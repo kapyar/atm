@@ -4,8 +4,6 @@ import java.awt.EventQueue;
 
 public class Main {
 	
-	
-	
 	private static Start frame;
 	
 	public static void main(String[] args) {
