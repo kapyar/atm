@@ -44,6 +44,8 @@ public class Start extends JFrame {
 		int delta = 7;
 		
 		
+		
+		
 		for (String colum: colums) {
 			
 			MyButton tableBtn = new MyButton(colum);
