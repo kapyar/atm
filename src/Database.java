@@ -82,6 +82,32 @@ public class Database {
 		return colums;
 	}
 	
-	
+	public String getColumComments(String table, String column) {
+		//HashSet<String> colums = new HashSet<String>();
+		String res = "";
+		
+		try {
+			PreparedStatement ps = 
+					connection.prepareStatement("SELECT `COLUMN_COMMENT` " +
+												"FROM information_schema.COLUMNS " +
+												"WHERE TABLE_SCHEMA = 'sql420969' " +
+												"AND TABLE_NAME = (?) AND COLUMN_NAME = (?) ");
+			ps.setString(1, table);
+			ps.setString(2, column);
+			ResultSet rs = ps.executeQuery();
+			
+	       	/*while (rs.next())
+	       		colums.add(rs.getString("COLUMN_COMMENT"));*/
+	       	rs.next();
+	       	res = rs.getString("COLUMN_COMMENT");
+       	 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+
+
 	
 }

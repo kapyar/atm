@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.JButton;
@@ -13,11 +14,19 @@ class MyButton extends JButton {
 
         public MyButton() {
             this(null);
+            
         }
 
         public MyButton(String text) {
             super(text);
             super.setContentAreaFilled(false);
+            this.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+            this.setBorderPainted(false);
+            this.setFocusPainted(false);
+            this.setHoverBackgroundColor(new Color(3, 59, 90).brighter());
+            this.setPressedBackgroundColor(new Color(3, 59, 90));
+            this.setForeground(new Color(255, 255, 255));
+            this.setBackground(new Color(51, 102, 255));
         }
 
         @Override
