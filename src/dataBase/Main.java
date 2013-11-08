@@ -1,6 +1,8 @@
 package dataBase;
 import java.awt.EventQueue;
 
+import javax.swing.UIManager;
+
 
 public class Main {
 	
@@ -13,6 +15,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.put("ScrollBarUI", "dataBase.MetroScrollBar");
 					frame = new Start();
 					frame.setResizable(false);
 					frame.setVisible(true);
