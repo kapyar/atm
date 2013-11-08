@@ -21,7 +21,7 @@ public class MainForm extends JFrame{
 		getContentPane().add(panel);
 		
 		ImageIcon start = new ImageIcon(ImageIO.read(new 
-				File("C:\\Users\\Yaroslav\\git\\ATMers\\imagesForATM\\balance.png")));
+				File("imagesForATM\\balance.png")));
 		//setIcon(new ImageIcon(ImageIO.read(new File("path/to/image.png"))))
 		JButton btnNewButton = new JButton(start);
 		panel.add(btnNewButton);
