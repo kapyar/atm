@@ -98,6 +98,8 @@ public class Start extends JFrame {
 		setBounds(x, y, 800, 600);
 
 
+		
+		
 		final Database db = new Database();
 		HashSet<String> tables = db.getTables();
 		
