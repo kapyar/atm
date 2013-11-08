@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-class MyButton extends JButton {
+public class MyButton extends JButton {
 
         private Color hoverBackgroundColor;
         private Color pressedBackgroundColor;

@@ -5,8 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 
@@ -45,8 +47,8 @@ public class Database {
          return hashmap;
 	}
 	
-	public HashSet<String> getTables() {
-		HashSet<String> tables = new HashSet<String>();
+	public List<String> getTables() {
+		List<String> tables = new ArrayList<String>();
 		
 		try {
        	 Statement st = connection.createStatement();
@@ -66,8 +68,8 @@ public class Database {
 	
 	
 	
-	public HashSet<String> getColums(String table) {
-		HashSet<String> colums = new HashSet<String>();
+	public List<String> getColums(String table) {
+		List<String> colums = new ArrayList<String>();
 		
 		try {
        	 Statement st = connection.createStatement();
