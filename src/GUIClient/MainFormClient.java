@@ -27,20 +27,20 @@ import javax.swing.JLabel;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+/*import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
-import net.miginfocom.swing.MigLayout;
+import net.miginfocom.swing.MigLayout;*/
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.Component;
 
-public class MainForm extends JFrame {
+public class MainFormClient extends JFrame {
 
 	private Dimension btnDimention;
 
-	public MainForm() throws IOException {
+	public MainFormClient() throws IOException {
 		setResizable(false);
 		setSize(new Dimension(800, 600));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
