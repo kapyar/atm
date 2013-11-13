@@ -1,4 +1,4 @@
-package Clients;
+package Model;
 
 import java.awt.HeadlessException;
 import java.io.IOException;
