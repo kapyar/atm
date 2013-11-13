@@ -32,4 +32,12 @@ public class ButtonFactory {
 		return m;
 	}
 	
+	public static MyButton getDelButton(){
+		MyButton m = new MyButton();
+		m.setSize(new Dimension(30,20));
+		//need to set image
+		return m;
+		
+	}
+	
 }
