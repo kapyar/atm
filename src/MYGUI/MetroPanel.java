@@ -1,4 +1,4 @@
-package dataBase;
+package MYGUI;
 import java.awt.Color;
 
 import javax.swing.JPanel;

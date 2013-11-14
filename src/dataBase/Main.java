@@ -13,7 +13,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIManager.put("ScrollBarUI", "dataBase.MetroScrollBar");
+				//	UIManager.put("ScrollBarUI", "MYGUI.MetroScrollBar");
 					frame = new Start();
 					frame.setResizable(false);
 					frame.setVisible(true);

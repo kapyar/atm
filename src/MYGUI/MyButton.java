@@ -1,5 +1,6 @@
-package dataBase;
+package MYGUI;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 
@@ -21,6 +22,7 @@ public class MyButton extends JButton {
         public MyButton(String text) {
             super(text);
             super.setContentAreaFilled(false);
+            this.setCursor(new Cursor(Cursor.HAND_CURSOR));
             this.setFont(new Font("Segoe UI", Font.PLAIN, 11));
             this.setBorderPainted(false);
             this.setFocusPainted(false);
