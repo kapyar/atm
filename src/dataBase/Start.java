@@ -144,6 +144,9 @@ public class Start extends JFrame {
 				}
 			});
 
+			
+			
+			
 			contentPane.add(tableBtn);
 			++numButtons;
 			y1 = y1 + btnHeight + delta;
