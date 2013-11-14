@@ -8,6 +8,10 @@ import MYGUI.MetroPanel;
  */
 public class Model {
 
+	public Model(){
+		System.out.println("Constructing the Model");
+	}
+	
 	public boolean checkLogIn(String text, String text2) {
 		
 		return true;

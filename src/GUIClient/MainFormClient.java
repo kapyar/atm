@@ -17,7 +17,9 @@ import java.awt.event.ActionListener;
 
 import MYGUI.ButtonFactory;
 import MYGUI.MetroPanel;
+import MYGUI.MetroPassView;
 import MYGUI.MetroScrollBar;
+import MYGUI.MetroTextView;
 import MYGUI.MyButton;
 
 import javax.swing.ButtonGroup;
@@ -26,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
+import javax.swing.JLabel;
 
 public class MainFormClient extends JFrame {
 
@@ -33,6 +36,7 @@ public class MainFormClient extends JFrame {
 	private MetroPanel pnlBalance;
 	private MetroPanel pnlStart;
 	private MetroPanel panel;
+
 	private MyButton btnBalance;
 	private MyButton btnWithdrawal;
 	private MyButton btnSendMoney;
@@ -41,7 +45,7 @@ public class MainFormClient extends JFrame {
 	private MyButton btnAddMoneyPhone;
 	private MyButton btnContactList;
 	private JScrollPane scrollPane;
-	private JTextField txtCardNumb;
+	private MetroTextView txtCardNumb;
 
 	private MyButton myButton_Cancel;
 	private MyButton myButton_1;
@@ -55,17 +59,18 @@ public class MainFormClient extends JFrame {
 	private MyButton myButton_9;
 	private MyButton myButton_0;
 	private MyButton myButton_Enter;
-	private JPasswordField txtPin;
+	private MetroPassView txtPin;
 	private MyButton btnDelNumbCard;
 	private MyButton btnDelPin;
-	
+
 	private JRadioButton rdbtPass;
 	private JRadioButton rdbtnCardNumb;
 
 	private ArrayList<MyButton> listOfComponents = new ArrayList<MyButton>();
+	private ArrayList<MyButton> listOfBalanceButton = new ArrayList<MyButton>();
 
 	public MainFormClient() {
-
+		System.out.println("Constructing the View");
 		setResizable(false);
 		setSize(new Dimension(800, 600));
 		getContentPane().setLayout(null);
@@ -73,8 +78,28 @@ public class MainFormClient extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				"resources\\imagesClient\\pig.png"));
 
-		setPnlStart();
+		showStart();
 		
+	}
+
+	public void showStart() {
+		setPnlStart();
+	}
+
+	public void showWork() {
+		setPnlBalance();
+		setPnlSide();
+		setButtons();
+
+	}
+
+	public void hideStart() {
+		pnlStart.setVisible(false);
+	}
+
+	public void hideWork() {
+		pnlSide.setVisible(false);
+		pnlBalance.setVisible(false);
 	}
 
 	private void setPnlStart() {
@@ -151,40 +176,40 @@ public class MainFormClient extends JFrame {
 		panel.add(myButton_Cancel);
 		listOfComponents.add(myButton_Cancel);
 
-		txtCardNumb = new JTextField();
+		txtCardNumb = new MetroTextView();
 		txtCardNumb.setBounds(219, 79, 166, 20);
 		panel.add(txtCardNumb);
 		txtCardNumb.setColumns(10);
 
-		txtPin = new JPasswordField();
+		txtPin = new MetroPassView();
 		txtPin.setBounds(219, 110, 166, 20);
 		panel.add(txtPin);
 
-		btnDelNumbCard = ButtonFactory.getDelButton();
+		btnDelNumbCard = ButtonFactory.getDelButton(
+				"resources\\imagesClient\\del_1.png");
 		btnDelNumbCard.setBounds(391, 78, 23, 21);
-		panel.add(btnDelNumbCard); 
+		panel.add(btnDelNumbCard);
 		listOfComponents.add(btnDelNumbCard);
 
-		btnDelPin = ButtonFactory.getDelButton();
+		btnDelPin = ButtonFactory.getDelButton("resources\\imagesClient\\del_1.png");
 		btnDelPin.setBounds(391, 109, 23, 21);
 		panel.add(btnDelPin);
-		
+
 		rdbtnCardNumb = new JRadioButton("");
 		rdbtnCardNumb.setBounds(196, 76, 21, 23);
-		rdbtnCardNumb.setBackground(new Color(40,140,255));
+		rdbtnCardNumb.setBackground(new Color(40, 140, 255));
 		rdbtnCardNumb.setSelected(true);
 		panel.add(rdbtnCardNumb);
-		
+
 		rdbtPass = new JRadioButton("");
 		rdbtPass.setBounds(196, 109, 21, 23);
-		rdbtPass.setBackground(new Color(40,140,255));
+		rdbtPass.setBackground(new Color(40, 140, 255));
 		panel.add(rdbtPass);
 		listOfComponents.add(btnDelPin);
-		
+
 		ButtonGroup radioGroup = new ButtonGroup();
 		radioGroup.add(rdbtnCardNumb);
 		radioGroup.add(rdbtPass);
-		
 
 	}
 
@@ -201,15 +226,40 @@ public class MainFormClient extends JFrame {
 
 	}
 
-	public void setPnlBalance() {
+	public void addListenerBalance(ActionListener ActionListenerBalance) {
+
+		for (MyButton x : listOfBalanceButton) {
+			x.addActionListener(ActionListenerBalance);
+		}
+
+	}
+
+	private void setPnlBalance() {
 		pnlBalance = new MYGUI.MetroPanel();
 		pnlBalance.setBounds(119, 0, 675, 571);
 		getContentPane().add(pnlBalance);
 		pnlBalance.setLayout(null);
 
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(304, 66, 46, 14);
+		pnlBalance.add(lblNewLabel);
+
+		final JButton btnNewButton = new JButton("New button");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnNewButton.setText("tro=lo");
+			}
+		});
+		btnNewButton.setBounds(413, 522, 89, 23);
+		pnlBalance.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		btnNewButton_1.setBounds(512, 522, 89, 23);
+		pnlBalance.add(btnNewButton_1);
+
 	}
 
-	public void setPnlSide() {
+	private void setPnlSide() {
 		pnlSide = new MYGUI.MetroPanel();
 		pnlSide.setBounds(0, 0, 120, 700);
 		scrollPane = new JScrollPane(pnlSide,
@@ -230,46 +280,49 @@ public class MainFormClient extends JFrame {
 
 	}
 
-	public void setButtons() {
+	private void setButtons() {
 		btnBalance = ButtonFactory.getIconButton(
 				"resources\\imagesClient\\balance_100x100.png",
 				"current balance");
 		btnBalance.setBounds(0, 0, 100, 100);
 		pnlSide.add(btnBalance);
+		listOfBalanceButton.add(btnBalance);
 
 		btnWithdrawal = ButtonFactory.getIconButton(
 				"resources\\imagesClient\\money_bag.png", "get withdrawal");
 		btnWithdrawal.setBounds(0, 100, 100, 100);
 		pnlSide.add(btnWithdrawal);
+		listOfBalanceButton.add(btnWithdrawal);
 
 		btnSendMoney = ButtonFactory.getIconButton(
 				"resources\\imagesClient\\money_transfer.png", "send money");
 		btnSendMoney.setBounds(0, 200, 100, 100);
 		pnlSide.add(btnSendMoney);
-
+		listOfBalanceButton.add(btnSendMoney);
 		btnPayBill = ButtonFactory.getIconButton(
 				"resources\\imagesClient\\pay_bill.png", "pay bill");
 		btnPayBill.setBounds(0, 300, 100, 100);
 		pnlSide.add(btnPayBill);
-
+		listOfBalanceButton.add(btnPayBill);
 		btnAddMoney = ButtonFactory.getIconButton(
 				"resources\\imagesClient\\money_pig.png", "add money");
 		btnAddMoney.setBounds(0, 400, 100, 100);
 		pnlSide.add(btnAddMoney);
-
+		listOfBalanceButton.add(btnAddMoney);
 		btnAddMoneyPhone = ButtonFactory.getIconButton(
 				"resources\\imagesClient\\phone.png", "add money to phone");
 		btnAddMoneyPhone.setBounds(0, 500, 100, 100);
 		pnlSide.add(btnAddMoneyPhone);
-
+		listOfBalanceButton.add(btnAddMoneyPhone);
 		btnContactList = ButtonFactory.getIconButton(
 				"resources\\imagesClient\\contact_list.png", "contact list");
 		btnContactList.setBounds(0, 600, 100, 100);
 		pnlSide.add(btnContactList);
+		listOfBalanceButton.add(btnContactList);
 	}
 
 	// //////////////SETTERS AND GETTERS///////////////////////////
-	
+
 	public JRadioButton getRdbtPass() {
 		return rdbtPass;
 	}
@@ -277,6 +330,7 @@ public class MainFormClient extends JFrame {
 	public JRadioButton getRdbtnCardNumb() {
 		return rdbtnCardNumb;
 	}
+
 	public MyButton getMyButton_Enter() {
 		return myButton_Enter;
 	}

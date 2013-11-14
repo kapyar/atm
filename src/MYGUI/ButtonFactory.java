@@ -32,10 +32,11 @@ public class ButtonFactory {
 		return m;
 	}
 	
-	public static MyButton getDelButton(){
+	public static MyButton getDelButton(String pathToImage){
 		MyButton m = new MyButton();
 		m.setSize(new Dimension(30,20));
-		//need to set image
+		ImageIcon start = new ImageIcon(pathToImage);
+		m.setIcon(start);
 		return m;
 		
 	}
