@@ -47,12 +47,69 @@ public class Database {
          return hashmap;
 	}
 	
+	public String getColType(String table, String column) {
+		String result = "";
+		try {
+			PreparedStatement ps =  connection.prepareStatement("SELECT data_type FROM INFORMATION_SCHEMA.COLUMNS "
+					+ " WHERE table_schema = 'sql420969' AND  table_name = (?) and column_name = (?) ");
+			ps.setString(1, table);
+			ps.setString(2, column);
+			
+			ResultSet rs = ps.executeQuery();
+
+	       	while (rs.next()) {
+	       		result = rs.getString("data_type");
+	       	}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public List<String[]> getTableData (String table, String [] colums) {
+		List<String[]> res = new ArrayList<String[]>();
+		
+		try {
+			Statement st = connection.createStatement();
+			
+			ResultSet rs = st.executeQuery("SELECT * FROM `"+table+"` ");
+			
+			
+       	 while (rs.next()) {
+       		String [] temp = new String[colums.length];
+       		
+       		for (int i = 0; i < colums.length; ++i) {
+       			temp[i] =  rs.getString(colums[i]);
+       		}
+       		
+       		res.add(temp);
+
+       		//for (String col: colums) {
+       			/*String type = getColType(table, col);
+       			
+       			if (type.equals("int")) {
+       				res.add(Integer.parseInt(rs.getString("id"));
+       			}*/
+       			
+       		//}
+       		//res.put(Integer.parseInt(rs.getString("id")), rs.getString("name"));
+       	 }
+       	 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+	
 	public List<String> getTables() {
 		List<String> tables = new ArrayList<String>();
 		
 		try {
-       	 Statement st = connection.createStatement();
-       	 ResultSet rs = st.executeQuery("SELECT `TABLE_NAME` FROM INFORMATION_SCHEMA.TABLES WHERE `TABLE_TYPE` = 'BASE TABLE'");
+			PreparedStatement ps = 
+					connection.prepareStatement("SELECT `TABLE_NAME` FROM INFORMATION_SCHEMA.TABLES WHERE `TABLE_TYPE` = 'BASE TABLE'");
+       	 ResultSet rs = ps.executeQuery();
        	 
        	 while (rs.next())
        		tables.add(rs.getString("TABLE_NAME"));
@@ -63,10 +120,6 @@ public class Database {
 		
 		return tables;
 	}
-	
-	
-	
-	
 	
 	public List<String> getColums(String table) {
 		List<String> colums = new ArrayList<String>();
@@ -111,6 +164,4 @@ public class Database {
 		return res;
 	}
 
-
-	
 }

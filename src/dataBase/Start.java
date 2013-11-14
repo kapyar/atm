@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -22,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,14 +34,35 @@ public class Start extends JFrame {
 	private Dimension screenSize; 
 	
 	private List<String> tables;
+	private HashMap<String, List<String> > table_vals;
 
-	private JPanel getColumsPane(final String table) {
-		JPanel res = new MetroPanel();
-		
+	private JTable getColumsPane(final String curr_table) {
 		Database db = new Database();
-		List<String> colums = db.getColums(table);
+		List<String> colums = db.getColums(curr_table);
+		String[] columnNames = new String[colums.size()];
+		
+		for (int i = 0; i < colums.size(); ++i) {
+			columnNames[i] = colums.get(i);
+		}
 
 		
+		//System.out.println(db.getColType(curr_table, columnNames[2]));
+		
+		List<String[]> tData = db.getTableData(curr_table, columnNames);
+		Object[][] data = new Object[tData.size()][];
+		
+		for (int i = 0; i < tData.size(); ++i) {
+			data[i] = tData.get(i);
+		}
+
+		final JTable table = new JTable(data, columnNames);
+		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		table.setFillsViewportHeight(true);
+
+		
+		return table;
+
+		/*
 		int x1 = 100;
 		int y1 = 100;
 		int btnWidth = 250;
@@ -47,37 +70,27 @@ public class Start extends JFrame {
 		int delta = 7;
 		int numButtons = 0;
 		int height = y1;
-		
-		 new Font("Century Gothic", Font.BOLD, 14);
-         
-         /*JLabel centerLabel = new JLabel("Center");
-         centerLabel.setVerticalAlignment(JLabel.CENTER);
-         centerLabel.setHorizontalAlignment(JLabel.CENTER);
-         centerLabel.setPreferredSize(labelSize);
-         centerLabel.setBorder(solidBorder);
-         centerLabel.setFont(font);
-         alignmentPanel.add(centerLabel);*/
-		
+		*/
 
-		for (String colum: colums) {
+		/*for (String colum: colums) {
 			
 			MyButton tableBtn = new MyButton(colum);
 			tableBtn.setBounds(x1, y1, btnWidth, btnHeight);
-			final String val = colum;
+			final String col = colum;
 			
 			tableBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					//System.out.println(db.getColumComments(table, val));
-					//setWindow(getMainPage());
+					System.out.println(table + "    " + col);
+					setWindow(getTableData());
 				}
 			});
 			
 			res.add(tableBtn);
 			++numButtons;
 			y1 = y1 + btnHeight + delta;
-		}
+		}*/
 		
-		MyButton back = new MyButton("Back");
+		/*MyButton back = new MyButton("Back");
 		back.setBounds(x1, y1 + 50, btnWidth, btnHeight);
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -87,10 +100,12 @@ public class Start extends JFrame {
 		
 		res.add(back);
 		height += (numButtons * (btnHeight + delta)) + 100;
-		res.setPreferredSize(new Dimension(770,height));
+		res.setPreferredSize(new Dimension(770,height));*/
 		
-	    return res;
+	    //return res;
 	}
+	
+
 	
 	private JPanel getMainPage() {
 		JPanel contentPane = new MetroPanel();
@@ -139,9 +154,9 @@ public class Start extends JFrame {
 		if (scrollPane != null) {
 			getContentPane().remove(scrollPane);
 		}
-		
+
 		scrollPane = new JScrollPane(container, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(0, 0, 800, 600);
+		//scrollPane.setBounds(0, 0, 800, 500);
 		
 		int increment = 20;
 		scrollPane.getVerticalScrollBar().setUI(new MetroScrollBar());
@@ -165,7 +180,7 @@ public class Start extends JFrame {
 
 		setWindow(getMainPage());
 		getContentPane().add(scrollPane);
+		
+		
 	}
-	
-
 }
