@@ -13,13 +13,19 @@ import java.util.Map;
 
 
 public class Database {
-	private String dbName = "//sql4.freemysqlhosting.net/sql420969?user=sql420969&password=nE5*pG9*";
+	private String base_server = "gofrie.mysql.ukraine.com.ua";
+	private String base_name = "gofrie_vlad";
+	private String base_user = "gofrie_vlad";
+	private String base_pass = "e9937rdk";
+	
+	private String dbName = "//" + base_server + "/" + base_name + "?user=" + base_user + "&password=" + base_pass;
 	private Connection connection;
+	
 	
 	public Database () {
 		init();
 	}
-	
+
 	private void init () {
 		try {
 		 Class.forName("com.mysql.jdbc.Driver");
@@ -51,7 +57,7 @@ public class Database {
 		String result = "";
 		try {
 			PreparedStatement ps =  connection.prepareStatement("SELECT data_type FROM INFORMATION_SCHEMA.COLUMNS "
-					+ " WHERE table_schema = 'sql420969' AND  table_name = (?) and column_name = (?) ");
+					+ " WHERE table_schema = '" + base_name + "' AND  table_name = (?) and column_name = (?) ");
 			ps.setString(1, table);
 			ps.setString(2, column);
 			
@@ -146,7 +152,7 @@ public class Database {
 			PreparedStatement ps = 
 					connection.prepareStatement("SELECT `COLUMN_COMMENT` " +
 												"FROM information_schema.COLUMNS " +
-												"WHERE TABLE_SCHEMA = 'sql420969' " +
+												"WHERE TABLE_SCHEMA = '"+base_name+"' " +
 												"AND TABLE_NAME = (?) AND COLUMN_NAME = (?) ");
 			ps.setString(1, table);
 			ps.setString(2, column);
