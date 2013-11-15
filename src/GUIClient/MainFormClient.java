@@ -30,6 +30,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
 
+import Controller.ActionListenerBalance;
+import Controller.ActionListenerStart;
+
 public class MainFormClient extends JFrame {
 
 	private MetroPanel pnlSide;

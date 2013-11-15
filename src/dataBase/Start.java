@@ -1,7 +1,10 @@
 package dataBase;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
@@ -11,18 +14,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-
-
-
 import MYGUI.MetroPanel;
 import MYGUI.MetroScrollBar;
 import MYGUI.MyButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+import MYGUI.ButtonFactory;
 
 
 public class Start extends JFrame {
@@ -37,67 +39,72 @@ public class Start extends JFrame {
 	private Dimension screenSize; 
 	private int window_width = 1000;
 	private int window_height = 600;
-	private int navi_height = 50;
+	private int navi_height = 55;
 	
 	private List<String> tables;
+	private HashMap<String, Object[][]> columns_data_map;
+	private HashMap<String, String[]> columns_name_map;
 	
+	private Stack<Pair<String, Container>> to_add;
 	private Stack<Container> navi;
 	private Stack<Container> new_navi;
 	
+	public MyButton getNaviButton ( String btn,final Container goTo, int naviSize, int padding ) {
+		
+		MyButton temp = new MyButton();
+		temp.setPreferredSize(new Dimension(naviSize - padding*2, naviSize - padding*2));
+		temp.setMargin(new Insets(padding,padding,padding,padding));
+		
+		temp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setWindow(goTo);
+			}
+		});
+		
+		String fullPath  = "imagesForBaseAdmin\\" + btn + ".png";		
+		
+		ImageIcon start = new ImageIcon(fullPath);
+		temp.setIcon(start);
+		
+		return temp;
+	}
+	
 
 	private JTable getColumsPane(final String curr_table) {
-		Database db = new Database();
-		List<String> colums = db.getColums(curr_table);
-		String[] columnNames = new String[colums.size()];
-		
-		for (int i = 0; i < colums.size(); ++i) {
-			columnNames[i] = colums.get(i);
+		if (columns_data_map.containsKey(curr_table) == false) {
+			
+			Database db = new Database();
+			List<String> colums = db.getColums(curr_table);
+			String[] columnNames = new String[colums.size()];
+			
+			for (int i = 0; i < colums.size(); ++i) {
+				columnNames[i] = colums.get(i);
+			}
+	
+			
+	
+			List<String[]> tData = db.getTableData(curr_table, columnNames);
+			Object[][] data = new Object[tData.size()][];
+			
+			for (int i = 0; i < tData.size(); ++i) {
+				data[i] = tData.get(i);
+			}
+			columns_name_map.put(curr_table, columnNames);
+			columns_data_map.put(curr_table, data);
 		}
+		
+		to_add.push(new Pair(ButtonFactory.BACK, getMainPage()));
+		
+		
 
-		
-		//System.out.println(db.getColType(curr_table, columnNames[2]));
-		
-		List<String[]> tData = db.getTableData(curr_table, columnNames);
-		Object[][] data = new Object[tData.size()][];
-		
-		for (int i = 0; i < tData.size(); ++i) {
-			data[i] = tData.get(i);
-		}
-
-		final JTable table = new JTable(data, columnNames);
+		final JTable table = new JTable(columns_data_map.get(curr_table), columns_name_map.get(curr_table));
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
 
 		
 		return table;
 
-		/*
-		int x1 = 100;
-		int y1 = 100;
-		int btnWidth = 250;
-		int btnHeight = 35;
-		int delta = 7;
-		int numButtons = 0;
-		int height = y1;
-		*/
-
-		/*for (String colum: colums) {
-			
-			MyButton tableBtn = new MyButton(colum);
-			tableBtn.setBounds(x1, y1, btnWidth, btnHeight);
-			final String col = colum;
-			
-			tableBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					System.out.println(table + "    " + col);
-					setWindow(getTableData());
-				}
-			});
-			
-			res.add(tableBtn);
-			++numButtons;
-			y1 = y1 + btnHeight + delta;
-		}*/
+		//System.out.println(db.getColType(curr_table, columnNames[2]));
 		
 		/*MyButton back = new MyButton("Back");
 		back.setBounds(x1, y1 + 50, btnWidth, btnHeight);
@@ -114,7 +121,7 @@ public class Start extends JFrame {
 	    //return res;
 	}
 	
-	// now we start editing
+	
 	
 	private JPanel getMainPage() {
 		JPanel contentPane = new MetroPanel();
@@ -156,6 +163,8 @@ public class Start extends JFrame {
 			y1 = y1 + btnHeight + delta;
 		}
 		
+		
+		
 		height += (numButtons * (btnHeight + delta)) + 100;
 		contentPane.setPreferredSize(new Dimension(770,height));
 		
@@ -163,9 +172,29 @@ public class Start extends JFrame {
 	}
 	
 	private void setNavi () {
+		/*navigation_holder.add(ButtonFactory.getNaviButton(ButtonFactory.BACK, new Container(), navi_height, 5));
+		navigation_holder.add(ButtonFactory.getNaviButton(ButtonFactory.FORWARD, new Container(), navi_height, 5));
+		navigation_holder.add(ButtonFactory.getNaviButton(ButtonFactory.DELETE, new Container(), navi_height, 5));*/
+		
+		while (to_add.empty() == false) {
+			Pair<String, Container> temp = to_add.pop();
+			new_navi.add(getNaviButton(temp.first(), temp.second(), navi_height, 5));
+		}
+		
+		while (navi.empty() == false) {
+			navigation_holder.remove(navi.pop());
+		}
+		
+		while (new_navi.empty() == false) {
+			Container temp = new_navi.pop();
+			navigation_holder.add(temp);
+			navi.push(temp);
+		}
 		
 		
 		
+		navigation_holder.revalidate();
+		navigation_holder.repaint();
 	}
 	
 	private void setWindow(Container container) {
@@ -188,6 +217,8 @@ public class Start extends JFrame {
 		scrollPane.revalidate();
 		scrollPane.repaint();
 		
+		setNavi();
+		
 		/*invalidate();
 		validate();
 		repaint();*/
@@ -195,6 +226,14 @@ public class Start extends JFrame {
 	
 	public Start() {
 		super("Database Client");
+		
+		columns_data_map = new HashMap<String, Object[][]>();
+		columns_name_map = new HashMap<String, String[]>();
+		
+		to_add = new Stack<Pair<String, Container>>();
+		navi = new Stack<Container>();
+		new_navi = new Stack<Container>();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (screenSize.width - window_width) / 2;
@@ -203,6 +242,7 @@ public class Start extends JFrame {
 		setBounds(x, y, window_width, window_height);
 		
 		init_layouts();
+		
 		setWindow(getMainPage());
 		
 		//getContentPane().add(scrollPane);
@@ -218,9 +258,9 @@ public class Start extends JFrame {
 		scroll_holder.setLocation(0, navi_height);
 		
 		navigation_holder = new JPanel();
-		navigation_holder.setLayout(null);
+		navigation_holder.setLayout(new FlowLayout(FlowLayout.LEFT));
 		navigation_holder.setSize(window_width, navi_height);
-		navigation_holder.setBackground(new Color(255,255,255));
+		navigation_holder.setBackground(new Color(51, 102, 255));
 		
 		wrapper.add(scroll_holder);
 		wrapper.add(navigation_holder);

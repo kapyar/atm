@@ -1,10 +1,16 @@
 package MYGUI;
 
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 
 public class ButtonFactory {
+	
+	public static final String BACK = "back";
+	public static final String FORWARD = "forward";
+	public static final String DELETE = "delete";
 	
 	public static MyButton getNormalButton(){
 		MyButton m = new MyButton();
@@ -40,5 +46,21 @@ public class ButtonFactory {
 		return m;
 		
 	}
+	
+	public static MyButton getNaviButton ( String btn, Container goTo, int naviSize, int padding ) {
+		
+		MyButton temp = new MyButton();
+		temp.setPreferredSize(new Dimension(naviSize - padding*2, naviSize - padding*2));
+		temp.setMargin(new Insets(padding,padding,padding,padding));
+		
+		String fullPath  = "imagesForBaseAdmin\\" + btn + ".png";		
+		
+		ImageIcon start = new ImageIcon(fullPath);
+		temp.setIcon(start);
+		
+		return temp;
+	}
+	
+	
 	
 }
