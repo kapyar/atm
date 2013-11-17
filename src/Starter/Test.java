@@ -1,22 +1,28 @@
 package Starter;
 
-
+import javax.swing.JFrame;
 
 import Controller.Controller;
+import GUIClient.Balance;
 import GUIClient.MainFormClient;
+import GUIClient.StartFrame;
 import Model.Model;
 
 public class Test {
 
-	private static Controller controller;
-	private static Model model;
-	private static MainFormClient form;
-   
-	public static void main(String[] args) {
-		model = new Model();
-		form = new MainFormClient();
-		controller = new Controller(form, model);
-   
-	}
+	private static  Controller controller;
+	private  Model model;
+	private static  MainFormClient form;
+	private static  StartFrame start ;
+	private static Balance balance;
+	
 
+	public static void main(String[] args) {
+		balance = new Balance();
+		start = new StartFrame();
+		form = new MainFormClient();
+		controller = new Controller(form, start, balance);
+		
+
+	}
 }

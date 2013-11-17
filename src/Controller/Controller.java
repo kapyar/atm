@@ -1,41 +1,60 @@
 package Controller;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
+import GUIClient.Balance;
 import GUIClient.MainFormClient;
-import Model.Model;
+import GUIClient.StartFrame;
 
-/*
- * 
- * Bind interface and model(calculating requests to BD)
- */
-public class Controller {
-	// package access
-	private MainFormClient mainForm;
-	private Model model;
 
-	public Controller(MainFormClient form, Model model) {
-		this.mainForm = form;
-		this.model = model;
-
-		mainForm.addListenerBalance(new ActionListenerBalance(this));
-		mainForm.addMainFormListener(new ActionListenerStart(this));
+public class Controller{
+	
+	private StartFrame start;
+	private Balance balance;
+	private MainFormClient mainConteiner;
+	
+	
+	
+	public Controller(MainFormClient mainConteiner,StartFrame start, Balance balance){
+		System.out.println("Constructing Controller");
+		this.mainConteiner = mainConteiner;
+		this.start = start;
+		this.balance = balance;
+		this.mainConteiner.resetPanel(start);
+		this.start.addOuterListener(new OuterStartActionListener());
+		this.balance.addNavigationListeners(new NavigationListeners());
+		System.out.println("must be visiable");
+		this.mainConteiner.setVisible(true);
 		
-		mainForm.setVisible(true);
 	}
 
-	public MainFormClient getView() {
-		return mainForm;
-	}
+	
+	 public class OuterStartActionListener implements ActionListener{
 
-	public Model getModel() {
-		return model;
-	}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+			if(source == start.getMyButton_Enter()){
+			//	balance.addNavigationListeners(new NavigationListeners());
+				mainConteiner.resetPanel(balance);
+			}
+		}
+		 
+	 }//END OuterStartActionListener
+	 
+	 class NavigationListeners implements ActionListener{
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			Object source = e.getSource();
+			
+			if(source == balance.getBtnBalance()){
+				System.out.println("Balance!!");
+				
+			}
+			
+		}
+		 
+	 }//END NavigationListeners
 }
