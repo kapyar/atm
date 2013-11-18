@@ -42,7 +42,7 @@ public class ButtonFactory {
 
 	public static MyButton getDelButton(String pathToImage) {
 		MyButton m = new MyButton();
-		m.setSize(new Dimension(30, 20));
+		m.setSize(new Dimension(25, 25));
 		ImageIcon start = new ImageIcon(pathToImage);
 		m.setIcon(start);
 		return m;

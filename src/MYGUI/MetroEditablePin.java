@@ -6,25 +6,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.Action;
 import javax.swing.JTextField;
-import javax.swing.JButton;
 
-public class MetroEditablePane extends JPanel {
+public class MetroEditablePin extends JPanel {
 
-	private MetroTextView textField;
+	private MetroPassView pass;
 	private MyButton del;
 
-	public MetroEditablePane() {
+	public MetroEditablePin() {
 		this.setSize(new Dimension(190, 31));
 		this.setBackground(Color.WHITE);
 		this.setLayout(null);
 
-		textField = new MetroTextView();
-		textField.setBounds(8, 5, 144, 20);
-		add(textField);
-		textField.setColumns(10);
+		pass = new MetroPassView();
+		pass.setBounds(8, 5, 144, 20);
+		add(pass);
+		pass.setColumns(10);
 
 		del = ButtonFactory.getDelButton("resources\\imagesClient\\del_1.png");
 		del.setLocation(160, 3);
@@ -48,28 +45,27 @@ public class MetroEditablePane extends JPanel {
 			if (source == del) {
 				// deleting
 
-				String s = textField.getText();
-				cleanField(textField);
+				String s = pass.getText();
+				cleanField(pass);
 				if (!s.isEmpty()) {
 					s = s.substring(0, s.length() - 1);
 					System.out.println("String after deleting: " + s);
-					textField.setText(s);
+					pass.setText(s);
 				}
 			}// del
 
 		}
 
-		private void cleanField(JTextField txtCardNumb) {
+		private void cleanField(MetroPassView txtCardNumb) {
 			txtCardNumb.setBackground(new Color(255, 255, 255));
 		}
 	}// END InnerListener
 
-	public MetroTextView getTextField() {
-		return textField;
+	public MetroPassView getPass() {
+		return pass;
 	}
 
 	public MyButton getDel() {
 		return del;
 	}
-
 }

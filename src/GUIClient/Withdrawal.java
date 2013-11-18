@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.awt.Font;
 
 public class Withdrawal extends RightPanel {
 
@@ -20,7 +21,8 @@ public class Withdrawal extends RightPanel {
 	
 	public Withdrawal(){
 		
-		JLabel lblNewLabel = new JLabel("Widrawal");
+		JLabel lblNewLabel = new JLabel("Withdrawal");
+		lblNewLabel.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
 		lblNewLabel.setBounds(289, 42, 187, 29);
 		add(lblNewLabel);
 		

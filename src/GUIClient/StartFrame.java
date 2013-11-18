@@ -1,6 +1,7 @@
 package GUIClient;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,8 @@ import javax.swing.JTextField;
 
 import Controller.Controller.OuterStartActionListener;
 import MYGUI.ButtonFactory;
+import MYGUI.MetroEditablePane;
+import MYGUI.MetroEditablePin;
 import MYGUI.MetroPanel;
 import MYGUI.MetroPassView;
 import MYGUI.MetroTextView;
@@ -32,17 +35,14 @@ public class StartFrame extends MetroPanel {
 	private MyButton myButton_9;
 	private MyButton myButton_0;
 	private MyButton myButton_Enter;
-	private MyButton btnDelNumbCard;
 	private MetroPanel panel;
 
 	private MyButton myButton_Cancel;
 	private ArrayList<MyButton> listOfComponents = new ArrayList<MyButton>();
-	private MetroTextView txtCardNumb;
 	private JRadioButton rdbtnCardNumb;
 	private JRadioButton rdbtPass;
-	private JPanel panel_2;
-	private MyButton btnDelPin;
-	private MetroPassView passTextView;
+	private MetroEditablePane txt;
+	private MetroEditablePin pin;
 
 	public StartFrame() {
 		System.out.println("Start Frame");
@@ -115,13 +115,13 @@ public class StartFrame extends MetroPanel {
 		listOfComponents.add(myButton_Cancel);
 
 		rdbtnCardNumb = new JRadioButton("");
-		rdbtnCardNumb.setBounds(196, 76, 21, 23);
+		rdbtnCardNumb.setBounds(195, 72, 21, 23);
 		rdbtnCardNumb.setBackground(new Color(40, 140, 255));
 		rdbtnCardNumb.setSelected(true);
 		panel.add(rdbtnCardNumb);
 
 		rdbtPass = new JRadioButton("");
-		rdbtPass.setBounds(196, 109, 21, 23);
+		rdbtPass.setBounds(195, 111, 21, 23);
 		rdbtPass.setBackground(new Color(40, 140, 255));
 		panel.add(rdbtPass);
 
@@ -129,41 +129,13 @@ public class StartFrame extends MetroPanel {
 		radioGroup.add(rdbtnCardNumb);
 		radioGroup.add(rdbtPass);
 
-		// Fields to imput data
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.WHITE);
-		panel_1.setBounds(219, 79, 160, 20);
-		panel.add(panel_1);
-		panel_1.setLayout(null);
+		txt = new MetroEditablePane();
+		txt.setBounds(224, 68, 190, 31);
+		panel.add(txt);
 
-		txtCardNumb = new MetroTextView();
-		txtCardNumb.setBounds(0, 0, 129, 20);
-		//
-		panel_1.add(txtCardNumb);
-		txtCardNumb.setColumns(10);
-
-		btnDelNumbCard = ButtonFactory
-				.getDelButton("resources\\imagesClient\\del_1.png");
-		btnDelNumbCard.setBounds(132, 2, 20, 16);
-		listOfComponents.add(btnDelNumbCard);
-		panel_1.add(btnDelNumbCard);
-		// password
-		panel_2 = new JPanel();
-		panel_2.setLayout(null);
-		panel_2.setBackground(Color.WHITE);
-		panel_2.setBounds(219, 109, 160, 20);
-		panel.add(panel_2);
-
-		passTextView = new MetroPassView();
-		passTextView.setColumns(10);
-		passTextView.setBounds(1, 0, 129, 20);
-		panel_2.add(passTextView);
-
-		btnDelPin = ButtonFactory
-				.getDelButton("resources\\imagesClient\\del_1.png");
-		btnDelPin.setBounds(132, 1, 20, 16);
-		listOfComponents.add(btnDelPin);
-		panel_2.add(btnDelPin);
+		pin = new MetroEditablePin();
+		pin.setBounds(224, 109, 190, 31);
+		panel.add(pin);
 
 		addInnerListener();
 
@@ -231,26 +203,6 @@ public class StartFrame extends MetroPanel {
 					System.exit(0);
 				}
 			}
-			// deleting
-			if (source == btnDelNumbCard) {
-				String s = txtCardNumb.getText();
-				cleanField(txtCardNumb);
-				if (!s.isEmpty()) {
-					s = s.substring(0, s.length() - 1);
-					System.out.println("String after deleting: "+s);
-					txtCardNumb.setText(s);
-				}
-			}// delCardNumb
-
-			if (source == btnDelPin) {
-				String s = passTextView.getText();
-				cleanField(passTextView);
-				if (!s.isEmpty()) {
-					s = s.substring(0, s.length() - 1);
-					passTextView.setText(s);
-				}
-			}// delPin
-
 		}// action Performed
 
 		private void cleanField(JTextField txtCardNumb) {
@@ -268,12 +220,12 @@ public class StartFrame extends MetroPanel {
 		private void writeToField(String s) {
 
 			if (rdbtnCardNumb.isSelected()) {
-				txtCardNumb.setText(txtCardNumb.getText() + s);
-				cleanField(txtCardNumb);
+				txt.getTextField().setText(txt.getTextField().getText() + s);
+				cleanField(txt.getTextField());
 
 			} else if (rdbtPass.isSelected()) {
-				passTextView.setText(passTextView.getText() + s);
-				cleanField(passTextView);
+				pin.getPass().setText(pin.getPass().getText() + s);
+				cleanField(pin.getPass());
 			}
 		}
 
