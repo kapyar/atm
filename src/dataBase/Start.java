@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 
 import MYGUI.MetroPanel;
 import MYGUI.MetroScrollBar;
@@ -51,8 +52,11 @@ public class Start extends JFrame {
 	private Stack<Pair<String, Container>> to_add;
 	private Stack<Container> navi;
 	private Stack<Container> new_navi;
+	public  MetroTable current_model;
 	
-	public static Pair<String, List<Integer>> last_edited = new Pair<String, List<Integer>>(null, null);
+	public Pair<String, List<Integer>> last_edited = new Pair<String, List<Integer>>(null, null);
+	public Pair<String, List<Integer>> last_added = new Pair<String, List<Integer>>(null, null);
+	
 	
 	public MyButton getNaviButton ( String btn,final Container goTo, int naviSize, int padding ) {
 		
@@ -67,18 +71,65 @@ public class Start extends JFrame {
 		});
 		
 		String fullPath  = "imagesForBaseAdmin\\" + btn + ".png";		
-		
-		ImageIcon start = new ImageIcon(fullPath);
-		temp.setIcon(start);
+		temp.setIcon(new ImageIcon(fullPath));
 		
 		return temp;
 	}
 	
+	public MyButton getAddButton ( String btn, int naviSize, int padding ) {
+		MyButton temp = new MyButton();
+		temp.setPreferredSize(new Dimension(naviSize - padding*2, naviSize - padding*2));
+		temp.setMargin(new Insets(padding,padding,padding,padding));
+		
+		temp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				current_model.addRow(last_added);
+			}
+		});
+		
+		String fullPath  = "imagesForBaseAdmin\\" + btn + ".png";
+		temp.setIcon(new ImageIcon(fullPath));
+
+		return temp;
+	}
+	
+	
+	public MyButton getSaveButton ( String btn, int naviSize, int padding ) {
+		MyButton temp = new MyButton();
+		temp.setPreferredSize(new Dimension(naviSize - padding*2, naviSize - padding*2));
+		temp.setMargin(new Insets(padding,padding,padding,padding));
+		
+		temp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("added: table: " + last_added.first());
+				
+				for (int i = 0; i < last_added.second().size(); ++i) {
+					System.out.println(last_added.second().get(i));
+				}
+				
+				System.out.println("edited: table: " + last_edited.first());
+				
+				for (int i = 0; i < last_edited.second().size(); ++i) {
+					System.out.println(last_edited.second().get(i));
+				}
+			}
+		});
+		
+		String fullPath  = "imagesForBaseAdmin\\" + btn + ".png";
+		temp.setIcon(new ImageIcon(fullPath));
+
+		return temp;
+	}
 	
 	
 	private JTable getColumsPane(final String curr_table) {
 		last_edited.set_first(curr_table);
 		last_edited.set_second(new ArrayList<Integer>());
+		
+		last_added.set_first(curr_table);
+		last_added.set_second(new ArrayList<Integer>());
+		
+		
 		
 		if (columns_data_map.containsKey(curr_table) == false) {
 			
@@ -105,36 +156,23 @@ public class Start extends JFrame {
 		}
 		
 		to_add.push(new Pair(ButtonFactory.BACK, getMainPage()));
-		to_add.push(new Pair(ButtonFactory.DELETE, new JPanel()));
-		
+		to_add.push(new Pair(ButtonFactory.ADD, new JPanel()));
+		to_add.push(new Pair(ButtonFactory.DONE, new JPanel()));
+		//to_add.push(new Pair(ButtonFactory.DELETE, new JPanel()));
 		
 
-		//final JTable table = new JTable(columns_data_map.get(curr_table), columns_name_map.get(curr_table));
+		current_model = new MetroTable(	columns_data_map.get(curr_table), 
+										columns_name_map.get(curr_table), 
+										columns_type_map.get(curr_table), 
+										last_edited);
 		
-		final JTable table = new JTable (new MetroTable(columns_data_map.get(curr_table), columns_name_map.get(curr_table), columns_type_map.get(curr_table)));
+		final JTable table = new JTable (current_model);
 		
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
-
-		
 		
 		return table;
 
-		//System.out.println(db.getColType(curr_table, columnNames[2]));
-		
-		/*MyButton back = new MyButton("Back");
-		back.setBounds(x1, y1 + 50, btnWidth, btnHeight);
-		back.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				setWindow(getMainPage());
-			}
-		});
-		
-		res.add(back);
-		height += (numButtons * (btnHeight + delta)) + 100;
-		res.setPreferredSize(new Dimension(770,height));*/
-		
-	    //return res;
 	}
 	
 	
@@ -170,9 +208,7 @@ public class Start extends JFrame {
 				}
 			});
 
-			
-			
-			
+
 			contentPane.add(tableBtn);
 			++numButtons;
 			y1 = y1 + btnHeight + delta;
@@ -187,13 +223,16 @@ public class Start extends JFrame {
 	}
 	
 	private void setNavi () {
-		/*navigation_holder.add(ButtonFactory.getNaviButton(ButtonFactory.BACK, new Container(), navi_height, 5));
-		navigation_holder.add(ButtonFactory.getNaviButton(ButtonFactory.FORWARD, new Container(), navi_height, 5));
-		navigation_holder.add(ButtonFactory.getNaviButton(ButtonFactory.DELETE, new Container(), navi_height, 5));*/
 		
 		while (to_add.empty() == false) {
 			Pair<String, Container> temp = to_add.pop();
-			new_navi.add(getNaviButton(temp.first(), temp.second(), navi_height, 5));
+			if (temp.first().equals(ButtonFactory.ADD)) {
+				new_navi.add(getAddButton(temp.first(), navi_height, 5));
+			} else if (temp.first().equals(ButtonFactory.DONE)) {
+				new_navi.add(getSaveButton(temp.first(), navi_height, 5));
+			} else  {
+				new_navi.add(getNaviButton(temp.first(), temp.second(), navi_height, 5));
+			}
 		}
 		
 		while (navi.empty() == false) {

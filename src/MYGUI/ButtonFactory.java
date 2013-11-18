@@ -11,6 +11,8 @@ public class ButtonFactory {
 	public static final String BACK = "back";
 	public static final String FORWARD = "forward";
 	public static final String DELETE = "delete";
+	public static final String ADD = "add";
+	public static final String DONE = "done";
 	
 	public static MyButton getNormalButton(){
 		MyButton m = new MyButton();
