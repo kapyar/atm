@@ -138,6 +138,7 @@ public class StartFrame extends MetroPanel {
 
 		txtCardNumb = new MetroTextView();
 		txtCardNumb.setBounds(0, 0, 129, 20);
+		//
 		panel_1.add(txtCardNumb);
 		txtCardNumb.setColumns(10);
 
