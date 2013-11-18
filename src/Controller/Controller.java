@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import GUIClient.AddMoney;
 import GUIClient.AddMoneyPhone;
 import GUIClient.Balance;
+import GUIClient.ContactList;
 import GUIClient.PayBill;
 import GUIClient.SendMoney;
 import GUIClient.Withdrawal;
@@ -75,6 +76,9 @@ public class Controller {
 			
 			if(source == wrapper.getBtnAddMoneyPhone()){
 				wrapper.resetRightPanel(new AddMoneyPhone());
+			}
+			if(source == wrapper.getBtnContactList()){
+				wrapper.resetRightPanel(new ContactList());
 			}
 		}
 

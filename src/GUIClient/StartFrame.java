@@ -1,8 +1,6 @@
 package GUIClient;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -17,10 +15,8 @@ import MYGUI.ButtonFactory;
 import MYGUI.MetroEditablePane;
 import MYGUI.MetroEditablePin;
 import MYGUI.MetroPanel;
-import MYGUI.MetroPassView;
-import MYGUI.MetroTextView;
 import MYGUI.MyButton;
-import javax.swing.JPanel;
+
 
 public class StartFrame extends MetroPanel {
 
