@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
@@ -37,28 +38,47 @@ public class Balance extends MetroPanel {
 	private MyButton btnBalance;
 	private MyButton btnPrint;
 	private MyButton btnOnDissplay;
+	private JLabel lblNewLabel;
 
 	public Balance() {
 		System.out.println("Balance");
 		pnlBalance = new MetroPanel();
 		pnlBalance.setBounds(115, 0, 685, 600);
-		add(pnlBalance);
-		
+
 		JLabel lblBalance = new JLabel("Balance");
 		lblBalance.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
-		lblBalance.setBounds(349, 54, 124, 36);
+		lblBalance.setBounds(305, 62, 124, 36);
 		pnlBalance.add(lblBalance);
-		
+
 		btnOnDissplay = new MyButton("On display");
-		btnOnDissplay.setBounds(0, 338, 89, 23);
+		btnOnDissplay.setBounds(0, 338, 132, 45);
 		pnlBalance.add(btnOnDissplay);
-		
+
 		btnPrint = new MyButton("Print");
-		btnPrint.setBounds(0, 394, 89, 23);
+		btnPrint.setBounds(553, 338, 132, 45);
 		pnlBalance.add(btnPrint);
+
+		lblNewLabel = new JLabel();
+		lblNewLabel.setFont(new Font("Verdana", Font.PLAIN, 17));
+		lblNewLabel.setBounds(256, 113, 223, 45);
+		pnlBalance.add(lblNewLabel);
+
+		addInnerListener();
+		add(pnlBalance);
 
 		setPnlSide();
 		setScrollPane();
+	}
+
+	public void resetRightPanel(MetroPanel m) {
+		remove(pnlBalance);
+		repaint();
+		revalidate();
+		m.setBounds(115, 0, 685, 600);
+		add(m);
+		repaint();
+		revalidate();
+
 	}
 
 	// add listeners
@@ -67,6 +87,30 @@ public class Balance extends MetroPanel {
 			b.addActionListener(a);
 		}
 	}
+
+	private void addInnerListener() {
+		btnOnDissplay.addActionListener(new ActionListenerBalance());
+		btnPrint.addActionListener(new ActionListenerBalance());
+	}
+
+	private class ActionListenerBalance implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+			System.out.println("In the ActionListenerBalance");
+
+			if (source == btnOnDissplay) {
+				// need to add model which show how much do we have
+				lblNewLabel.setText("Your current balance: ");
+			}
+
+			if (source == btnPrint) {
+				lblNewLabel.setText("Please take your check");
+			}
+
+		}
+	}// END ActionListenerBalance
 
 	private void setScrollPane() {
 		System.out.println("Scroll panel navigation");
@@ -85,7 +129,7 @@ public class Balance extends MetroPanel {
 
 	private void setPnlSide() {
 		pnlSide = new MYGUI.MetroPanel();
-		pnlSide.setBounds(0, 0, 110, 500);
+		pnlSide.setBounds(0, 0, 110, 700);
 		setButtons();
 
 	}

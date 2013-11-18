@@ -146,7 +146,6 @@ public class StartFrame extends MetroPanel {
 		btnDelNumbCard.setBounds(132, 2, 20, 16);
 		listOfComponents.add(btnDelNumbCard);
 		panel_1.add(btnDelNumbCard);
-		listOfComponents.add(btnDelNumbCard);
 		// password
 		panel_2 = new JPanel();
 		panel_2.setLayout(null);
@@ -237,6 +236,7 @@ public class StartFrame extends MetroPanel {
 				cleanField(txtCardNumb);
 				if (!s.isEmpty()) {
 					s = s.substring(0, s.length() - 1);
+					System.out.println("String after deleting: "+s);
 					txtCardNumb.setText(s);
 				}
 			}// delCardNumb

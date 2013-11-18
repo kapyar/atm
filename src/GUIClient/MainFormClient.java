@@ -23,10 +23,10 @@ public class MainFormClient extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				"resources\\imagesClient\\pig.png"));
 		
-
 	}
 
 	public void resetPanel(MetroPanel m) {
+		System.out.println("ResetPanel");
 		getContentPane().removeAll();
 		getContentPane().repaint();
 		getContentPane().revalidate();

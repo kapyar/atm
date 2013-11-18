@@ -35,6 +35,7 @@ public class Controller{
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if(source == start.getMyButton_Enter()){
+				System.out.println("Pressed the Enter");
 			//	balance.addNavigationListeners(new NavigationListeners());
 				mainConteiner.resetPanel(balance);
 			}
@@ -50,10 +51,13 @@ public class Controller{
 			Object source = e.getSource();
 			
 			if(source == balance.getBtnBalance()){
-				System.out.println("Balance!!");
-				
+				System.out.println("Balance!!");	
 			}
 			
+			if(source == balance.getBtnPayBill()){
+				System.out.println("Must change the panels");
+				balance.resetRightPanel(start);
+			}
 		}
 		 
 	 }//END NavigationListeners
