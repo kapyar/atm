@@ -16,10 +16,12 @@ import javax.swing.JTable;
 
 import MYGUI.MetroPanel;
 import MYGUI.MetroScrollBar;
+import MYGUI.MetroTable;
 import MYGUI.MyButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
@@ -44,10 +46,13 @@ public class Start extends JFrame {
 	private List<String> tables;
 	private HashMap<String, Object[][]> columns_data_map;
 	private HashMap<String, String[]> columns_name_map;
+	private HashMap<String, String[]> columns_type_map;
 	
 	private Stack<Pair<String, Container>> to_add;
 	private Stack<Container> navi;
 	private Stack<Container> new_navi;
+	
+	public static Pair<String, List<Integer>> last_edited = new Pair<String, List<Integer>>(null, null);
 	
 	public MyButton getNaviButton ( String btn,final Container goTo, int naviSize, int padding ) {
 		
@@ -69,38 +74,49 @@ public class Start extends JFrame {
 		return temp;
 	}
 	
-
+	
+	
 	private JTable getColumsPane(final String curr_table) {
+		last_edited.set_first(curr_table);
+		last_edited.set_second(new ArrayList<Integer>());
+		
 		if (columns_data_map.containsKey(curr_table) == false) {
 			
 			Database db = new Database();
 			List<String> colums = db.getColums(curr_table);
 			String[] columnNames = new String[colums.size()];
+			String [] col_types = db.getColTypes(curr_table, columnNames);
 			
 			for (int i = 0; i < colums.size(); ++i) {
 				columnNames[i] = colums.get(i);
 			}
 	
-			
-	
+
 			List<String[]> tData = db.getTableData(curr_table, columnNames);
+
 			Object[][] data = new Object[tData.size()][];
 			
 			for (int i = 0; i < tData.size(); ++i) {
 				data[i] = tData.get(i);
 			}
 			columns_name_map.put(curr_table, columnNames);
+			columns_type_map.put(curr_table, col_types);
 			columns_data_map.put(curr_table, data);
 		}
 		
 		to_add.push(new Pair(ButtonFactory.BACK, getMainPage()));
+		to_add.push(new Pair(ButtonFactory.DELETE, new JPanel()));
 		
 		
 
-		final JTable table = new JTable(columns_data_map.get(curr_table), columns_name_map.get(curr_table));
+		//final JTable table = new JTable(columns_data_map.get(curr_table), columns_name_map.get(curr_table));
+		
+		final JTable table = new JTable (new MetroTable(columns_data_map.get(curr_table), columns_name_map.get(curr_table), columns_type_map.get(curr_table)));
+		
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
 
+		
 		
 		return table;
 
@@ -120,7 +136,6 @@ public class Start extends JFrame {
 		
 	    //return res;
 	}
-	
 	
 	
 	private JPanel getMainPage() {
@@ -229,6 +244,7 @@ public class Start extends JFrame {
 		
 		columns_data_map = new HashMap<String, Object[][]>();
 		columns_name_map = new HashMap<String, String[]>();
+		columns_type_map = new HashMap<String, String[]>();
 		
 		to_add = new Stack<Pair<String, Container>>();
 		navi = new Stack<Container>();
@@ -244,6 +260,7 @@ public class Start extends JFrame {
 		init_layouts();
 		
 		setWindow(getMainPage());
+		
 		
 		//getContentPane().add(scrollPane);
 	}

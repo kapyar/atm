@@ -76,10 +76,17 @@ public class Database {
 	public List<String[]> getTableData (String table, String [] colums) {
 		List<String[]> res = new ArrayList<String[]>();
 		
+		/*System.out.println("table " + table);
+
+		for ( int i = 0; i < colums.length; ++i ) {
+			System.out.println(getColType(table, colums[i]));
+		}
+		*/
+		
 		try {
 			Statement st = connection.createStatement();
 			
-			ResultSet rs = st.executeQuery("SELECT * FROM `"+table+"` ");
+			ResultSet rs = st.executeQuery("SELECT * FROM `" + table + "` ");
 			
 			
        	 while (rs.next()) {
@@ -104,6 +111,16 @@ public class Database {
        	 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		
+		return res;
+	}
+	
+	public String[] getColTypes (String table, String [] cols) {
+		String [] res = new String[cols.length];
+		
+		for (int i = 0; i < cols.length; ++i) {
+			res[i] = getColType(table, cols[i]);
 		}
 		
 		return res;

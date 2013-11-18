@@ -16,4 +16,12 @@ public class Pair<FIRST, SECOND> {
 	public SECOND second() {
 		return second;
 	}
+	
+	public void set_first(FIRST val) {
+		first = val;
+	}
+	
+	public void set_second(SECOND val) {
+		second = val;
+	}
 }
