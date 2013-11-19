@@ -55,11 +55,16 @@ public class Withdrawal extends RightPanel {
 		
 		btnChoose = ButtonFactory.getSelectBtn("Choose");
 		btnChoose.setBounds(553, 420, 132, 45);
-		list.add(btnChoose);
+		//list.add(btnChoose);
 		add(btnChoose);
 		
 		addInnerListener();
 		
+	}
+	//set OuterListener to be able to switch panel to input own
+	//sum of money
+	private void addOuterListener(ActionListener a){
+		btnChoose.addActionListener(a);
 	}
 
 	private void addInnerListener() {
