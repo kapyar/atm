@@ -30,10 +30,7 @@ public class SendMoney extends RightPanel {
 
 	public SendMoney() {
 
-		JLabel lblNewLabel = new JLabel("Send Money");
-		lblNewLabel.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
-		lblNewLabel.setBounds(274, 64, 161, 28);
-		add(lblNewLabel);
+		setMyTitle("Send Money");
 
 		radioButton = new JRadioButton("");
 		radioButton.setBackground(new Color(51, 153, 255));

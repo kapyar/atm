@@ -13,80 +13,81 @@ import java.awt.Font;
 public class Withdrawal extends RightPanel {
 
 	private MyButton btn20;
-	private ArrayList<MyButton> list ;
+	private ArrayList<MyButton> list;
 	private MyButton btn50;
 	private MyButton btn100;
 	private MyButton btn200;
 	private MyButton btnChoose;
-	
-	public Withdrawal(){
-		
-		JLabel lblNewLabel = new JLabel("Withdrawal");
-		lblNewLabel.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
-		lblNewLabel.setBounds(289, 42, 187, 29);
-		add(lblNewLabel);
-		
+
+	public Withdrawal() {
+
+		setMyTitle("Withdrawal");
+
 		list = new ArrayList<MyButton>();
 		btn20 = ButtonFactory.getSelectBtn("20");
 		btn20.setLocation(0, 260);
 		list.add(btn20);
 		add(btn20);
-		
+
 		btn50 = ButtonFactory.getSelectBtn("50");
 		btn50.setLocation(0, 340);
 		list.add(btn50);
 		add(btn50);
-		
+
 		btn100 = ButtonFactory.getSelectBtn("100");
 		btn100.setLocation(0, 420);
-		
+
 		list.add(btn100);
 		add(btn100);
-		
+
 		btn200 = ButtonFactory.getSelectBtn("200");
 		btn200.setBounds(553, 260, 132, 45);
 		list.add(btn200);
 		add(btn200);
-		
+
 		MyButton btn500 = ButtonFactory.getSelectBtn("500");
 		btn500.setBounds(553, 340, 132, 45);
 		list.add(btn500);
 		add(btn500);
-		
+
 		btnChoose = ButtonFactory.getSelectBtn("Choose");
 		btnChoose.setBounds(553, 420, 132, 45);
-		//list.add(btnChoose);
+		// list.add(btnChoose);
 		add(btnChoose);
-		
+
 		addInnerListener();
-		
+
 	}
-	//set OuterListener to be able to switch panel to input own
-	//sum of money
-	private void addOuterListener(ActionListener a){
+
+	// set OuterListener to be able to switch panel to input own
+	// sum of money
+	public void addOuterListener(ActionListener a) {
 		btnChoose.addActionListener(a);
 	}
 
 	private void addInnerListener() {
-		
-		for(MyButton a:list){
+
+		for (MyButton a : list) {
 			a.addActionListener(new InnerActionListener());
-		}	
+		}
 	}
-	
-	private class InnerActionListener implements ActionListener{
+
+	private class InnerActionListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
-			
-			if(source == btn20){
+
+			if (source == btn20) {
 				System.out.println("Get your 20");
 			}
-			///the same
-			
+			// /the same
+
 		}
-		
-		
+
 	}// END InnerActionListener
+
+	public MyButton getBtnChoose() {
+		return btnChoose;
+	}
 }

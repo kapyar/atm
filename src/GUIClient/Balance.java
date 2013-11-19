@@ -17,11 +17,8 @@ public class Balance extends RightPanel {
 	private JLabel lblNewLabel;
 
 	public Balance() {
-		
-		JLabel lblBalance = new JLabel("Balance");
-		lblBalance.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
-		lblBalance.setBounds(305, 62, 124, 36);
-		add(lblBalance);
+
+		setMyTitle("Balance");
 
 		btnOnDissplay = new MyButton("On display");
 		btnOnDissplay.setBounds(0, 338, 132, 45);
