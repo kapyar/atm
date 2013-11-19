@@ -56,7 +56,7 @@ public class MetroTable extends AbstractTableModel {
 	}
 	
 	public void addRow(Pair<String, List<Integer>> addTo) {  
-		Object [][] temp = temp = Arrays.copyOf (data, data.length + 1);
+		Object [][] temp = Arrays.copyOf (data, data.length + 1);
 		
 		temp[data.length] = new Object[names.length];
 		temp[data.length][0] = "new";
