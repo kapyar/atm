@@ -12,12 +12,14 @@ public class MetroTable extends AbstractTableModel {
 	String []   types;
 	Object [][] data;
 	Pair<String, List<Integer>> edited;
+	private int originalSize;
 	
 	public MetroTable (Object [][] table_data, String [] col_names, String [] col_types, Pair<String, List<Integer>> edit) {
 		data  = table_data;
 		names = col_names;
 		types = col_types;
 		edited = edit;
+		originalSize = data.length;
 	}
 	
 	@Override
@@ -52,7 +54,9 @@ public class MetroTable extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		 data[row][col] = value;
-		 edited.second().add(row);
+		 if (row < originalSize && !edited.second().contains(row)) {
+			 edited.second().add(row);
+		 }
 	}
 	
 	public void addRow(Pair<String, List<Integer>> addTo) {  
@@ -60,11 +64,26 @@ public class MetroTable extends AbstractTableModel {
 		
 		temp[data.length] = new Object[names.length];
 		temp[data.length][0] = "new";
+		//System.out.println("Data size was: " + data.length);
 		data = temp;
+		//System.out.println("New data size: " + data.length);
 		
-		addTo.second().add(data.length);
+		addTo.second().add(data.length-1);
+		
 		
 	    this.fireTableDataChanged();
     }  
+	
+	public Object [][] getData() {
+		return data;
+	}
+	
+	public String [] getFieldTypes() {
+		return types;
+	}
+	
+	public String [] getFieldNames() {
+		return names;
+	}
 
 }

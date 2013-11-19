@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 
 public class Database {
 	private String base_server = "gofrie.mysql.ukraine.com.ua";
@@ -49,8 +51,8 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-         
-         return hashmap;
+        
+        return hashmap;
 	}
 	
 	public String getColType(String table, String column) {
@@ -187,4 +189,76 @@ public class Database {
 		return res;
 	}
 
+	public void updateRow(String table, Object [] row, String [] names, String [] types) {
+		try {
+			
+			String query = "UPDATE `" + table + "` SET ";
+			
+			for (int i = 1; i < types.length; ++i) {
+				query += "`" + names[i] + "` = (?)";
+				if (i != types.length - 1) {
+					query += ",";
+				}
+			}
+			
+			query += " WHERE `id`=(?)";
+			
+			//System.out.println(query);
+			
+			PreparedStatement ps =  connection.prepareStatement(query);
+			
+			for (int i = 1; i < types.length; ++i) {
+				/*if (types[i].equals("int") || types[i].equals("tinyint")) {
+					ps.setInt(1, Integer.parseInt((String)row[i]));
+				}
+				
+				if (types[i].equals("int")) {
+					ps.setInt(1, Integer.parseInt((String)row[i]));
+					
+				}*/
+				
+				ps.setString(i, (String)row[i]);
+				
+				//System.out.print( names[i] + "=" + (String)row[i] + ",  ");
+				
+			}
+
+			ps.setInt(types.length, Integer.parseInt((String)row[0]));
+			
+			ps.execute();
+
+			
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Something went wrong while UPDATING a table. Check data types or field length.");
+			Start.error_flag = true;
+			e.printStackTrace();
+		}
+	}
+	
+	public void insertRow(String table, Object [] row, String [] names, String [] types) {
+		try {
+			
+			String query = "INSERT INTO `" + table + "` SET ";
+			
+			for (int i = 1; i < types.length; ++i) {
+				query += "`" + names[i] + "` = (?)";
+				if (i != types.length - 1) {
+					query += ",";
+				}
+			}
+
+			PreparedStatement ps =  connection.prepareStatement(query);
+			
+			for (int i = 1; i < types.length; ++i) {
+				ps.setString(i, (String)row[i]);
+			}
+
+			ps.execute();
+			
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Something went wrong while ADDING a table. Check data types or field length.");
+			Start.error_flag = true;
+			e.printStackTrace();
+		}
+	}
 }

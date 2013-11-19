@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -52,7 +53,12 @@ public class Start extends JFrame {
 	private Stack<Pair<String, Container>> to_add;
 	private Stack<Container> navi;
 	private Stack<Container> new_navi;
-	public  MetroTable current_model;
+	private MetroTable current_model;
+	
+	private Database db;
+	
+	public static boolean error_flag;
+	
 	
 	public Pair<String, List<Integer>> last_edited = new Pair<String, List<Integer>>(null, null);
 	public Pair<String, List<Integer>> last_added = new Pair<String, List<Integer>>(null, null);
@@ -93,7 +99,6 @@ public class Start extends JFrame {
 		return temp;
 	}
 	
-	
 	public MyButton getSaveButton ( String btn, int naviSize, int padding ) {
 		MyButton temp = new MyButton();
 		temp.setPreferredSize(new Dimension(naviSize - padding*2, naviSize - padding*2));
@@ -101,17 +106,28 @@ public class Start extends JFrame {
 		
 		temp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("added: table: " + last_added.first());
-				
+				Object [][] table_data = current_model.getData();
+
 				for (int i = 0; i < last_added.second().size(); ++i) {
-					System.out.println(last_added.second().get(i));
+					//System.out.println("Adding indexes: " + last_added.second().get(i));
+					db.insertRow(last_added.first(), table_data[last_added.second().get(i)], current_model.getFieldNames(),current_model.getFieldTypes());
 				}
-				
-				System.out.println("edited: table: " + last_edited.first());
+
 				
 				for (int i = 0; i < last_edited.second().size(); ++i) {
-					System.out.println(last_edited.second().get(i));
+					db.updateRow(last_added.first(), table_data[last_edited.second().get(i)], current_model.getFieldNames(),current_model.getFieldTypes());
 				}
+				
+				if (!error_flag) {
+					JOptionPane.showMessageDialog(null, "Added: " + last_added.second().size() + " rows\n" + "Updated: " + last_edited.second().size() + " rows");
+					
+					//System.out.println("Updated: " + last_edited.second().size() + " rows");
+					//System.out.println("Added: " + last_added.second().size() + " rows");
+				}
+				
+				columns_data_map.remove(last_added.first());
+				setWindow(getColumsPane(last_added.first()));
+		
 			}
 		});
 		
@@ -133,7 +149,6 @@ public class Start extends JFrame {
 		
 		if (columns_data_map.containsKey(curr_table) == false) {
 			
-			Database db = new Database();
 			List<String> colums = db.getColums(curr_table);
 			String[] columnNames = new String[colums.size()];
 			String [] col_types = db.getColTypes(curr_table, columnNames);
@@ -281,6 +296,9 @@ public class Start extends JFrame {
 	public Start() {
 		super("Database Client");
 		
+		db = new Database();
+		error_flag = false;
+		
 		columns_data_map = new HashMap<String, Object[][]>();
 		columns_name_map = new HashMap<String, String[]>();
 		columns_type_map = new HashMap<String, String[]>();
@@ -300,6 +318,7 @@ public class Start extends JFrame {
 		
 		setWindow(getMainPage());
 		
+
 		
 		//getContentPane().add(scrollPane);
 	}
