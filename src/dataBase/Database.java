@@ -1,4 +1,5 @@
 package dataBase;
+import java.security.Timestamp;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -39,21 +40,7 @@ public class Database {
 		}
 	}
 	
-	public Map<Integer, String> getCountries() {
-		Map<Integer, String> hashmap = new HashMap<Integer, String>();
-         try {
-        	 Statement st = connection.createStatement();
-        	 ResultSet rs = st.executeQuery("SELECT * FROM `Countries`");
-        	 
-        	 while (rs.next())
-        		 hashmap.put(Integer.parseInt(rs.getString("id")), rs.getString("name"));
-        	 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-        
-        return hashmap;
-	}
+	
 	
 	public String getColType(String table, String column) {
 		String result = "";
@@ -75,41 +62,37 @@ public class Database {
 		return result;
 	}
 	
-	public List<String[]> getTableData (String table, String [] colums) {
-		List<String[]> res = new ArrayList<String[]>();
-		
-		/*System.out.println("table " + table);
-
-		for ( int i = 0; i < colums.length; ++i ) {
-			System.out.println(getColType(table, colums[i]));
-		}
-		*/
+	public List<Object[]> getTableData (String table, String [] colums, String [] types) {
+		List<Object[]> res = new ArrayList<Object[]>();
 		
 		try {
 			Statement st = connection.createStatement();
-			
 			ResultSet rs = st.executeQuery("SELECT * FROM `" + table + "` ");
 			
-			
-       	 while (rs.next()) {
-       		String [] temp = new String[colums.length];
-       		
-       		for (int i = 0; i < colums.length; ++i) {
-       			temp[i] =  rs.getString(colums[i]);
-       		}
-       		
-       		res.add(temp);
+	       	 while (rs.next()) {
+	       		Object [] temp = new Object[colums.length];
+	       		
+	       		for (int i = 0; i < colums.length-1; ++i) {
+	       			String val = rs.getString(colums[i]);
+	       			String type = types[i];
+	       			
+	       			if (type.equals("int")) {
+	       				temp[i] =  (Integer)Integer.parseInt(val);
+	       			} else if (type.equals("double")) {
+	       				temp[i] = (Double) Double.parseDouble(val);
+	       			} else if (type.equals("tinyint")) {
+	       				temp[i] = Boolean.parseBoolean(val);
+	       			} else if (type.equals("timestamp")) {
+	       				temp[i] = java.sql.Timestamp.valueOf(val);
+	       			} else {
+	       				temp[i] = val;
+	       			}
 
-       		//for (String col: colums) {
-       			/*String type = getColType(table, col);
-       			
-       			if (type.equals("int")) {
-       				res.add(Integer.parseInt(rs.getString("id"));
-       			}*/
-       			
-       		//}
-       		//res.put(Integer.parseInt(rs.getString("id")), rs.getString("name"));
-       	 }
+	       		}
+	       		
+	       		temp[colums.length-1] = false;
+	       		res.add(temp);
+	       	 }
        	 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,9 +104,10 @@ public class Database {
 	public String[] getColTypes (String table, String [] cols) {
 		String [] res = new String[cols.length];
 		
-		for (int i = 0; i < cols.length; ++i) {
+		for (int i = 0; i < cols.length-1; ++i) {
 			res[i] = getColType(table, cols[i]);
 		}
+		res[cols.length-1] = "boolean";
 		
 		return res;
 	}
@@ -194,36 +178,37 @@ public class Database {
 			
 			String query = "UPDATE `" + table + "` SET ";
 			
-			for (int i = 1; i < types.length; ++i) {
+			for (int i = 1; i < types.length -1; ++i) {
 				query += "`" + names[i] + "` = (?)";
-				if (i != types.length - 1) {
+				if (i != types.length - 2) {
 					query += ",";
 				}
 			}
 			
 			query += " WHERE `id`=(?)";
-			
-			//System.out.println(query);
-			
+
 			PreparedStatement ps =  connection.prepareStatement(query);
 			
-			for (int i = 1; i < types.length; ++i) {
-				/*if (types[i].equals("int") || types[i].equals("tinyint")) {
-					ps.setInt(1, Integer.parseInt((String)row[i]));
-				}
+			for (int i = 1; i < types.length-1; ++i) {
+				String type = types[i];
+				Object obj = row[i];
 				
-				if (types[i].equals("int")) {
-					ps.setInt(1, Integer.parseInt((String)row[i]));
-					
-				}*/
-				
-				ps.setString(i, (String)row[i]);
-				
-				//System.out.print( names[i] + "=" + (String)row[i] + ",  ");
+				if (type.equals("int")) {
+					ps.setInt(i, (int)obj);
+       			} else if (type.equals("double")) {
+       				ps.setDouble(i, (double)obj);
+       			} else if (type.equals("tinyint")) {
+       				ps.setBoolean(i, (Boolean)obj);
+       			} else if (type.equals("timestamp")) {
+       				java.sql.Timestamp x = (java.sql.Timestamp)obj;
+       				ps.setTimestamp(i, x);
+       			} else {
+       				ps.setString(i, (String)obj);
+       			}
 				
 			}
 
-			ps.setInt(types.length, Integer.parseInt((String)row[0]));
+			ps.setInt(types.length-1, (Integer)row[0]);
 			
 			ps.execute();
 
@@ -240,17 +225,32 @@ public class Database {
 			
 			String query = "INSERT INTO `" + table + "` SET ";
 			
-			for (int i = 1; i < types.length; ++i) {
+			for (int i = 1; i < types.length-1; ++i) {
 				query += "`" + names[i] + "` = (?)";
-				if (i != types.length - 1) {
+				if (i != types.length - 2) {
 					query += ",";
 				}
 			}
 
 			PreparedStatement ps =  connection.prepareStatement(query);
 			
-			for (int i = 1; i < types.length; ++i) {
-				ps.setString(i, (String)row[i]);
+			for (int i = 1; i < types.length-1; ++i) {
+				String type = types[i];
+				Object obj = row[i];
+				
+				if (type.equals("int")) {
+					ps.setInt(i, (int)obj);
+       			} else if (type.equals("double")) {
+       				ps.setDouble(i, (double)obj);
+       			} else if (type.equals("tinyint")) {
+       				ps.setBoolean(i, (Boolean)obj);
+       			} else if (type.equals("timestamp")) {
+       				java.sql.Timestamp x = (java.sql.Timestamp)obj;
+       				ps.setTimestamp(i, x);
+       			} else {
+       				ps.setString(i, (String)obj);
+       			}
+				
 			}
 
 			ps.execute();
@@ -261,4 +261,18 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
+	
+	public void removeRow(String table, int id) {
+		try {
+			PreparedStatement ps =  connection.prepareStatement("DELETE FROM `" + table + "` WHERE `id`=? ");
+       		ps.setInt(1, id);
+			ps.execute();
+			
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Something went wrong while REMOVING a table. Check data types or field length.");
+			Start.error_flag = true;
+			e.printStackTrace();
+		}
+	}
+	
 }
