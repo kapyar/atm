@@ -22,11 +22,12 @@ public class Numbers extends MetroPanel {
 
 	public Numbers() {
 		setBounds(204, 116, 207, 264);
-		setBackground(new Color(40, 140, 255));
+		this.setBackground(new Color(51, 153, 255));
+		// setBackground(new Color(40, 140, 255));
 		setVisible(true);
 
 		listOfComponents = new ArrayList<MyButton>();
-		
+
 		myButton_1 = ButtonFactory.getNumbButton("1", '1');
 		myButton_1.setLocation(24, 9);
 		add(myButton_1);

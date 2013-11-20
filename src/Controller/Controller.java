@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import GUIClient.AddMoney;
 import GUIClient.AddMoneyPhone;
 import GUIClient.Balance;
+import GUIClient.ChooseYourCash;
 import GUIClient.ContactList;
 import GUIClient.PayBill;
 import GUIClient.SendMoney;
@@ -19,6 +20,7 @@ public class Controller {
 	private StartFrame start;
 	private Wrapper wrapper;
 	private MainFormClient mainConteiner;
+	private Withdrawal withdrawal;
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
 			Wrapper wrapper) {
@@ -63,7 +65,9 @@ public class Controller {
 			}
 
 			if (source == wrapper.getBtnWithdrawal()) {
-				wrapper.resetRightPanel(new Withdrawal());
+				withdrawal = new Withdrawal();
+				withdrawal.addOuterListener(new WithdrawalListener());
+				wrapper.resetRightPanel(withdrawal);
 			}
 
 			if (source == wrapper.getBtnSendMoney()) {
@@ -73,14 +77,28 @@ public class Controller {
 			if (source == wrapper.getBtnAddMoney()) {
 				wrapper.resetRightPanel(new AddMoney());
 			}
-			
-			if(source == wrapper.getBtnAddMoneyPhone()){
+
+			if (source == wrapper.getBtnAddMoneyPhone()) {
 				wrapper.resetRightPanel(new AddMoneyPhone());
 			}
-			if(source == wrapper.getBtnContactList()){
+			if (source == wrapper.getBtnContactList()) {
 				wrapper.resetRightPanel(new ContactList());
 			}
 		}
 
 	}// END NavigationListeners
+
+	private class WithdrawalListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+
+			if (source == withdrawal.getBtnChoose()) {
+				wrapper.resetRightPanel(new ChooseYourCash());
+			}
+
+		}
+
+	}// END WithdrawalListener
 }
