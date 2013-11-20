@@ -59,7 +59,6 @@ public class Start extends JFrame {
 	
 	public static boolean error_flag;
 	
-	
 	public Pair<String, List<Integer>> last_edited = new Pair<String, List<Integer>>(null, null);
 	public Pair<String, List<Integer>> last_added = new Pair<String, List<Integer>>(null, null);
 	
@@ -138,6 +137,7 @@ public class Start extends JFrame {
 	}
 	
 	
+	
 	private JTable getColumsPane(final String curr_table) {
 		last_edited.set_first(curr_table);
 		last_edited.set_second(new ArrayList<Integer>());
@@ -191,6 +191,7 @@ public class Start extends JFrame {
 	}
 	
 	
+	
 	private JPanel getMainPage() {
 		JPanel contentPane = new MetroPanel();
 		
@@ -237,6 +238,7 @@ public class Start extends JFrame {
 		return contentPane;
 	}
 	
+	
 	private void setNavi () {
 		
 		while (to_add.empty() == false) {
@@ -265,6 +267,9 @@ public class Start extends JFrame {
 		navigation_holder.revalidate();
 		navigation_holder.repaint();
 	}
+	
+	
+	
 	
 	private void setWindow(Container container) {
 		if (scrollPane != null) {
@@ -322,6 +327,7 @@ public class Start extends JFrame {
 		
 		//getContentPane().add(scrollPane);
 	}
+	
 	
 	private void init_layouts() {
 		wrapper = new JPanel();
