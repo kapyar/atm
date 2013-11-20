@@ -14,4 +14,14 @@ public class Utils {
 		}
 		return output;
 	}
+	
+	public enum Buttons {
+		ADD,
+		REMOVE, 
+		SAVE;
+	}
+	
+	public enum DataTypes {
+		
+	}
 }

@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import MYGUI.MetroPanel;
 import MYGUI.MetroScrollBar;
@@ -61,6 +62,7 @@ public class Start extends JFrame {
 	
 	public Pair<String, List<Integer>> last_edited = new Pair<String, List<Integer>>(null, null);
 	public Pair<String, List<Integer>> last_added = new Pair<String, List<Integer>>(null, null);
+	public Pair<String, List<Integer>> last_removed = new Pair<String, List<Integer>>(null, null);
 	
 	
 	public MyButton getNaviButton ( String btn,final Container goTo, int naviSize, int padding ) {
@@ -135,8 +137,36 @@ public class Start extends JFrame {
 
 		return temp;
 	}
-	
-	
+
+	public MyButton getDeleteButton ( String btn, int naviSize, int padding ) {
+		MyButton temp = new MyButton(); 
+		temp.setPreferredSize(new Dimension(naviSize - padding*2, naviSize - padding*2));
+		temp.setMargin(new Insets(padding,padding,padding,padding));
+		
+		temp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Object [][] table_data = current_model.getData();
+
+				for (int i = 0; i < last_removed.second().size(); ++i) {
+					//System.out.println("Adding indexes: " + last_added.second().get(i));
+					db.removeRow(last_removed.first(), last_removed.second().get(i));
+				}
+				
+				if (!error_flag) {
+					JOptionPane.showMessageDialog(null, "Removed: " + last_removed.second().size() + " rows\n");
+				}
+				
+				columns_data_map.remove(last_removed.first());
+				setWindow(getColumsPane(last_removed.first()));
+		
+			}
+		});
+		
+		String fullPath  = "imagesForBaseAdmin\\" + btn + ".png";
+		temp.setIcon(new ImageIcon(fullPath));
+
+		return temp;
+	}
 	
 	private JTable getColumsPane(final String curr_table) {
 		last_edited.set_first(curr_table);
@@ -145,21 +175,26 @@ public class Start extends JFrame {
 		last_added.set_first(curr_table);
 		last_added.set_second(new ArrayList<Integer>());
 		
+		last_removed.set_first(curr_table);
+		last_removed.set_second(new ArrayList<Integer>());
+		
 		
 		
 		if (columns_data_map.containsKey(curr_table) == false) {
 			
 			List<String> colums = db.getColums(curr_table);
-			String[] columnNames = new String[colums.size()];
-			String [] col_types = db.getColTypes(curr_table, columnNames);
-			
+			String[] columnNames = new String[colums.size() + 1];
+
 			for (int i = 0; i < colums.size(); ++i) {
 				columnNames[i] = colums.get(i);
 			}
-	
+			
+			columnNames[colums.size()] = "Remove";
+			
+			String [] col_types = db.getColTypes(curr_table, columnNames);
 
-			List<String[]> tData = db.getTableData(curr_table, columnNames);
-
+			List<Object[]> tData = db.getTableData(curr_table, columnNames, col_types);
+			
 			Object[][] data = new Object[tData.size()][];
 			
 			for (int i = 0; i < tData.size(); ++i) {
@@ -173,15 +208,22 @@ public class Start extends JFrame {
 		to_add.push(new Pair(ButtonFactory.BACK, getMainPage()));
 		to_add.push(new Pair(ButtonFactory.ADD, new JPanel()));
 		to_add.push(new Pair(ButtonFactory.DONE, new JPanel()));
-		//to_add.push(new Pair(ButtonFactory.DELETE, new JPanel()));
-		
+		to_add.push(new Pair(ButtonFactory.DELETE, new JPanel()));
 
 		current_model = new MetroTable(	columns_data_map.get(curr_table), 
 										columns_name_map.get(curr_table), 
 										columns_type_map.get(curr_table), 
-										last_edited);
+										last_edited,
+										last_removed);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		
 		final JTable table = new JTable (current_model);
+		
+		for (int i = 0; i < current_model.getColumnCount()-1; ++i) {
+			table.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
+		}
 		
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
@@ -189,8 +231,6 @@ public class Start extends JFrame {
 		return table;
 
 	}
-	
-	
 	
 	private JPanel getMainPage() {
 		JPanel contentPane = new MetroPanel();
@@ -238,7 +278,6 @@ public class Start extends JFrame {
 		return contentPane;
 	}
 	
-	
 	private void setNavi () {
 		
 		while (to_add.empty() == false) {
@@ -247,6 +286,8 @@ public class Start extends JFrame {
 				new_navi.add(getAddButton(temp.first(), navi_height, 5));
 			} else if (temp.first().equals(ButtonFactory.DONE)) {
 				new_navi.add(getSaveButton(temp.first(), navi_height, 5));
+			} else if (temp.first().equals(ButtonFactory.DELETE)) {
+				new_navi.add(getDeleteButton(temp.first(), navi_height, 5));
 			} else  {
 				new_navi.add(getNaviButton(temp.first(), temp.second(), navi_height, 5));
 			}
@@ -267,9 +308,6 @@ public class Start extends JFrame {
 		navigation_holder.revalidate();
 		navigation_holder.repaint();
 	}
-	
-	
-	
 	
 	private void setWindow(Container container) {
 		if (scrollPane != null) {
@@ -327,7 +365,6 @@ public class Start extends JFrame {
 		
 		//getContentPane().add(scrollPane);
 	}
-	
 	
 	private void init_layouts() {
 		wrapper = new JPanel();
