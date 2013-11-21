@@ -149,7 +149,7 @@ public class Start extends JFrame {
 
 				for (int i = 0; i < last_removed.second().size(); ++i) {
 					//System.out.println("Adding indexes: " + last_added.second().get(i));
-					db.removeRow(last_removed.first(), last_removed.second().get(i));
+					db.removeRow(last_removed.first(), (int)table_data[last_removed.second().get(i)][0]);
 				}
 				
 				if (!error_flag) {

@@ -265,8 +265,10 @@ public class Database {
 	public void removeRow(String table, int id) {
 		try {
 			PreparedStatement ps =  connection.prepareStatement("DELETE FROM `" + table + "` WHERE `id`=? ");
+			System.out.println("DELETE FROM `" + table + "` WHERE `id`= " + id);
        		ps.setInt(1, id);
 			ps.execute();
+
 			
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Something went wrong while REMOVING a table. Check data types or field length.");
