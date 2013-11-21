@@ -34,30 +34,42 @@ public class SendMoney extends RightPanel {
 
 		radioButton = new JRadioButton("");
 		radioButton.setBackground(new Color(51, 153, 255));
-		radioButton.setBounds(66, 238, 21, 23);
+		radioButton.setBounds(344, 356, 21, 23);
 		radioButton.setSelected(true);
 		add(radioButton);
 
 		how = new MetroEditablePane();
-		how.setLocation(93, 234);
+		how.setLocation(367, 352);
 		add(how);
 
 		whome = new MetroEditablePane();
-		whome.setBounds(428, 234, 190, 31);
+		whome.setBounds(367, 295, 190, 31);
 		add(whome);
 
 		numb = new Numbers();
-		numb.setLocation(249, 293);
+		numb.setLocation(142, 284);
 		add(numb);
 
 		radioButton_1 = new JRadioButton("");
 		radioButton_1.setBackground(SystemColor.textHighlight);
-		radioButton_1.setBounds(404, 238, 21, 23);
+		radioButton_1.setBounds(344, 299, 21, 23);
 		add(radioButton_1);
-		
+
 		ButtonGroup b = new ButtonGroup();
 		b.add(radioButton);
 		b.add(radioButton_1);
+
+		JLabel lblNewLabel = new JLabel("To Whome");
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		lblNewLabel.setBounds(367, 280, 69, 14);
+		add(lblNewLabel);
+
+		JLabel lblHowMuch = new JLabel("How Much\r\n");
+		lblHowMuch.setForeground(Color.WHITE);
+		lblHowMuch.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		lblHowMuch.setBounds(367, 337, 69, 14);
+		add(lblHowMuch);
 
 		addInnerListener();
 
@@ -110,7 +122,8 @@ public class SendMoney extends RightPanel {
 				System.out.println("Pressed ENTER");
 			}
 			if (source == numb.getMyButton_Cancel()) {
-				System.out.println("PRessed Cancel");
+				how.getTextField().setText("");
+				whome.getTextField().setText("");
 			}
 
 		}
@@ -125,6 +138,5 @@ public class SendMoney extends RightPanel {
 		}
 
 	}
-
 }// END InnerListener
 

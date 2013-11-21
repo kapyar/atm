@@ -21,10 +21,23 @@ public class Controller {
 	private Wrapper wrapper;
 	private MainFormClient mainConteiner;
 	private Withdrawal withdrawal;
+	private ChooseYourCash chooseYourCash;
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
 			Wrapper wrapper) {
 		System.out.println("Constructing Controller");
+
+		// try {
+		// Class.forName("GUIClient.AddMoney");
+		// Class.forName("GUIClient.AddMoneyPhone");
+		// Class.forName("GUIClient.Balance");
+		// Class.forName("GUIClient.ContactList");
+		// Class.forName("GUIClient.PayBill");
+		// Class.forName("GUIClient.Withdrawal");
+		// } catch (ClassNotFoundException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 		this.mainConteiner = mainConteiner;
 		this.start = start;
 		this.wrapper = wrapper;
@@ -95,10 +108,28 @@ public class Controller {
 			Object source = e.getSource();
 
 			if (source == withdrawal.getBtnChoose()) {
-				wrapper.resetRightPanel(new ChooseYourCash());
+				chooseYourCash = new ChooseYourCash();
+				chooseYourCash.addOuterListener(new ChooseYourCashListener());
+				wrapper.resetRightPanel(chooseYourCash);
+			}
+		}
+
+	}// END WithdrawalListener
+
+	private class ChooseYourCashListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+
+			if (source == chooseYourCash.getBtnEnter()) {
+				System.out.println("get my cash");
+			}
+			if (source == chooseYourCash.getBtnCancel()) {
+				wrapper.resetRightPanel(withdrawal);
 			}
 
 		}
 
-	}// END WithdrawalListener
+	}// END ChooseYourCashListener
 }
