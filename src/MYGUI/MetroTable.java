@@ -99,10 +99,10 @@ public class MetroTable extends AbstractTableModel {
 		        }  
 			 }
 			 
-			 for (int i = 0; i < removed.second().size(); ++i) {
+			 /*for (int i = 0; i < removed.second().size(); ++i) {
 				 System.out.print(removed.second().get(i) + ",  ");
 			 }
-			 System.out.println();
+			 System.out.println();*/
 		 }
 	}
 	
