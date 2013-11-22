@@ -12,6 +12,7 @@ public class RightPanel extends MetroPanel {
 		lblBalance = new JLabel();
 		lblBalance.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
 		lblBalance.setBounds(305, 62, 300, 36);
+		lblBalance.setAlignmentX(CENTER_ALIGNMENT);
 		add(lblBalance);
 		setBounds(115, 0, 685, 600);
 	}

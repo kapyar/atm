@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import MYGUI.NumbersWithTextField;
 import MYGUI.RightPanel;
+import Model.Model;
 
 public class AddMoney extends RightPanel {
 
@@ -18,7 +19,7 @@ public class AddMoney extends RightPanel {
 	public AddMoney() {
 		setMyTitle("Add Money");
 		panel = new NumbersWithTextField();
-		panel.setBounds(257, 184, 225, 326);
+		panel.setBounds(257, 210, 225, 326);
 		add(panel);
 
 		JLabel lblNewLabel = new JLabel("Input value of money");
@@ -48,16 +49,17 @@ public class AddMoney extends RightPanel {
 				int t = JOptionPane.showConfirmDialog(AddMoney.this,
 						"You Add "
 								+ panel.getTextView().getTextField().getText()
-								+ "UAH", "Exit", JOptionPane.YES_NO_OPTION);
-				if (t == 0) {
+								+ " UAH", "Exit", JOptionPane.YES_NO_OPTION);
+				if (t == 0) {// Using model. It should request server to do impl
+
 					System.out.println("Add "
 							+ panel.getTextView().getTextField().getText());
 					panel.getTextView().getTextField().setText("");
+
 				}
 
 			}
 
 		}
-
 	}// END InnerListener
 }
