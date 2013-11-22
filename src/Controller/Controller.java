@@ -2,6 +2,9 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.concurrent.ExecutionException;
 
 import GUIClient.AddMoney;
 import GUIClient.AddMoneyPhone;
@@ -16,6 +19,7 @@ import GUIClient.Withdrawal;
 import GUIClient.Wrapper;
 import GUIClient.MainFormClient;
 import GUIClient.StartFrame;
+import Model.Model;
 
 public class Controller {
 
@@ -58,7 +62,12 @@ public class Controller {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
 				System.out.println("Pressed the Enter");
-				// balance.addNavigationListeners(new NavigationListeners());
+				Model m = new Model();
+				try {
+					m.doDummy("dummy");
+				} catch (Exception ex) {
+					System.out.println("Cought Exception");
+				}
 				mainConteiner.resetPanel(wrapper);
 			}
 		}

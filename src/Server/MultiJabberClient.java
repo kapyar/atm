@@ -1,19 +1,37 @@
 package Server;
 
 import java.net.*;
+import java.util.concurrent.Callable;
 import java.io.*;
 
-public class MultiJabberClient {
-	static final int MAX_THREADS = 5;
+/*
+ * 
+ * this class is for testing multithreading
+ */
+public class MultiJabberClient implements Callable<String> {
+	private String textFromModel;
+	private Socket socket;
+	private BufferedReader bfReader;
+	private PrintWriter prWriter;
 
-	public static void main(String[] args) throws IOException,
-			InterruptedException {
-		InetAddress addr = InetAddress.getByName(null);
-		System.out.println(addr);
+	public MultiJabberClient(String textFromModel) throws UnknownHostException,
+			IOException {
+		System.out.println("Constructor MultiJabberClient");
+		socket = new Socket("localhost", 3434);
+		bfReader = new BufferedReader(new InputStreamReader(
+				socket.getInputStream()));
+		prWriter = new PrintWriter(socket.getOutputStream());
+		this.textFromModel = textFromModel;
 
-		new ClientThread("first");
-		new ClientThread("second");
-		new ClientThread("third");
+	}
 
+	@Override
+	public String call() throws Exception {
+		System.out.println("MultyJabberClient call");
+		prWriter.println(textFromModel);
+
+		String answer = bfReader.readLine();
+
+		return answer;
 	}
 }

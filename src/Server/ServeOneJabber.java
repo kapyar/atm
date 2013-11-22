@@ -2,10 +2,12 @@ package Server;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.TimeUnit;
 
 public class ServeOneJabber extends Thread {
 
 	public ServeOneJabber(Socket s) throws IOException {
+		System.out.println("Constructor ServerOneJabber");
 		socket = s;
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		// включаємо автоматичне виштовхування
@@ -22,15 +24,18 @@ public class ServeOneJabber extends Thread {
 		try {
 			while (true) {
 				// read from client
-				String str = in.readLine();
-				if (str != null) {
-					System.out.println("Get string: " + str);
-					out.println(str + "OUT FROM RUN SERVERONEJOBBER");
+				System.out.println("ServerOneJabber run()");
+
+				// System.out.println("Get string: " + str);
+				out.println("answer");
+				try {
+					sleep(1121);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 
-		} catch (IOException e) {
-			System.err.println("IO Exception");
 		} finally {
 			try {
 				socket.close();
@@ -38,7 +43,6 @@ public class ServeOneJabber extends Thread {
 				System.err.println("Cought smt ...");
 			}
 		}
-		System.out.println("The END of run method");
 	}
 
 	private Socket socket;
