@@ -20,6 +20,7 @@ public class MyButton extends JButton {
         }
 
         public MyButton(String text) {
+        	
             super(text);
             super.setContentAreaFilled(false);
             this.setCursor(new Cursor(Cursor.HAND_CURSOR));
