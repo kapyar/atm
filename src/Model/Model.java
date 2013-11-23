@@ -23,10 +23,10 @@ import Server.Server;
 
 public class Model {
 
-	public String doDummy(HashMap<Action, Object> command)
-			throws InterruptedException, ExecutionException,
-			UnknownHostException, IOException {
+	public String doDummy(Object object) throws InterruptedException,
+			ExecutionException, UnknownHostException, IOException {
 
+		HashMap command = (HashMap<Action, Object>) object;
 		System.out.println("Inside dummy");
 		ExecutorService ex = Executors.newCachedThreadPool();
 		Future<String> res = ex.submit(new MultiJabberClient(command));
