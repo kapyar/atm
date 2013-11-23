@@ -25,6 +25,8 @@ public class AddMoney extends RightPanel {
 		_H = super.getHeight();
 		_x = super.getX();
 		_y = super.getY();
+		
+		
 		setMyTitle("Add Money");
 		panel = new NumbersWithTextField();
 		panel.setBounds(_W/2-115, 210, 230, 326);

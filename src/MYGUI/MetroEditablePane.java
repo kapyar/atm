@@ -17,19 +17,19 @@ public class MetroEditablePane extends JPanel {
 	private MyButton del;
 
 	public MetroEditablePane() {
-		this.setSize(new Dimension(190, 31));
+		this.setSize(new Dimension(190 , 31));
 		this.setBackground(Color.WHITE);
 		this.setLayout(null);
-
+		
 		textField = new MetroTextView();
-		textField.setBounds(8, 5, 144, 20);
+		textField.getMargin();
+		textField.setBounds(8, 5, this.getWidth()-45, 20);
 		add(textField);
 		textField.setColumns(10);
 
 		del = ButtonFactory.getDelButton("resources\\imagesClient\\del_1.png");
-		del.setLocation(160, 3);
+		del.setLocation(this.getWidth()-30, 3);
 		add(del);
-		
 		addInnerListener();
 	}
 
