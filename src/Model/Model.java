@@ -23,10 +23,10 @@ public class Model {
 	public String doDummy(String command) throws InterruptedException,
 			ExecutionException, UnknownHostException, IOException {
 
-		System.out.println("Iside dummy");
+		System.out.println("Inside dummy");
 		ExecutorService ex = Executors.newCachedThreadPool();
 		Future<String> res = ex.submit(new MultiJabberClient(command));
-		System.out.println("get back: " + res.get());
+		System.out.println("get back in dummy: " + res.get());
 		ex.shutdown();
 
 		return res.get();

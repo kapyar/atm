@@ -13,11 +13,13 @@ public class MultiJabberClient implements Callable<String> {
 	private Socket socket;
 	private BufferedReader bfReader;
 	private PrintWriter prWriter;
+	final String HOST_NAME = "162.211.226.101";
+	final int PORT_NUMBER = 8081;
 
 	public MultiJabberClient(String textFromModel) throws UnknownHostException,
 			IOException {
 		System.out.println("Constructor MultiJabberClient");
-		socket = new Socket("localhost", 3434);
+		socket = new Socket("localhost", PORT_NUMBER);
 		bfReader = new BufferedReader(new InputStreamReader(
 				socket.getInputStream()));
 		prWriter = new PrintWriter(socket.getOutputStream());
@@ -31,6 +33,7 @@ public class MultiJabberClient implements Callable<String> {
 		prWriter.println(textFromModel);
 
 		String answer = bfReader.readLine();
+		System.out.println("Answer in call(): " + answer);
 
 		return answer;
 	}

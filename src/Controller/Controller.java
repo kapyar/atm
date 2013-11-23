@@ -66,7 +66,7 @@ public class Controller {
 				try {
 					m.doDummy("dummy");
 				} catch (Exception ex) {
-					System.out.println("Cought Exception");
+					ex.printStackTrace();
 				}
 				mainConteiner.resetPanel(wrapper);
 			}
