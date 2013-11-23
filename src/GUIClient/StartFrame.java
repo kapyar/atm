@@ -293,4 +293,12 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		// empty method
 		
 	}
+
+	public MetroEditablePane getTxt() {
+		return txt;
+	}
+
+	public MetroEditablePin getPin() {
+		return pin;
+	}
 }
