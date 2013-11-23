@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class ServeOneJabber extends Thread {
 
 	private Socket socket;
 	private BufferedReader in;
 	private PrintWriter out;
+	private HashMap<Actions.Action, Object> dataFromUser;
 
 	public ServeOneJabber(Socket s) throws IOException {
 		System.out.println("Constructor ServerOneJabber");

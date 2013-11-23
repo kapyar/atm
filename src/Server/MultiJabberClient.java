@@ -1,8 +1,12 @@
 package Server;
 
 import java.net.*;
+import java.util.HashMap;
+import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.io.*;
+
+import Actions.Action;
 
 /*
  * 
@@ -15,25 +19,40 @@ public class MultiJabberClient implements Callable<String> {
 	private PrintWriter prWriter;
 	final String HOST_NAME = "162.211.226.101";
 	final int PORT_NUMBER = 8081;
+	private HashMap<Action, Object> dataToSend;
 
-	public MultiJabberClient(String textFromModel) throws UnknownHostException,
-			IOException {
+	public MultiJabberClient(HashMap<Action, Object> dataToSend)
+			throws UnknownHostException, IOException {
 		System.out.println("Constructor MultiJabberClient");
-		socket = new Socket("localhost", PORT_NUMBER);
+		socket = new Socket(HOST_NAME, PORT_NUMBER);
 		bfReader = new BufferedReader(new InputStreamReader(
 				socket.getInputStream()));
-		prWriter = new PrintWriter(socket.getOutputStream());
-		this.textFromModel = textFromModel;
+		// true is very important
+		prWriter = new PrintWriter(socket.getOutputStream(), true);
+		this.dataToSend = dataToSend;
 
 	}
 
 	@Override
 	public String call() throws Exception {
 		System.out.println("MultyJabberClient call");
-		prWriter.println(textFromModel);
+		// send data to server
+		prWriter.println(dataToSend);
 
+		System.out.println("call() before Reading");
+		// Scanner s = new Scanner(socket.getInputStream());
 		String answer = bfReader.readLine();
-		System.out.println("Answer in call(): " + answer);
+		// String answer = s.nextLine();
+		System.out.println("Answer from server" + answer);
+
+		prWriter.println("stop");
+
+		System.out.println("finished showing serv data");
+		System.out.println();
+
+		bfReader.close();
+		prWriter.close();
+		socket.close();
 
 		return answer;
 	}
