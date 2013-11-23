@@ -1,11 +1,13 @@
 package GUIClient;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -16,7 +18,6 @@ import MYGUI.MetroEditablePane;
 import MYGUI.MetroEditablePin;
 import MYGUI.MetroPanel;
 import MYGUI.MyButton;
-
 
 public class StartFrame extends MetroPanel {
 
@@ -42,6 +43,11 @@ public class StartFrame extends MetroPanel {
 
 	public StartFrame() {
 		System.out.println("Start Frame");
+		JLabel lblBalanceTitle = new JLabel("ATMers");
+		lblBalanceTitle.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
+		lblBalanceTitle.setBounds(305, 62, 300, 36);
+		lblBalanceTitle.setAlignmentX(CENTER_ALIGNMENT);
+		add(lblBalanceTitle);
 		panel = new MetroPanel();
 		panel.setBounds(204, 116, 435, 296);
 		panel.setOpaque(true);

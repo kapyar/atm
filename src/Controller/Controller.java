@@ -5,11 +5,13 @@ import java.awt.event.ActionListener;
 
 import GUIClient.AddMoney;
 import GUIClient.AddMoneyPhone;
+import GUIClient.AddNewFriend;
 import GUIClient.Balance;
 import GUIClient.ChooseYourCash;
 import GUIClient.ContactList;
 import GUIClient.PayBill;
 import GUIClient.SendMoney;
+import GUIClient.WatchFriends;
 import GUIClient.Withdrawal;
 import GUIClient.Wrapper;
 import GUIClient.MainFormClient;
@@ -22,6 +24,7 @@ public class Controller {
 	private MainFormClient mainConteiner;
 	private Withdrawal withdrawal;
 	private ChooseYourCash chooseYourCash;
+	private ContactList contactList;
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
 			Wrapper wrapper) {
@@ -95,11 +98,30 @@ public class Controller {
 				wrapper.resetRightPanel(new AddMoneyPhone());
 			}
 			if (source == wrapper.getBtnContactList()) {
-				wrapper.resetRightPanel(new ContactList());
+				contactList = new ContactList();
+				contactList.addOuterListener(new ContactListListener());
+				wrapper.resetRightPanel(contactList);
 			}
 		}
-
 	}// END NavigationListeners
+
+	private class ContactListListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+
+			if (source == contactList.getWatch()) {
+				wrapper.resetRightPanel(new WatchFriends());
+			}
+
+			if (source == contactList.getAddFriend()) {
+				wrapper.resetRightPanel(new AddNewFriend());
+			}
+
+		}
+
+	}// END ContactListListener
 
 	private class WithdrawalListener implements ActionListener {
 

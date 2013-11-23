@@ -93,5 +93,9 @@ public class NumbersWithTextField extends Numbers {
 
 	}
 
+	public MetroEditablePane getTextView() {
+		return textView;
+	}
+
 }// END InnerListener
 
