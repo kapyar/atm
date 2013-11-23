@@ -22,7 +22,7 @@ public class ServeOneJabber extends Thread {
 		/*
 		 * out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
 		 * socket.getOutputStream())), true);
-		 */   
+		 */
 
 		// Якщо будь-який з вище перерахованих викликів приведе до виникнення
 		// виключення, тоді викликаючий буде відповідальний за закриття сокета
