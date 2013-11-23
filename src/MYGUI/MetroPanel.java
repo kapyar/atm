@@ -13,4 +13,6 @@ public class MetroPanel extends JPanel {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
 	}
+
+
 }

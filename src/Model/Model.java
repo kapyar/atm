@@ -25,15 +25,17 @@ public class Model {
 
 	public String doDummy(Object object) throws InterruptedException,
 			ExecutionException, UnknownHostException, IOException {
+				
+//		HashMap command = (HashMap<Action, Object>) object;
+//		System.out.println("Inside dummy");
+//		ExecutorService ex = Executors.newCachedThreadPool();
+//		Future<String> res = ex.submit(new MultiJabberClient(command));
+//		System.out.println("get back in dummy: " + res.get());
+//		ex.shutdown();
+//
+//		return res.get();
+		return "doDummeComentes";
 
-		HashMap command = (HashMap<Action, Object>) object;
-		System.out.println("Inside dummy");
-		ExecutorService ex = Executors.newCachedThreadPool();
-		Future<String> res = ex.submit(new MultiJabberClient(command));
-		System.out.println("get back in dummy: " + res.get());
-		ex.shutdown();
-
-		return res.get();
 	}
 
 	public boolean checkLogIn(String text, String text2) {

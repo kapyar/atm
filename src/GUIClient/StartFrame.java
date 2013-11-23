@@ -63,12 +63,14 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		JLabel lblBalanceTitle = new JLabel("ATMers", JLabel.CENTER);
 		lblBalanceTitle.setFont(new Font(FontType, Font.PLAIN, 27));
 
-		lblBalanceTitle.setBounds(((_x + _W) / 2) - 150, 62, 300, 36);
+		lblBalanceTitle.setBounds(( _W / 2) - ConfigGUICLient._WTL / 2,
+				ConfigGUICLient._yTL, ConfigGUICLient._WTL,
+				ConfigGUICLient._HTL);
 		lblBalanceTitle.setAlignmentX(this.CENTER_ALIGNMENT);
 
 		add(lblBalanceTitle);
 		panel = new MetroPanel();
-		panel.setBounds(204, 116, 435, 296);
+		panel.setBounds((_x+_W/2)-220, 116, 440, 296);
 		panel.setOpaque(true);
 		panel.setBackground(new Color(40, 140, 255));
 		panel.setVisible(true);

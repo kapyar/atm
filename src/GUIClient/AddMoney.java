@@ -15,11 +15,19 @@ import Model.Model;
 public class AddMoney extends RightPanel {
 
 	private NumbersWithTextField panel;
-
+	
+	private int _W;
+	private int _H;
+	private int _x;
+	private int _y;
 	public AddMoney() {
+		_W = super.getWidth();
+		_H = super.getHeight();
+		_x = super.getX();
+		_y = super.getY();
 		setMyTitle("Add Money");
 		panel = new NumbersWithTextField();
-		panel.setBounds(257, 210, 225, 326);
+		panel.setBounds(_W/2-115, 210, 230, 326);
 		add(panel);
 
 		JLabel lblNewLabel = new JLabel("Input value of money");

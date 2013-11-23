@@ -4,10 +4,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class NumbersWithTextField extends Numbers {
-	private MetroEditablePane textView;
+	private  MetroEditablePane textView;
+	// NumbersWithTextField sizes and coordinates
+		private int _W;
+		private int _H;
+		private int _x;
+		private int _y;
 
+		
+		
 	public NumbersWithTextField() {
-
+		_W = this.getWidth();
+		_H = this.getHeight();
+		_x = this.getX();
+		_y = this.getY();
 		init();
 		addInnerListener();
 	}
@@ -27,11 +37,12 @@ public class NumbersWithTextField extends Numbers {
 		}
 
 	}
-
+	
 	private void init() {
+		this.getX();
 		getMyButton_Enter().setLocation(119, 264);
 		getMyButton_Cancel().setLocation(22, 264);
-		getMyButton_0().setLocation(88, 211);
+		getMyButton_0().setLocation(_x, _y);
 		getMyButton_7().setLocation(36, 163);
 		getMyButton_8().setLocation(88, 163);
 		getMyButton_9().setLocation(139, 163);

@@ -5,10 +5,12 @@ import javax.swing.JFrame;
 import java.awt.Dimension;
 
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import MYGUI.MetroPanel;
 
-public class MainFormClient extends JFrame {
+public class MainFormClient extends JFrame implements WindowListener  {
 
 	/*
 	 * Conteiner in which we iput panels to deploy
@@ -22,7 +24,7 @@ public class MainFormClient extends JFrame {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				"resources\\imagesClient\\pig.png"));
-		
+		addWindowListener(this); 
 	}
 
 	public void resetPanel(MetroPanel m) {
@@ -35,4 +37,29 @@ public class MainFormClient extends JFrame {
 		getContentPane().repaint();
 		getContentPane().revalidate();
 	}
+
+	
+	@Override
+	public void windowClosing (WindowEvent e) {
+		
+		System.out.println("Заврешуємо прогу");
+		System.exit(0);
+	}
+
+	
+	
+	
+	@Override
+	public void windowActivated(WindowEvent e) {}
+	@Override
+	public void windowClosed(WindowEvent e) {}
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+	@Override
+	public void windowIconified(WindowEvent e) {}
+	@Override
+	public void windowOpened(WindowEvent e) {}
+
 }
