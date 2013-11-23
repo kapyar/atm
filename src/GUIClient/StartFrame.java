@@ -24,6 +24,9 @@ import MYGUI.MyButton;
 
 public class StartFrame extends MetroPanel implements MouseListener {
 
+	// private Font localFont = new Font("Viner Hand ITC", Font.PLAIN, 19);
+	private String FontType = "Viner Hand ITC";
+	// private String FontType = "Colibry";
 	private MyButton myButton_1;
 	private MyButton myButton_2;
 	private MyButton myButton_3;
@@ -44,13 +47,25 @@ public class StartFrame extends MetroPanel implements MouseListener {
 	private MetroEditablePane txt;
 	private MetroEditablePin pin;
 
+	// StartFrame sizes and coordinates
+	private int _W;
+	private int _H;
+	private int _x;
+	private int _y;
+
 	public StartFrame() {
-		
+		_W = super.getWidth();
+		_H = super.getHeight();
+		_x = super.getX();
+		_y = super.getY();
+
 		System.out.println("Start Frame");
-		JLabel lblBalanceTitle = new JLabel("ATMers");
-		lblBalanceTitle.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
-		lblBalanceTitle.setBounds(305, 62, 300, 36);
-		lblBalanceTitle.setAlignmentX(CENTER_ALIGNMENT);
+		JLabel lblBalanceTitle = new JLabel("ATMers", JLabel.CENTER);
+		lblBalanceTitle.setFont(new Font(FontType, Font.PLAIN, 27));
+
+		lblBalanceTitle.setBounds(((_x + _W) / 2) - 150, 62, 300, 36);
+		lblBalanceTitle.setAlignmentX(this.CENTER_ALIGNMENT);
+
 		add(lblBalanceTitle);
 		panel = new MetroPanel();
 		panel.setBounds(204, 116, 435, 296);
@@ -120,14 +135,48 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		panel.add(myButton_Cancel);
 		listOfComponents.add(myButton_Cancel);
 
+		// координати та розміри правивий обєктів
+		int _xRightElemets = 224;
+		int _yRightElemets = 68;
+		int _deltaYRE = 35;// delta y right element;
+
+		int _WRightElemets = 190;
+		int _HRightElemets = 31;
+
+		JLabel lblNubrerCart = new JLabel("Number Cart:", JLabel.CENTER);
+		lblNubrerCart.setFont(new Font(FontType, Font.PLAIN, 19));
+		lblNubrerCart.setBounds(_xRightElemets, _yRightElemets, _WRightElemets,
+				_HRightElemets);
+		panel.add(lblNubrerCart);
+
+		txt = new MetroEditablePane();
+		txt.getTextField().addMouseListener(this);
+		txt.setBounds(_xRightElemets, _yRightElemets + _deltaYRE,
+				_WRightElemets, _HRightElemets);
+		panel.add(txt);
+
+		JLabel lblPin = new JLabel("Enter, yor PIN:", JLabel.CENTER);
+		lblPin.setFont(new Font(FontType, Font.PLAIN, 19));
+		lblPin.setBounds(_xRightElemets, _yRightElemets + _deltaYRE * 2,
+				_WRightElemets, _HRightElemets);
+		panel.add(lblPin);
+
+		pin = new MetroEditablePin();
+		pin.getPass().addMouseListener(this);
+		pin.setBounds(_xRightElemets, _yRightElemets + _deltaYRE * 3,
+				_WRightElemets, _HRightElemets);
+		panel.add(pin);
+
 		rdbtnCardNumb = new JRadioButton("");
-		rdbtnCardNumb.setBounds(195, 72, 21, 23);
+		rdbtnCardNumb.setBounds(_xRightElemets - 20, _yRightElemets + _deltaYRE
+				+ 3, 21, 23);
 		rdbtnCardNumb.setBackground(new Color(40, 140, 255));
 		rdbtnCardNumb.setSelected(true);
 		panel.add(rdbtnCardNumb);
 
 		rdbtPass = new JRadioButton("");
-		rdbtPass.setBounds(195, 111, 21, 23);
+		rdbtPass.setBounds(_xRightElemets - 20, _yRightElemets + _deltaYRE * 3
+				+ 3, 21, 23);
 		rdbtPass.setBackground(new Color(40, 140, 255));
 		panel.add(rdbtPass);
 
@@ -135,21 +184,10 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		radioGroup.add(rdbtnCardNumb);
 		radioGroup.add(rdbtPass);
 
-		txt = new MetroEditablePane();
-		txt.getTextField().addMouseListener(this);
-		txt.setBounds(224, 68, 190, 31);
-		panel.add(txt);
-
-		pin = new MetroEditablePin();
-		pin.getPass().addMouseListener(this);
-		pin.setBounds(224, 109, 190, 31);
-	
-		panel.add(pin);
-
 		addInnerListener();
 
 	}
-	
+
 	public void addOuterListener(OuterStartActionListener m) {
 		myButton_Enter.addActionListener(m);
 	}
@@ -212,8 +250,7 @@ public class StartFrame extends MetroPanel implements MouseListener {
 					System.exit(0);
 				}
 			}
-			
-		
+
 		}// action Performed
 
 		private void cleanField(JTextField txtCardNumb) {
@@ -226,21 +263,9 @@ public class StartFrame extends MetroPanel implements MouseListener {
 			txtPin.setBackground(new Color(123, 255, 0));
 
 		}
-		
+
 		// Need to find how to input into right fields
 		private void writeToField(String s) {
-			
-//			if(txt.getTextField().isFocusable())
-//			{
-//				rdbtnCardNumb.setSelected(true);
-//				rdbtPass.setSelected(false);
-//			}
-//			if(pin.getPass().isFocusable())
-//			{
-//				rdbtPass.setSelected(true);
-//				rdbtnCardNumb.setSelected(false);
-//			}
-			
 			if (rdbtnCardNumb.isSelected()) {
 				txt.getTextField().setText(txt.getTextField().getText() + s);
 				cleanField(txt.getTextField());
@@ -253,34 +278,31 @@ public class StartFrame extends MetroPanel implements MouseListener {
 
 	}
 
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Object source = e.getSource();
-		if (source == txt.getTextField()){
-			//System.out.println("txt");
+		if (source == txt.getTextField()) {
+			// System.out.println("txt");
 			rdbtnCardNumb.setSelected(true);
 		}
-		if (source == pin.getPass()){
-			//System.out.println("pin");
+		if (source == pin.getPass()) {
+			// System.out.println("pin");
 			rdbtPass.setSelected(true);
 		}
-		//System.out.println("("+e.getX()+":"+e.getY()+")");
-		
+		// System.out.println("("+e.getX()+":"+e.getY()+")");
+
 	}
-
-
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// empty method
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// empty method
-		
+
 	}
 
 	@Override
@@ -291,7 +313,7 @@ public class StartFrame extends MetroPanel implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// empty method
-		
+
 	}
 
 	public MetroEditablePane getTxt() {
