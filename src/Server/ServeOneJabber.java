@@ -47,16 +47,14 @@ public class ServeOneJabber extends Thread {
 
 		    BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-		    while ((str = br.readLine()) != null) {
+		    while (!(str = br.readLine()).equals("stop")) {
 		      System.out.println("The message: " + str);
 
-		      if (str.equals("bye")) {
-		        pw.println("bye");
-		        break;
-		      } else {
 		        str = "Server returns " + str;
 		        pw.println(str);
-		      }
+		        pw.println(str + "111111111111");
+		        pw.println(str + "222222222221");
+		        pw.println("EOS");
 		    }
 		
 			/*// read from client
