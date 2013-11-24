@@ -29,7 +29,7 @@ public class MetroEditablePane extends JPanel {
 		del = ButtonFactory.getDelButton("resources\\imagesClient\\del_1.png");
 		del.setLocation(160, 3);
 		add(del);
-
+		
 		addInnerListener();
 	}
 

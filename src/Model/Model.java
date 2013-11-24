@@ -9,20 +9,24 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import Actions.Action;
+import Server.ClientMain;
 import Server.MultiJabberClient;
 import Server.Server;
 
 public class Model {
 
-	public String doDummy(String command) throws InterruptedException,
+	public String doDummy(Object object) throws InterruptedException,
 			ExecutionException, UnknownHostException, IOException {
 
+		HashMap command = (HashMap<Action, Object>) object;
 		System.out.println("Inside dummy");
 		ExecutorService ex = Executors.newCachedThreadPool();
 		Future<String> res = ex.submit(new MultiJabberClient(command));

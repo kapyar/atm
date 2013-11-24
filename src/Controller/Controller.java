@@ -1,11 +1,15 @@
 package Controller;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+import Actions.Action;
+import Actions.ObjLogIn;
 import GUIClient.AddMoney;
 import GUIClient.AddMoneyPhone;
 import GUIClient.AddNewFriend;
@@ -64,14 +68,16 @@ public class Controller {
 				System.out.println("Pressed the Enter");
 				Model m = new Model();
 				try {
-					m.doDummy("dummy");
+					ObjLogIn obj = new ObjLogIn(start.getTxt().getTextField()
+							.getText(), start.getPin().getPass().getText());
+					String str = m.doDummy((new HashMap<Action, Object>().put(
+							Action.ACTION, obj)));
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 				mainConteiner.resetPanel(wrapper);
 			}
 		}
-
 	}// END OuterStartActionListener
 
 	class NavigationListeners implements ActionListener {

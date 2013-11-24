@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -19,7 +22,7 @@ import MYGUI.MetroEditablePin;
 import MYGUI.MetroPanel;
 import MYGUI.MyButton;
 
-public class StartFrame extends MetroPanel {
+public class StartFrame extends MetroPanel implements MouseListener {
 
 	private MyButton myButton_1;
 	private MyButton myButton_2;
@@ -42,6 +45,7 @@ public class StartFrame extends MetroPanel {
 	private MetroEditablePin pin;
 
 	public StartFrame() {
+		
 		System.out.println("Start Frame");
 		JLabel lblBalanceTitle = new JLabel("ATMers");
 		lblBalanceTitle.setFont(new Font("Viner Hand ITC", Font.PLAIN, 27));
@@ -132,17 +136,20 @@ public class StartFrame extends MetroPanel {
 		radioGroup.add(rdbtPass);
 
 		txt = new MetroEditablePane();
+		txt.getTextField().addMouseListener(this);
 		txt.setBounds(224, 68, 190, 31);
 		panel.add(txt);
 
 		pin = new MetroEditablePin();
+		pin.getPass().addMouseListener(this);
 		pin.setBounds(224, 109, 190, 31);
+	
 		panel.add(pin);
 
 		addInnerListener();
 
 	}
-
+	
 	public void addOuterListener(OuterStartActionListener m) {
 		myButton_Enter.addActionListener(m);
 	}
@@ -205,6 +212,8 @@ public class StartFrame extends MetroPanel {
 					System.exit(0);
 				}
 			}
+			
+		
 		}// action Performed
 
 		private void cleanField(JTextField txtCardNumb) {
@@ -217,10 +226,21 @@ public class StartFrame extends MetroPanel {
 			txtPin.setBackground(new Color(123, 255, 0));
 
 		}
-
+		
 		// Need to find how to input into right fields
 		private void writeToField(String s) {
-
+			
+//			if(txt.getTextField().isFocusable())
+//			{
+//				rdbtnCardNumb.setSelected(true);
+//				rdbtPass.setSelected(false);
+//			}
+//			if(pin.getPass().isFocusable())
+//			{
+//				rdbtPass.setSelected(true);
+//				rdbtnCardNumb.setSelected(false);
+//			}
+			
 			if (rdbtnCardNumb.isSelected()) {
 				txt.getTextField().setText(txt.getTextField().getText() + s);
 				cleanField(txt.getTextField());
@@ -231,5 +251,54 @@ public class StartFrame extends MetroPanel {
 			}
 		}
 
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object source = e.getSource();
+		if (source == txt.getTextField()){
+			//System.out.println("txt");
+			rdbtnCardNumb.setSelected(true);
+		}
+		if (source == pin.getPass()){
+			//System.out.println("pin");
+			rdbtPass.setSelected(true);
+		}
+		//System.out.println("("+e.getX()+":"+e.getY()+")");
+		
+	}
+
+
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// empty method
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// empty method
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// empty method
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// empty method
+		
+	}
+
+	public MetroEditablePane getTxt() {
+		return txt;
+	}
+
+	public MetroEditablePin getPin() {
+		return pin;
 	}
 }
