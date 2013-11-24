@@ -19,18 +19,21 @@ public class MultiJabberClient implements Callable<String> {
 	public MultiJabberClient(String textFromModel) throws UnknownHostException,
 			IOException {
 		System.out.println("Constructor MultiJabberClient");
-		socket = new Socket("localhost", PORT_NUMBER);
-		bfReader = new BufferedReader(new InputStreamReader(
-				socket.getInputStream()));
-		prWriter = new PrintWriter(socket.getOutputStream());
+		socket = new Socket(HOST_NAME, PORT_NUMBER);
+		
+		bfReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		prWriter = new PrintWriter(socket.getOutputStream(), true);
+		
 		this.textFromModel = textFromModel;
 
 	}
 
 	@Override
 	public String call() throws Exception {
+		
+		
 		System.out.println("MultyJabberClient call");
-		prWriter.println(textFromModel);
+		prWriter.println("hola hola");
 
 		String answer = bfReader.readLine();
 		System.out.println("Answer in call(): " + answer);
