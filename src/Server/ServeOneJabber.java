@@ -24,7 +24,7 @@ public class ServeOneJabber extends Thread {
 		System.out.println("Constructor ServerOneJabber");
 		socket = s;
 		dataBase = new SQLwrapper();
-		
+
 		this.start();
 	}
 
@@ -33,43 +33,43 @@ public class ServeOneJabber extends Thread {
 		try {
 			System.out.println("ServerOneJabber run()");
 
-			osIn  = new ObjectInputStream (socket.getInputStream());
+			osIn = new ObjectInputStream(socket.getInputStream());
 			osOut = new ObjectOutputStream(socket.getOutputStream());
-			
-			HashMap<Action, Object> in = (HashMap<Action, Object>) osIn.readObject();
+
+			HashMap<Action, Object> in = (HashMap<Action, Object>) osIn
+					.readObject();
 			HashMap<Action, Object> out = new HashMap<Action, Object>();
-			
-			switch ((Action)in.get(Action.ACTION)) {
-				case LOG_IN:
-					Integer login = (Integer) in.get(Action.LOGIN_FIELD);
-					String pass  = (String) in.get(Action.PASS_FIELD);
-					
-					if (!dataBase.userExists(login)) {
-						out.put(Action.ERROR_CODE,  Action.ERROR_NO_USER);
-						break;
-					}
-					
-					if (!dataBase.passMatches(login, pass)) {
-						out.put(Action.ERROR_CODE,  Action.EREOR_NOT_MATCHES);
-						break;
-					}
-					
-					String session = "session_uid";
-					
-					if (!dataBase.setSession(login, session)) {
-						out.put(Action.ERROR_CODE,  Action.ERROR_SETTING_SESSION);
-						break;
-					}
-					
-					out.put(Action.SESSION_ID, Algos.serverHash(pass));
+
+			switch ((Action) in.get(Action.ACTION)) {
+			case LOG_IN:
+				Integer login = (Integer) in.get(Action.LOGIN_FIELD);
+				String pass = (String) in.get(Action.PASS_FIELD);
+
+				if (!dataBase.userExists(login)) {
+					out.put(Action.ERROR_CODE, Action.ERROR_NO_USER);
 					break;
+				}
+
+				if (!dataBase.passMatches(login, pass)) {
+					out.put(Action.ERROR_CODE, Action.EREOR_NOT_MATCHES);
+					break;
+				}
+
+				String session = "session_uid";
+
+				if (!dataBase.setSession(login, session)) {
+					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);
+					break;
+				}
+
+				out.put(Action.SESSION_ID, Algos.serverHash(pass));
+				break;
 			}
 
 			osOut.writeObject(out);
 
 			osOut.flush();
 			socket.close();
-
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
