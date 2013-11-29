@@ -24,7 +24,7 @@ public class ServeOneJabber extends Thread {
 		System.out.println("Constructor ServerOneJabber");
 		socket = s;
 		dataBase = new SQLwrapper();
-
+		
 		this.start();
 	}
 
@@ -66,6 +66,9 @@ public class ServeOneJabber extends Thread {
 				break;
 			}
 
+			System.out.println("All ok");
+			System.out.println("session is " + out.get(Action.SESSION_ID));
+			
 			osOut.writeObject(out);
 
 			osOut.flush();
