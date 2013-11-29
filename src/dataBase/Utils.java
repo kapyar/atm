@@ -21,7 +21,7 @@ public class Utils {
 		SAVE;
 	}
 	
-	public enum DataTypes {
-		
+	public static String generateRandomString() {
+		return "just_random_session";
 	}
 }
