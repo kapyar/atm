@@ -2,7 +2,7 @@ package cryptography;
 
 import java.math.BigInteger;
 import java.util.Random;
-
+import org.apache.commons.lang3.SerializationUtils;
 public class DiffieHellmanMPK {
 	private static Random randomGenerator = new Random();
 	private static long pValue = randomGenerator.nextInt(1000000);
@@ -134,27 +134,35 @@ public class DiffieHellmanMPK {
 		return BigInteger.valueOf(0);
 	}
 
-//	public static void main(String[] args) {
-//		Random randomGenerator = new Random();
-//		long Alise = randomGenerator.nextInt(1000000);
-//		long Ben = randomGenerator.nextInt(1000000);
-//		System.out.println(Alise);
-//		System.out.println(Ben);
-//		initKlient(Alise);
-//		initServer(Ben);
-//		System.out.println(getKeyKlient(Alise));
-//		System.out.println(getKeyServer(Ben));
-//		
-//		
-//		// Початок костиля
-////		String result = closeBen.toString();
-////		for (int i = result.length(); i < 16; i++) {
-////			result += "7";
-////		}
-////		// кінець костиля
-//		
-//
-//
-//	}
+	public static void main(String[] args) {
+		Random randomGenerator = new Random();
+		long Alise = randomGenerator.nextInt(1000000);
+		long Ben = randomGenerator.nextInt(1000000);
+		System.out.println(Alise);
+		System.out.println(Ben);
+		initKlient(Alise);
+		initServer(Ben);
+		System.out.println(getKeyKlient(Alise));
+		System.out.println(getKeyServer(Ben));
+		
+		System.out.println("Wow");
+		String st = "Losos";
+		System.out.println(st);
+		byte[] data = SerializationUtils.serialize(st);
+		System.out.println(data);
+		String yourObject;
+		yourObject = (String) SerializationUtils.deserialize(data);
+		System.out.println(yourObject);
+		 
+		// Початок костиляString
+//		String result = closeBen.toString();
+//		for (int i = result.length(); i < 16; i++) {
+//			result += "7";
+//		}
+//		// кінець костиля
+		
+
+
+	}
 
 }
