@@ -15,7 +15,10 @@ public class ChooseYourCash extends RightPanel {
 		setMyTitle("Choose Your Cash");
 
 		panel = new NumbersWithTextField();
-		panel.setSize(218, 309);
+		panel.getTextView().getDel().setLocation(176, 3);
+		panel.getTextView().getTextField().setBounds(8, 5, 147, 20);
+		panel.getTextView().setBounds(16, 15, 210, 31);
+		panel.setSize(250, 309);
 		panel.setLocation(224, 253);
 		panel.setAlignmentY(0);
 		add(panel);

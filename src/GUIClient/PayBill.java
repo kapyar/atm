@@ -37,7 +37,7 @@ public class PayBill extends RightPanel {
 		add(numbOfBill);
 
 		sum = new MetroEditablePane();
-		sum.setBounds(367, 295, 190, 31);
+		sum.setBounds(367, 295, 210, 31);
 		add(sum);
 
 		numbPane = new Numbers();

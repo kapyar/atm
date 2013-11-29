@@ -3,8 +3,12 @@ package GUIClient;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import MYGUI.MetroPanel;
 import MYGUI.MyButton;
@@ -54,6 +58,17 @@ public class Balance extends RightPanel {
 			}
 
 			if (source == btnPrint) {
+				DateFormat dateFormat = new SimpleDateFormat(
+						"yyyy/MM/dd HH:mm:ss");
+				Date date = new Date();
+				// System.out.println(dateFormat.format(date));
+				int t = JOptionPane.showConfirmDialog(Balance.this, date
+						+ "\nYour current balance:", "Balance",
+						JOptionPane.PLAIN_MESSAGE, JOptionPane.NO_OPTION);
+				if (t == 0) {
+					System.exit(0);
+				}
+
 				lblNewLabel.setText("Please take your receipt");
 			}
 

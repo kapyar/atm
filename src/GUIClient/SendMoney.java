@@ -17,6 +17,8 @@ import javax.swing.JRadioButton;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class SendMoney extends RightPanel {
 
@@ -27,6 +29,10 @@ public class SendMoney extends RightPanel {
 	private Numbers numb;
 	private JRadioButton radioButton_1;
 	private JRadioButton radioButton;
+	private JComboBox comboBox;
+	private JLabel lblYourFriends;
+	private JLabel lblNewLabel;
+	private JLabel lblHowMuch;
 
 	public SendMoney() {
 
@@ -34,42 +40,54 @@ public class SendMoney extends RightPanel {
 
 		radioButton = new JRadioButton("");
 		radioButton.setBackground(new Color(51, 153, 255));
-		radioButton.setBounds(344, 356, 21, 23);
+		radioButton.setBounds(202, 300, 21, 23);
 		radioButton.setSelected(true);
 		add(radioButton);
 
 		how = new MetroEditablePane();
-		how.setLocation(367, 352);
+		how.setLocation(225, 296);
 		add(how);
 
 		whome = new MetroEditablePane();
-		whome.setBounds(367, 295, 190, 31);
+		whome.setBounds(469, 239, 210, 31);
 		add(whome);
 
 		numb = new Numbers();
-		numb.setLocation(142, 284);
+		numb.setLocation(16, 228);
 		add(numb);
 
 		radioButton_1 = new JRadioButton("");
 		radioButton_1.setBackground(SystemColor.textHighlight);
-		radioButton_1.setBounds(344, 299, 21, 23);
+		radioButton_1.setBounds(446, 243, 21, 23);
 		add(radioButton_1);
 
 		ButtonGroup b = new ButtonGroup();
 		b.add(radioButton);
 		b.add(radioButton_1);
 
-		JLabel lblNewLabel = new JLabel("To Whome");
+		lblNewLabel = new JLabel("To Whome");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblNewLabel.setBounds(367, 280, 69, 14);
+		lblNewLabel.setBounds(469, 224, 69, 14);
 		add(lblNewLabel);
 
-		JLabel lblHowMuch = new JLabel("How Much\r\n");
+		lblHowMuch = new JLabel("How Much\r\n");
 		lblHowMuch.setForeground(Color.WHITE);
 		lblHowMuch.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblHowMuch.setBounds(367, 337, 69, 14);
+		lblHowMuch.setBounds(225, 281, 69, 14);
 		add(lblHowMuch);
+
+		comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Another",
+				"A", "B" }));
+		comboBox.setBounds(225, 239, 210, 31);
+		add(comboBox);
+
+		lblYourFriends = new JLabel("Your friends");
+		lblYourFriends.setForeground(Color.WHITE);
+		lblYourFriends.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		lblYourFriends.setBounds(225, 224, 69, 14);
+		add(lblYourFriends);
 
 		addInnerListener();
 
@@ -79,7 +97,29 @@ public class SendMoney extends RightPanel {
 		for (MyButton a : numb.getListOfComponents()) {
 			a.addActionListener(new InnerListener());
 		}
+		comboBox.addActionListener(new InnerActionComboBox());
 	}
+
+	private class InnerActionComboBox implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			if (comboBox.getSelectedIndex() == 0) {
+				radioButton_1.setVisible(true);
+				whome.setVisible(true);
+				lblNewLabel.setVisible(true);
+			} else {
+				radioButton.setSelected(true);
+				radioButton_1.setVisible(false);
+				whome.setVisible(false);
+				lblNewLabel.setVisible(false);
+				whome.getTextField().setText("");
+			}
+
+		}
+
+	}// END InnerActionComboBox
 
 	private class InnerListener implements ActionListener {
 
