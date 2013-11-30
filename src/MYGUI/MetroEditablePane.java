@@ -17,7 +17,7 @@ public class MetroEditablePane extends JPanel {
 	private MyButton del;
 
 	public MetroEditablePane() {
-		this.setSize(new Dimension(190 , 31));
+		this.setSize(new Dimension(210 , 31));
 		this.setBackground(Color.WHITE);
 		this.setLayout(null);
 		
