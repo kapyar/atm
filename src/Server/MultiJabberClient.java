@@ -14,38 +14,39 @@ import Actions.Action;
 public class MultiJabberClient implements Callable<HashMap<Action, Object>> {
 	private String textFromModel;
 	private Socket socket;
-	
+
 	private ObjectOutputStream osOut;
 	private ObjectInputStream osIn;
-	
+	private HashMap<Action, Object> command;
+
 	final String HOST_NAME = "162.211.226.101";
 	final int PORT_NUMBER = 8081;
 
-	public MultiJabberClient(String textFromModel) throws UnknownHostException,IOException 
-	{
+	public MultiJabberClient(HashMap<Action, Object> command)
+			throws IOException {
 		System.out.println("Constructor MultiJabberClient");
-		socket = new Socket(HOST_NAME, PORT_NUMBER);
-		
+		try {
+			socket = new Socket(HOST_NAME, PORT_NUMBER);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		osOut = new ObjectOutputStream(socket.getOutputStream());
 		osIn = new ObjectInputStream(socket.getInputStream());
-		
-		this.textFromModel = textFromModel;
+
+		this.command = command;
 
 	}
 
 	@Override
 	public HashMap<Action, Object> call() throws Exception {
-
-		HashMap<Action, Object> out = new HashMap<Action, Object>();
+		System.out.println("call()");
 		HashMap<Action, Object> in = new HashMap<Action, Object>();
-		
-		out.put(Action.ACTION, Action.LOG_IN);
-		out.put(Action.LOGIN_FIELD, 1111);
-		out.put(Action.PASS_FIELD, "12345");
-		
-		osOut.writeObject(out);		
+		osOut.writeObject(command);// write in ServeOneJabber
 		osOut.flush();
-		
+
+		System.out.println("Before read");
 		in = (HashMap<Action, Object>) osIn.readObject();
 
 		socket.close();

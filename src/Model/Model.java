@@ -23,18 +23,66 @@ import Server.Server;
 
 public class Model {
 
-	public String doDummy(Object object) throws InterruptedException,
-			ExecutionException, UnknownHostException, IOException {
-				
-//		HashMap command = (HashMap<Action, Object>) object;
-//		System.out.println("Inside dummy");
-//		ExecutorService ex = Executors.newCachedThreadPool();
-//		Future<String> res = ex.submit(new MultiJabberClient(command));
-//		System.out.println("get back in dummy: " + res.get());
-//		ex.shutdown();
-//
-//		return res.get();
-		return "doDummeComentes";
+	public static String SESSION_ID;
+
+	private static Model instance = null;
+
+	private Model() {
+
+	}
+
+	public static Model getInstance() {
+		if (instance == null) {
+			instance = new Model();
+		}
+		return instance;
+
+	}
+
+	public String doDummy(String login, String pass)
+			throws InterruptedException, ExecutionException,
+			UnknownHostException, IOException {
+
+		// make a command to server
+		HashMap<Action, Object> command = new HashMap<Action, Object>();
+		command.put(Action.ACTION, Action.LOG_IN);
+		Integer intLogin = Integer.parseInt(login);
+		command.put(Action.LOGIN_FIELD, intLogin);
+		command.put(Action.PASS_FIELD, pass);
+
+		System.out.println("Inside dummy");
+		ExecutorService ex = Executors.newCachedThreadPool();
+		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
+				command));
+		// System.out.println("get back in dummy: " + res.get());
+		ex.shutdown();
+
+		if (checkLogIn(res.get()))
+			return (String) res.get().get(Action.SESSION_ID);
+		else
+			return "Failed";
+	}
+
+	private boolean checkLogIn(HashMap<Action, Object> hashMap) {
+
+		if ((Action) hashMap.get(Action.ERROR_CODE) != null) {
+			switch ((Action) hashMap.get(Action.ERROR_CODE)) {
+
+			case ERROR_NOT_MATCHES:
+				System.out.println("ERROR_NOT_MATCHES");
+				return false;
+
+			case ERROR_NO_USER:
+				System.out.println("ERROR_NO_USER");
+				return false;
+
+			case ERROR_SETTING_SESSION:
+				System.out.println("ERROR_SETTING_SESSION");
+				return false;
+			}
+		}
+
+		return true;
 
 	}
 
