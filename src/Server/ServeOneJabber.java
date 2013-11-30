@@ -43,14 +43,18 @@ public class ServeOneJabber extends Thread {
 				case LOG_IN:
 					Integer login = (Integer) in.get(Action.LOGIN_FIELD);
 					String pass  = (String) in.get(Action.PASS_FIELD);
+					System.out.println("Log is " + login);
+					System.out.println("pass is " + pass);
 					
 					if (!dataBase.userExists(login)) {
 						out.put(Action.ERROR_CODE,  Action.ERROR_NO_USER);
+						System.out.println("No user");
 						break;
 					}
 					
 					if (!dataBase.passMatches(login, pass)) {
 						out.put(Action.ERROR_CODE,  Action.EREOR_NOT_MATCHES);
+						System.out.println("Match error");
 						break;
 					}
 					
@@ -58,6 +62,7 @@ public class ServeOneJabber extends Thread {
 					
 					if (!dataBase.setSession(login, session)) {
 						out.put(Action.ERROR_CODE,  Action.ERROR_SETTING_SESSION);
+						System.out.println("Error Setting session");
 						break;
 					}
 					
@@ -65,6 +70,9 @@ public class ServeOneJabber extends Thread {
 					break;
 			}
 
+			System.out.println("All ok");
+			System.out.println("session is " + out.get(Action.SESSION_ID));
+			
 			osOut.writeObject(out);
 
 			osOut.flush();

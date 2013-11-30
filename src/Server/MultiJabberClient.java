@@ -1,43 +1,55 @@
 package Server;
 
 import java.net.*;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.io.*;
+
+import Actions.Action;
 
 /*
  * 
  * this class is for testing multithreading
  */
-public class MultiJabberClient implements Callable<String> {
+public class MultiJabberClient implements Callable<HashMap<Action, Object>> {
 	private String textFromModel;
 	private Socket socket;
-	private BufferedReader bfReader;
-	private PrintWriter prWriter;
+	
+	private ObjectOutputStream osOut;
+	private ObjectInputStream osIn;
+	
 	final String HOST_NAME = "162.211.226.101";
 	final int PORT_NUMBER = 8081;
 
-	public MultiJabberClient(String textFromModel) throws UnknownHostException,
-			IOException {
+	public MultiJabberClient(String textFromModel) throws UnknownHostException,IOException 
+	{
 		System.out.println("Constructor MultiJabberClient");
 		socket = new Socket(HOST_NAME, PORT_NUMBER);
 		
-		bfReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		prWriter = new PrintWriter(socket.getOutputStream(), true);
+		osOut = new ObjectOutputStream(socket.getOutputStream());
+		osIn = new ObjectInputStream(socket.getInputStream());
 		
 		this.textFromModel = textFromModel;
 
 	}
 
 	@Override
-	public String call() throws Exception {
-		
-		
-		System.out.println("MultyJabberClient call");
-		prWriter.println("hola hola");
+	public HashMap<Action, Object> call() throws Exception {
 
-		String answer = bfReader.readLine();
-		System.out.println("Answer in call(): " + answer);
+		HashMap<Action, Object> out = new HashMap<Action, Object>();
+		HashMap<Action, Object> in = new HashMap<Action, Object>();
+		
+		out.put(Action.ACTION, Action.LOG_IN);
+		out.put(Action.LOGIN_FIELD, 1111);
+		out.put(Action.PASS_FIELD, "12345");
+		
+		osOut.writeObject(out);		
+		osOut.flush();
+		
+		in = (HashMap<Action, Object>) osIn.readObject();
 
-		return answer;
+		socket.close();
+
+		return in;
 	}
 }
