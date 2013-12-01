@@ -23,7 +23,8 @@ import Server.Server;
 
 public class Model {
 
-	public static String SESSION_ID;
+	public static String SESSION_ID = null;
+	public static Integer CURRENT_LOGIN = null;
 
 	private static Model instance = null;
 
@@ -39,7 +40,7 @@ public class Model {
 
 	}
 
-	public String doDummy(String login, String pass)
+	public String doLogIn(final String login, final String pass)
 			throws InterruptedException, ExecutionException,
 			UnknownHostException, IOException {
 
@@ -47,22 +48,60 @@ public class Model {
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.LOG_IN);
 		Integer intLogin = Integer.parseInt(login);
+		CURRENT_LOGIN = intLogin;
 		command.put(Action.LOGIN_FIELD, intLogin);
 		command.put(Action.PASS_FIELD, pass);
 
-		System.out.println("Inside dummy");
 		ExecutorService ex = Executors.newCachedThreadPool();
 		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
 				command));
-		// System.out.println("get back in dummy: " + res.get());
 		ex.shutdown();
 
-		if (checkLogIn(res.get()))
+		if (checkLogIn(res.get())) {
 			return (String) res.get().get(Action.SESSION_ID);
-		else
+		} else
 			return "Failed";
 	}
 
+	public double doBalance() throws InterruptedException, ExecutionException,
+			IOException {
+		// make a command to server
+		HashMap<Action, Object> command = new HashMap<Action, Object>();
+		command.put(Action.ACTION, Action.BALANCE);
+		command.put(Action.SESSION_ID, SESSION_ID);
+		command.put(Action.LOGIN_FIELD, CURRENT_LOGIN);
+
+		ExecutorService ex = Executors.newCachedThreadPool();
+		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
+				command));
+		ex.shutdown();
+
+		res.get();
+		double balance = (double) res.get().get(Action.BALANCE);
+
+		// double balance = 0;
+		return balance;
+	}
+
+	public boolean doWithdrawal(Integer howMuch) throws IOException,
+			InterruptedException, ExecutionException {
+		HashMap<Action, Object> command = new HashMap<Action, Object>();
+		command.put(Action.ACTION, Action.WITHDRAWAL);
+		command.put(Action.SESSION_ID, SESSION_ID);
+		command.put(Action.LOGIN_FIELD, CURRENT_LOGIN);
+		command.put(Action.WITHDRAWAL_SUM, howMuch);
+
+		ExecutorService ex = Executors.newCachedThreadPool();
+		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
+				command));
+		ex.shutdown();
+
+		res.get();
+
+		return true;
+	}
+
+	// HELP FUNCTIONS
 	private boolean checkLogIn(HashMap<Action, Object> hashMap) {
 
 		if ((Action) hashMap.get(Action.ERROR_CODE) != null) {
@@ -81,12 +120,6 @@ public class Model {
 				return false;
 			}
 		}
-
-		return true;
-
-	}
-
-	public boolean checkLogIn(String text, String text2) {
 
 		return true;
 

@@ -95,18 +95,41 @@ public class SQLwrapper {
 	}
 
 	public String getCurrentSession(Integer blogin) {
-
+		System.out.println("getCurrentSession bLogin: " + blogin);
 		String result = "";
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("SELECT `session_id` FROM `Accounts` WHERE `id`=? ");
+					.prepareStatement("SELECT `session_id` FROM `Accounts` WHERE `id`=(?) ");
 
+			// ps.setInt(1, blogin);
+			// int i = (int) blogin;
+			System.out.println("bLogin: " + blogin);
 			ps.setInt(1, blogin);
 
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
 				result = rs.getString("session_id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("+++++++++getCurrentSession: " + result);
+		return result;
+	}
+
+	public double getBalance(String bSession) {
+		double result = 0;
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `session_id`=? ");
+
+			ps.setString(1, bSession);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result = rs.getDouble("balance");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

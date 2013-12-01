@@ -66,7 +66,7 @@ public class Controller {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
 				try {
-					Model.SESSION_ID = Model.getInstance().doDummy(
+					Model.SESSION_ID = Model.getInstance().doLogIn(
 							start.getTxt().getTextField().getText(),
 							start.getPin().getPass().getText());
 					System.out.println("Result autheraised: " + Model.SESSION_ID);

@@ -74,12 +74,36 @@ public class ServeOneJabber extends Thread {
 				String s = dataBase.getCurrentSession(blogin);
 				if (s.equals(bSession)) {
 					System.out.println("Session is ok" + s);
+					double balance = dataBase.getBalance(bSession);
+					out.put(Action.BALANCE, balance);
+
+				} else {
+					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);
+
 				}
+				break;
+
+			case WITHDRAWAL:
+				String wSession = (String) in.get(Action.SESSION_ID);
+				Integer wlogin = (Integer) in.get(Action.LOGIN_FIELD);
+				Integer howMuch = (Integer) in.get(Action.WITHDRAWAL_SUM);
+
+				String ss = dataBase.getCurrentSession(wlogin);
+				if (ss.equals(wSession)) {
+					System.out.println("Session is ok" + ss);
+					double balance = dataBase.getBalance(wSession);
+					out.put(Action.BALANCE, balance);
+
+				} else {
+					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);
+
+				}
+
 				break;
 			}// END of switch
 
 			System.out.println("All ok");
-			System.out.println("session is " + out.get(Action.SESSION_ID));
+			// System.out.println("session is " + out.get(Action.SESSION_ID));
 
 			osOut.writeObject(out);
 
