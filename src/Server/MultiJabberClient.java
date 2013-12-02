@@ -26,15 +26,15 @@ public class MultiJabberClient implements Callable<HashMap<Action, Object>> {
 			throws IOException {
 		System.out.println("Constructor MultiJabberClient");
 		try {
-			socket = new Socket("localhost", PORT_NUMBER);
+			socket = new Socket(HOST_NAME, PORT_NUMBER);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		System.out.println("show splash");
 		osOut = new ObjectOutputStream(socket.getOutputStream());
 		osIn = new ObjectInputStream(socket.getInputStream());
-
+		
 		this.command = command;
 
 	}
