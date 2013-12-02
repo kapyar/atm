@@ -47,11 +47,13 @@ public class ServeOneJabber extends Thread {
 
 				if (!dataBase.userExists(login)) {
 					out.put(Action.ERROR_CODE, Action.ERROR_NO_USER);
+					System.out.println("No user");
 					break;
 				}
 
 				if (!dataBase.passMatches(login, pass)) {
 					out.put(Action.ERROR_CODE, Action.EREOR_NOT_MATCHES);
+					System.out.println("Match error");
 					break;
 				}
 
@@ -59,6 +61,7 @@ public class ServeOneJabber extends Thread {
 
 				if (!dataBase.setSession(login, session)) {
 					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);
+					System.out.println("Session not set");
 					break;
 				}
 

@@ -40,7 +40,7 @@ public class MultiJabberClient implements Callable<HashMap<Action, Object>> {
 		HashMap<Action, Object> in = new HashMap<Action, Object>();
 		
 		out.put(Action.ACTION, Action.LOG_IN);
-		out.put(Action.LOGIN_FIELD, 1111);
+		out.put(Action.LOGIN_FIELD, 1);
 		out.put(Action.PASS_FIELD, "12345");
 		
 		osOut.writeObject(out);		
