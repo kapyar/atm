@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Random;
 
 import cryptography.Algos;
 import dataBase.Pair;
@@ -24,7 +25,7 @@ public class ServeOneJabber extends Thread {
 		System.out.println("Constructor ServerOneJabber");
 		socket = s;
 		dataBase = new SQLwrapper();
-		
+
 		this.start();
 	}
 
@@ -47,31 +48,63 @@ public class ServeOneJabber extends Thread {
 
 				if (!dataBase.userExists(login)) {
 					out.put(Action.ERROR_CODE, Action.ERROR_NO_USER);
-					System.out.println("No user");
 					break;
 				}
 
 				if (!dataBase.passMatches(login, pass)) {
-					out.put(Action.ERROR_CODE, Action.EREOR_NOT_MATCHES);
-					System.out.println("Match error");
+					out.put(Action.ERROR_CODE, Action.ERROR_NOT_MATCHES);
 					break;
 				}
 
 				String session = "session_uid";
+				session += new Random().nextInt(Integer.MAX_VALUE);
 
 				if (!dataBase.setSession(login, session)) {
 					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);
-					System.out.println("Session not set");
 					break;
 				}
 
-				out.put(Action.SESSION_ID, Algos.serverHash(pass));
+				out.put(Action.SESSION_ID, session);
 				break;
-			}
+
+			case BALANCE:
+				String bSession = (String) in.get(Action.SESSION_ID);
+				Integer blogin = (Integer) in.get(Action.LOGIN_FIELD);
+
+				String s = dataBase.getCurrentSession(blogin);
+				if (s.equals(bSession)) {
+					System.out.println("Session is ok" + s);
+					double balance = dataBase.getBalance(bSession);
+					out.put(Action.BALANCE, balance);
+
+				} else {
+					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);
+
+				}
+				break;
+
+			case WITHDRAWAL:
+				String wSession = (String) in.get(Action.SESSION_ID);
+				Integer wlogin = (Integer) in.get(Action.LOGIN_FIELD);
+				Integer howMuch = (Integer) in.get(Action.WITHDRAWAL_SUM);
+
+				String ss = dataBase.getCurrentSession(wlogin);
+				if (ss.equals(wSession)) {
+					System.out.println("Session is ok" + ss);
+					double balance = dataBase.getBalance(wSession);
+					out.put(Action.BALANCE, balance);
+
+				} else {
+					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);
+
+				}
+
+				break;
+			}// END of switch
 
 			System.out.println("All ok");
-			System.out.println("session is " + out.get(Action.SESSION_ID));
-			
+			// System.out.println("session is " + out.get(Action.SESSION_ID));
+
 			osOut.writeObject(out);
 
 			osOut.flush();
@@ -91,5 +124,4 @@ public class ServeOneJabber extends Thread {
 			}
 		}
 	}
-
 }

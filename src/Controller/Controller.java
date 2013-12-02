@@ -65,15 +65,15 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
-				System.out.println("Pressed the Enter");
-				Model m = new Model();
 				try {
-					ObjLogIn obj = new ObjLogIn(start.getTxt().getTextField()
-							.getText(), start.getPin().getPass().getText());
-					String str = m.doDummy((new HashMap<Action, Object>().put(
-							Action.ACTION, obj)));
-				} catch (Exception ex) {
-					ex.printStackTrace();
+					Model.SESSION_ID = Model.getInstance().doLogIn(
+							start.getTxt().getTextField().getText(),
+							start.getPin().getPass().getText());
+					System.out.println("Result autheraised: " + Model.SESSION_ID);
+				} catch (InterruptedException | ExecutionException
+						| IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 				mainConteiner.resetPanel(wrapper);
 			}
