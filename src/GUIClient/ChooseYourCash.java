@@ -38,4 +38,8 @@ public class ChooseYourCash extends RightPanel {
 		return panel.getMyButton_Cancel();
 	}
 
+	public NumbersWithTextField getPanel() {
+		return panel;
+	}
+
 }

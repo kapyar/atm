@@ -1,10 +1,13 @@
 package GUIClient;
 
+import Controller.Friend;
 import MYGUI.ButtonFactory;
 import MYGUI.MetroEditablePane;
 import MYGUI.MyButton;
 import MYGUI.Numbers;
 import MYGUI.RightPanel;
+import Server.SQLwrapper;
+
 import javax.swing.JLabel;
 
 import java.awt.Color;
@@ -14,9 +17,11 @@ import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
+
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -33,10 +38,13 @@ public class SendMoney extends RightPanel {
 	private JLabel lblYourFriends;
 	private JLabel lblNewLabel;
 	private JLabel lblHowMuch;
+	private SQLwrapper dataBase;
 
 	public SendMoney() {
 
 		setMyTitle("Send Money");
+
+		dataBase = new SQLwrapper();
 
 		radioButton = new JRadioButton("");
 		radioButton.setBackground(new Color(51, 153, 255));
@@ -90,6 +98,12 @@ public class SendMoney extends RightPanel {
 		add(lblYourFriends);
 
 		addInnerListener();
+
+	}
+
+	private Friend[] getlistOfFriends(Integer accNum) {
+		Friend[] list = dataBase.getListFriends(accNum);
+		return list;
 
 	}
 
