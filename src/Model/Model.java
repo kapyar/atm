@@ -22,6 +22,8 @@ import Server.MultiJabberClient;
 import Server.Server;
 
 public class Model {
+	
+	public static boolean isDone = false;
 
 	public static String SESSION_ID = null;
 	public static Integer CURRENT_LOGIN = null;
@@ -51,12 +53,15 @@ public class Model {
 		CURRENT_LOGIN = intLogin;
 		command.put(Action.LOGIN_FIELD, intLogin);
 		command.put(Action.PASS_FIELD, pass);
-
+		
+		
 		ExecutorService ex = Executors.newCachedThreadPool();
 		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
 				command));
 		ex.shutdown();
-
+		
+		
+		
 		if (checkLogIn(res.get())) {
 			return (String) res.get().get(Action.SESSION_ID);
 		} else
