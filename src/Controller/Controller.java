@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 
 import Actions.Action;
 import Actions.ObjLogIn;
@@ -73,21 +74,44 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
-				try {
-					Model.SESSION_ID = Model.getInstance().doLogIn(
-							start.getTxt().getTextField().getText(),
-							start.getPin().getPass().getText());
-					System.out.println("Result autheraised: "
-							+ Model.SESSION_ID);
-				} catch (InterruptedException | ExecutionException
-						| IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				class MyWorker extends SwingWorker<String, Object> {
+					protected String doInBackground() {
+						start.progressBar.setVisible(true);
+						start.progressBar.setIndeterminate(true);
+						System.out
+								.println("***********BACKGROUND****************");
+
+						try {
+							Model.SESSION_ID = Model.getInstance().doLogIn(
+									start.getTxt().getTextField().getText(),
+									start.getPin().getPass().getText());
+							System.out.println("Result autheraised: "
+									+ Model.SESSION_ID);
+						} catch (InterruptedException | ExecutionException
+								| IOException e1) {
+							System.out.println("Exception");
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						System.out
+								.println("***********************************");
+						return "Done.";
+					}
+
+					protected void done() {
+						start.progressBar.setVisible(false);
+						mainConteiner.resetPanel(wrapper);
+
+					}
 				}
-				mainConteiner.resetPanel(wrapper);
-			}
+				new MyWorker().execute();
+
+				// /END myWORKER
+
+			}// END OuterStartActionListener
 		}
-	}// END OuterStartActionListener
+	}
 
 	class NavigationListeners implements ActionListener {
 

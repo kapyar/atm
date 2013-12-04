@@ -21,6 +21,7 @@ import MYGUI.MetroEditablePane;
 import MYGUI.MetroEditablePin;
 import MYGUI.MetroPanel;
 import MYGUI.MyButton;
+import javax.swing.JProgressBar;
 
 public class StartFrame extends MetroPanel implements MouseListener {
 
@@ -52,6 +53,7 @@ public class StartFrame extends MetroPanel implements MouseListener {
 	private int _H;
 	private int _x;
 	private int _y;
+	public JProgressBar progressBar;
 
 	public StartFrame() {
 		_W = super.getWidth();
@@ -126,8 +128,8 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		myButton_0.setBounds(76, 233, 42, 42);
 		panel.add(myButton_0);
 		listOfComponents.add(myButton_0);
-		
-		myButton_Enter = Butto	nFactory.getNumbButton("Enter", 'E');
+
+		myButton_Enter = ButtonFactory.getNumbButton("Enter", 'E');
 		myButton_Enter.setBounds(327, 233, 87, 42);
 		panel.add(myButton_Enter);
 		// listOfComponents.add(myButton_Enter);
@@ -152,8 +154,7 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		 */
 		lblNubrerCart.setForeground(Color.WHITE);
 		lblNubrerCart.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblNubrerCart.setBounds(224, 84, 190,
-				15);
+		lblNubrerCart.setBounds(224, 84, 190, 15);
 		panel.add(lblNubrerCart);
 
 		txt = new MetroEditablePane();
@@ -167,8 +168,7 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		JLabel lblPin = new JLabel("PIN", JLabel.LEFT);
 		lblPin.setForeground(Color.WHITE);
 		lblPin.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblPin.setBounds(224, 154,
-				190, 15);
+		lblPin.setBounds(224, 154, 190, 15);
 		panel.add(lblPin);
 
 		pin = new MetroEditablePin();
@@ -191,6 +191,11 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		ButtonGroup radioGroup = new ButtonGroup();
 		radioGroup.add(rdbtnCardNumb);
 		radioGroup.add(rdbtPass);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(180, 412, 440, 27);
+		progressBar.setVisible(false);
+		add(progressBar);
 
 		addInnerListener();
 
