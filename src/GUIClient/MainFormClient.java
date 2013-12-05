@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.util.HashMap;
 
 import Controller.CashController;
 import MYGUI.MetroPanel;
@@ -33,6 +34,12 @@ public class MainFormClient extends JFrame implements WindowListener  {
 			System.out.println("Couldn't load local cash ammount");
 			e.printStackTrace();
 		}
+		
+//		HashMap<Integer, Integer> bills = new HashMap<Integer, Integer>();
+//		bills.put(100,  3);
+//		bills.put(50,  6);
+//		bills.put(10,  1);
+//		CashController.INSTANCE.uploadBills(bills);
 	}
 
 	public void resetPanel(MetroPanel m) {
