@@ -74,43 +74,51 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
-				class MyWorker extends SwingWorker<String, Object> {
-					protected String doInBackground() {
-						start.progressBar.setVisible(true);
-						start.progressBar.setIndeterminate(true);
-						System.out
-								.println("***********BACKGROUND****************");
-
-						try {
-							Model.SESSION_ID = Model.getInstance().doLogIn(
-									start.getTxt().getTextField().getText(),
-									start.getPin().getPass().getText());
-							System.out.println("Result autheraised: "
-									+ Model.SESSION_ID);
-						} catch (InterruptedException | ExecutionException
-								| IOException e1) {
-							System.out.println("Exception");
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+				if (start.checkInputData()) {// if all fields had written
+					class MyWorker extends SwingWorker<String, Object> {
+						protected String doInBackground() {
+							start.progressBar.setVisible(true);
+							start.progressBar.setIndeterminate(true);
+							try {
+								Model.SESSION_ID = Model.getInstance()
+										.doLogIn(
+												start.getTxt().getTextField()
+														.getText(),
+												start.getPin().getPass()
+														.getText());
+								System.out.println("Result autheraised: "
+										+ Model.SESSION_ID);
+							} catch (InterruptedException | ExecutionException
+									| IOException e1) {
+								System.out.println("Exception");
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							return "Done.";
 						}
 
-						System.out
-								.println("***********************************");
-						return "Done.";
+						protected void done() {
+							start.progressBar.setVisible(false);
+							if (Model.SESSION_ID.equals("Failed")) {
+								JOptionPane.showConfirmDialog(start,
+										"Wrong input data", "Error",
+										JOptionPane.PLAIN_MESSAGE,
+										JOptionPane.NO_OPTION);
+								start.clearFields();
+							}
+
+							else
+								mainConteiner.resetPanel(wrapper);
+
+						}
 					}
+					new MyWorker().execute();
 
-					protected void done() {
-						start.progressBar.setVisible(false);
-						mainConteiner.resetPanel(wrapper);
+					// /END myWORKER
 
-					}
-				}
-				new MyWorker().execute();
-
-				// /END myWORKER
-
-			}// END OuterStartActionListener
-		}
+				}// END OuterStartActionListener
+			}
+		}// IF field not empty
 	}
 
 	class NavigationListeners implements ActionListener {
@@ -228,7 +236,6 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
-
 			if (source == chooseYourCash.getBtnEnter()) {
 				Integer howMuch = Integer.parseInt(chooseYourCash.getPanel()
 						.getTextView().getTextField().getText());

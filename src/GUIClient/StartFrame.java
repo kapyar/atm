@@ -193,12 +193,25 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		radioGroup.add(rdbtPass);
 
 		progressBar = new JProgressBar();
-		progressBar.setBounds(180, 412, 440, 27);
+		progressBar.setBounds(180, 412, 440, 29);
 		progressBar.setVisible(false);
 		add(progressBar);
 
 		addInnerListener();
 
+	}
+
+	public void clearFields() {
+		txt.getTextField().setText("");
+		pin.getPass().setText("");
+	}
+
+	public boolean checkInputData() {
+		if (txt.getTextField().getText().equals("")
+				|| pin.getPass().getText().equals("")) {
+			return false;
+		}
+		return true;
 	}
 
 	public void addOuterListener(OuterStartActionListener m) {
