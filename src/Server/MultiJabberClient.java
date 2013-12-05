@@ -1,43 +1,56 @@
 package Server;
 
 import java.net.*;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.io.*;
+
+import Actions.Action;
 
 /*
  * 
  * this class is for testing multithreading
  */
-public class MultiJabberClient implements Callable<String> {
+public class MultiJabberClient implements Callable<HashMap<Action, Object>> {
 	private String textFromModel;
 	private Socket socket;
-	private BufferedReader bfReader;
-	private PrintWriter prWriter;
+
+	private ObjectOutputStream osOut;
+	private ObjectInputStream osIn;
+	private HashMap<Action, Object> command;
+
 	final String HOST_NAME = "162.211.226.101";
 	final int PORT_NUMBER = 8081;
 
-	public MultiJabberClient(String textFromModel) throws UnknownHostException,
-			IOException {
+	public MultiJabberClient(HashMap<Action, Object> command)
+			throws IOException {
 		System.out.println("Constructor MultiJabberClient");
-		socket = new Socket(HOST_NAME, PORT_NUMBER);
+		try {
+			socket = new Socket(HOST_NAME, PORT_NUMBER);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("show splash");
+		osOut = new ObjectOutputStream(socket.getOutputStream());
+		osIn = new ObjectInputStream(socket.getInputStream());
 		
-		bfReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		prWriter = new PrintWriter(socket.getOutputStream(), true);
-		
-		this.textFromModel = textFromModel;
+		this.command = command;
 
 	}
 
 	@Override
-	public String call() throws Exception {
-		
-		
-		System.out.println("MultyJabberClient call");
-		prWriter.println("hola hola");
+	public HashMap<Action, Object> call() throws Exception {
+		System.out.println("call()");
+		HashMap<Action, Object> in = new HashMap<Action, Object>();
+		osOut.writeObject(command);// write in ServeOneJabber
+		osOut.flush();
 
-		String answer = bfReader.readLine();
-		System.out.println("Answer in call(): " + answer);
+		System.out.println("Before read");
+		in = (HashMap<Action, Object>) osIn.readObject();
 
-		return answer;
+		socket.close();
+
+		return in;
 	}
 }

@@ -1,5 +1,7 @@
 package Starter;
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
 import Controller.Controller;
@@ -16,7 +18,7 @@ public class Test {
 	private static StartFrame start;
 	private static Wrapper balance;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		balance = new Wrapper();
 		start = new StartFrame();
 		form = new MainFormClient();

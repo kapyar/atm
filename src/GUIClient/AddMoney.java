@@ -15,21 +15,21 @@ import Model.Model;
 public class AddMoney extends RightPanel {
 
 	private NumbersWithTextField panel;
-	
+
 	private int _W;
 	private int _H;
 	private int _x;
 	private int _y;
+
 	public AddMoney() {
 		_W = super.getWidth();
 		_H = super.getHeight();
 		_x = super.getX();
 		_y = super.getY();
-		
-		
+
 		setMyTitle("Add Money");
 		panel = new NumbersWithTextField();
-		panel.setBounds(_W/2-115, 210, 230, 326);
+		panel.setBounds(_W / 2 - 115, 210, 230, 326);
 		add(panel);
 
 		JLabel lblNewLabel = new JLabel("Input value of money");
@@ -43,7 +43,12 @@ public class AddMoney extends RightPanel {
 
 	private void addInnerListener() {
 		panel.getMyButton_Cancel().addActionListener(new InnerListener());
-		panel.getMyButton_Enter().addActionListener(new InnerListener());
+		// panel.getMyButton_Enter().addActionListener(new InnerListener());
+	}
+
+	public void addOuterListener(ActionListener a) {
+		panel.getMyButton_Enter().addActionListener(a);
+
 	}
 
 	private class InnerListener implements ActionListener {
@@ -55,21 +60,11 @@ public class AddMoney extends RightPanel {
 			if (source == panel.getMyButton_Cancel()) {
 				panel.getTextView().getTextField().setText("");
 			}
-			if (source == panel.getMyButton_Enter()) {
-				int t = JOptionPane.showConfirmDialog(AddMoney.this,
-						"You Add "
-								+ panel.getTextView().getTextField().getText()
-								+ " UAH", "Exit", JOptionPane.YES_NO_OPTION);
-				if (t == 0) {// Using model. It should request server to do impl
-
-					System.out.println("Add "
-							+ panel.getTextView().getTextField().getText());
-					panel.getTextView().getTextField().setText("");
-
-				}
-
-			}
-
+			
 		}
 	}// END InnerListener
+
+	public NumbersWithTextField getPanel() {
+		return panel;
+	}
 }

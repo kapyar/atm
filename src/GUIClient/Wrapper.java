@@ -86,7 +86,7 @@ public class Wrapper extends MetroPanel {
 	private void setPnlSide() {
 		pnlSide = new MYGUI.MetroPanel();
 		//pnlSide.setBounds(0, 0, 110, 700);
-		pnlSide.setPreferredSize(new Dimension(110,700));
+		pnlSide.setPreferredSize(new Dimension(110,720));
 		setButtons();
 
 	}
