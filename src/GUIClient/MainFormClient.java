@@ -3,11 +3,12 @@ package GUIClient;
 import javax.swing.JFrame;
 
 import java.awt.Dimension;
-
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 
+import Controller.CashController;
 import MYGUI.MetroPanel;
 
 public class MainFormClient extends JFrame implements WindowListener  {
@@ -25,6 +26,13 @@ public class MainFormClient extends JFrame implements WindowListener  {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				"resources\\imagesClient\\pig.png"));
 		addWindowListener(this); 
+		
+		try {
+			CashController.INSTANCE.loadLocalCash();
+		} catch (ClassNotFoundException | IOException e) {
+			System.out.println("Couldn't load local cash ammount");
+			e.printStackTrace();
+		}
 	}
 
 	public void resetPanel(MetroPanel m) {
@@ -43,6 +51,12 @@ public class MainFormClient extends JFrame implements WindowListener  {
 	public void windowClosing (WindowEvent e) {
 		
 		System.out.println("Заврешуємо прогу");
+		try {
+			CashController.INSTANCE.saveLocalCash();
+		} catch (IOException e1) {
+			System.out.println("Could'n save cash ammount in ATM");
+			e1.printStackTrace();
+		}
 		System.exit(0);
 	}
 
