@@ -29,6 +29,7 @@ public class MultiJabberClient implements Callable<HashMap<Action, Object>> {
 			socket = new Socket(HOST_NAME, PORT_NUMBER);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			System.out.println("Multi Jabber Exception new Socket");
 			e.printStackTrace();
 		}
 		System.out.println("show splash");
