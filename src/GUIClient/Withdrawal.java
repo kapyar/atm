@@ -3,12 +3,21 @@ package GUIClient;
 import MYGUI.ButtonFactory;
 import MYGUI.MyButton;
 import MYGUI.RightPanel;
+import Model.Model;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.awt.Font;
+import java.io.IOException;
 
 public class Withdrawal extends RightPanel {
 
@@ -18,6 +27,7 @@ public class Withdrawal extends RightPanel {
 	private MyButton btn100;
 	private MyButton btn200;
 	private MyButton btnChoose;
+	private MyButton btn500;
 
 	public Withdrawal() {
 
@@ -45,7 +55,7 @@ public class Withdrawal extends RightPanel {
 		list.add(btn200);
 		add(btn200);
 
-		MyButton btn500 = ButtonFactory.getSelectBtn("500");
+		btn500 = ButtonFactory.getSelectBtn("500");
 		btn500.setBounds(553, 340, 132, 45);
 		list.add(btn500);
 		add(btn500);
@@ -79,7 +89,135 @@ public class Withdrawal extends RightPanel {
 			Object source = e.getSource();
 
 			if (source == btn20) {
-				System.out.println("Get your 20");
+				int howMuch = 20;
+				try {
+					DateFormat dateFormat = new SimpleDateFormat(
+							"yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
+					double res = Model.getInstance().doWithdrawal(howMuch);
+					if (res == -1.0) {
+						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
+								date + "Cant get this sum", "Withdrawal",
+								JOptionPane.PLAIN_MESSAGE,
+								JOptionPane.NO_OPTION);
+					} else {
+						int t = JOptionPane
+								.showConfirmDialog(Withdrawal.this, date
+										+ "\nYour current balance:" + res
+										+ " UAH", "Balance",
+										JOptionPane.PLAIN_MESSAGE,
+										JOptionPane.NO_OPTION);
+					}
+
+				} catch (IOException | InterruptedException
+						| ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}// 20
+			if (source == btn50) {
+				int howMuch = 50;
+				try {
+					DateFormat dateFormat = new SimpleDateFormat(
+							"yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
+					double res = Model.getInstance().doWithdrawal(howMuch);
+					if (res == -1.0) {
+						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
+								date + "Cant get this sum", "Withdrawal",
+								JOptionPane.PLAIN_MESSAGE,
+								JOptionPane.NO_OPTION);
+					} else {
+						int t = JOptionPane
+								.showConfirmDialog(Withdrawal.this, date
+										+ "\nYour current balance:" + res
+										+ " UAH", "Balance",
+										JOptionPane.PLAIN_MESSAGE,
+										JOptionPane.NO_OPTION);
+					}
+				} catch (IOException | InterruptedException
+						| ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			if (source == btn100) {
+				int howMuch = 100;
+				try {
+					DateFormat dateFormat = new SimpleDateFormat(
+							"yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
+					double res = Model.getInstance().doWithdrawal(howMuch);
+					if (res == -1.0) {
+						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
+								date + "Cant get this sum", "Withdrawal",
+								JOptionPane.PLAIN_MESSAGE,
+								JOptionPane.NO_OPTION);
+					} else {
+						int t = JOptionPane
+								.showConfirmDialog(Withdrawal.this, date
+										+ "\nYour current balance:" + res
+										+ " UAH", "Balance",
+										JOptionPane.PLAIN_MESSAGE,
+										JOptionPane.NO_OPTION);
+					}
+				} catch (IOException | InterruptedException
+						| ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			if (source == btn200) {
+				int howMuch = 200;
+				try {
+					DateFormat dateFormat = new SimpleDateFormat(
+							"yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
+					double res = Model.getInstance().doWithdrawal(howMuch);
+					if (res == -1.0) {
+						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
+								date + "Cant get this sum", "Withdrawal",
+								JOptionPane.PLAIN_MESSAGE,
+								JOptionPane.NO_OPTION);
+					} else {
+						int t = JOptionPane
+								.showConfirmDialog(Withdrawal.this, date
+										+ "\nYour current balance:" + res
+										+ " UAH", "Balance",
+										JOptionPane.PLAIN_MESSAGE,
+										JOptionPane.NO_OPTION);
+					}
+				} catch (IOException | InterruptedException
+						| ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			if (source == btn500) {
+				int howMuch = 500;
+				try {
+					DateFormat dateFormat = new SimpleDateFormat(
+							"yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
+					double res = Model.getInstance().doWithdrawal(howMuch);
+					if (res == -1.0) {
+						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
+								date + "Cant get this sum", "Withdrawal",
+								JOptionPane.PLAIN_MESSAGE,
+								JOptionPane.NO_OPTION);
+					} else {
+						int t = JOptionPane
+								.showConfirmDialog(Withdrawal.this, date
+										+ "\nYour current balance:" + res
+										+ " UAH", "Balance",
+										JOptionPane.PLAIN_MESSAGE,
+										JOptionPane.NO_OPTION);
+					}
+				} catch (IOException | InterruptedException
+						| ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			// /the same
 

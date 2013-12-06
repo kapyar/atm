@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import Controller.Friend;
+
 public class SQLwrapper {
 
 	private String base_server = "gofrie.mysql.ukraine.com.ua";
@@ -95,7 +97,6 @@ public class SQLwrapper {
 	}
 
 	public String getCurrentSession(Integer blogin) {
-		System.out.println("getCurrentSession bLogin: " + blogin);
 		String result = "";
 		try {
 			PreparedStatement ps = connection
@@ -114,7 +115,7 @@ public class SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("+++++++++getCurrentSession: " + result);
+
 		return result;
 	}
 
@@ -172,5 +173,45 @@ public class SQLwrapper {
 	
 	
 	
+
+	public boolean setBalance(double newBal, Integer accNum) {
+		Boolean res = true;
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("UPDATE `Accounts` SET `balance`=(?) WHERE `id`=(?) ");
+
+			ps.setDouble(1, newBal);
+			ps.setInt(2, accNum);
+
+			// ps.executeQuery();
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			res = false;
+		}
+		return res;
+
+	}
+
+	// need to finish
+	public Friend[] getListFriends(Integer accNum) {
+		String result = "";
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("SELECT `first_name` FROM `Accounts` WHERE `id`=(?) ");
+			// ps.setInt(1, blogin);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result = rs.getString("session_id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
 }

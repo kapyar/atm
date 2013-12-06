@@ -88,7 +88,7 @@ public class Model {
 		return balance;
 	}
 
-	public boolean doWithdrawal(Integer howMuch) throws IOException,
+	public double doWithdrawal(Integer howMuch) throws IOException,
 			InterruptedException, ExecutionException {
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.WITHDRAWAL);
@@ -101,9 +101,46 @@ public class Model {
 				command));
 		ex.shutdown();
 
-		res.get();
+		double toReturn = 0;
+		if (checkWithdrawal(res.get())) {
+			toReturn = (double) res.get().get(Action.BALANCE);
+		} else {
+			toReturn = -1;
+		}
+		return toReturn;
+	}
+	
+	public void doAddMonney(double d) throws IOException {
+		HashMap<Action, Object> command = new HashMap<Action, Object>();
+		command.put(Action.ACTION, Action.ADD_MONEY);
+		command.put(Action.SESSION_ID, SESSION_ID);
+		command.put(Action.LOGIN_FIELD, CURRENT_LOGIN);
+		command.put(Action.ADD_MONEY, d);
+
+		ExecutorService ex = Executors.newCachedThreadPool();
+		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
+				command));
+		ex.shutdown();
+		
+	}
+
+	private boolean checkWithdrawal(HashMap<Action, Object> hashMap) {
+		// TODO Auto-generated method stub
+		if ((Action) hashMap.get(Action.ERROR_CODE) != null) {
+
+			switch ((Action) hashMap.get(Action.ERROR_CODE)) {
+
+			case ERROE_NO_MONEY:
+				return false;
+
+			case ERROR_NOT_MATCHES:
+				return false;
+
+			}// SWITCH
+		}// IF
 
 		return true;
+
 	}
 
 	// HELP FUNCTIONS
@@ -129,5 +166,7 @@ public class Model {
 		return true;
 
 	}
+
+	
 
 }

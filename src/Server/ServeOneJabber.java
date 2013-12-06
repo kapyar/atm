@@ -90,9 +90,43 @@ public class ServeOneJabber extends Thread {
 
 				String ss = dataBase.getCurrentSession(wlogin);
 				if (ss.equals(wSession)) {
-					System.out.println("Session is ok" + ss);
-					double balance = dataBase.getBalance(wSession);
-					out.put(Action.BALANCE, balance);
+					double onAcc = dataBase.getBalance(wSession);
+					if (onAcc - howMuch < 0.0) {
+						out.put(Action.ERROR_CODE, Action.ERROE_NO_MONEY);
+						break;
+					} else {
+						double newBal = onAcc - howMuch;
+						if (dataBase.setBalance(newBal, wlogin)) {
+							out.put(Action.BALANCE, newBal);
+						} else {// something wrong in DB
+							out.put(Action.ERROR_CODE, Action.ERROR_NOT_MATCHES);
+						}
+						break;
+					}
+
+				} else {
+					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);
+
+				}
+
+				break;
+
+			case ADD_MONEY:
+				String mSession = (String) in.get(Action.SESSION_ID);
+				Integer mlogin = (Integer) in.get(Action.LOGIN_FIELD);
+				Double mhowMuch = (Double) in.get(Action.ADD_MONEY);
+
+				String sss = dataBase.getCurrentSession(mlogin);
+				if (sss.equals(mSession)) {
+					double bal = dataBase.getBalance(mSession);
+					bal += mhowMuch;
+
+					if (dataBase.setBalance(bal, mlogin)) {
+						out.put(Action.BALANCE, bal);
+					} else {
+						out.put(Action.ERROR_CODE, Action.ERROR_NOT_MATCHES);
+					}
+					break;
 
 				} else {
 					out.put(Action.ERROR_CODE, Action.ERROR_SETTING_SESSION);

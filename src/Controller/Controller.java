@@ -1,12 +1,19 @@
 package Controller;
 
 import java.awt.Container;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 
 import Actions.Action;
 import Actions.ObjLogIn;
@@ -23,6 +30,7 @@ import GUIClient.Withdrawal;
 import GUIClient.Wrapper;
 import GUIClient.MainFormClient;
 import GUIClient.StartFrame;
+import MYGUI.RightPanel;
 import Model.Model;
 
 public class Controller {
@@ -33,6 +41,7 @@ public class Controller {
 	private Withdrawal withdrawal;
 	private ChooseYourCash chooseYourCash;
 	private ContactList contactList;
+	private AddMoney addMoney;
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
 			Wrapper wrapper) throws ClassNotFoundException, IOException {
@@ -71,6 +80,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
+<<<<<<< HEAD
 				try {
 					Model.SESSION_ID = Model.getInstance().doLogIn(
 							start.getTxt().getTextField().getText(),
@@ -81,11 +91,46 @@ public class Controller {
 						| IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+=======
+				class MyWorker extends SwingWorker<String, Object> {
+					protected String doInBackground() {
+						start.progressBar.setVisible(true);
+						start.progressBar.setIndeterminate(true);
+						System.out
+								.println("***********BACKGROUND****************");
+
+						try {
+							Model.SESSION_ID = Model.getInstance().doLogIn(
+									start.getTxt().getTextField().getText(),
+									start.getPin().getPass().getText());
+							System.out.println("Result autheraised: "
+									+ Model.SESSION_ID);
+						} catch (InterruptedException | ExecutionException
+								| IOException e1) {
+							System.out.println("Exception");
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						System.out
+								.println("***********************************");
+						return "Done.";
+					}
+
+					protected void done() {
+						start.progressBar.setVisible(false);
+						mainConteiner.resetPanel(wrapper);
+
+					}
+>>>>>>> d3980510c79cc7ef0e06fd751032887e8ebd10f5
 				}
-				mainConteiner.resetPanel(wrapper);
-			}
+				new MyWorker().execute();
+
+				// /END myWORKER
+
+			}// END OuterStartActionListener
 		}
-	}// END OuterStartActionListener
+	}
 
 	class NavigationListeners implements ActionListener {
 
@@ -113,7 +158,9 @@ public class Controller {
 			}
 
 			if (source == wrapper.getBtnAddMoney()) {
-				wrapper.resetRightPanel(new AddMoney());
+				addMoney = new AddMoney();
+				addMoney.addOuterListener(new AddMoneyListener());
+				wrapper.resetRightPanel(addMoney);
 			}
 
 			if (source == wrapper.getBtnAddMoneyPhone()) {
@@ -126,6 +173,41 @@ public class Controller {
 			}
 		}
 	}// END NavigationListeners
+
+	private class AddMoneyListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+			if (source == addMoney.getPanel().getMyButton_Enter()) {
+				double d = Double.parseDouble(addMoney.getPanel().getTextView()
+						.getTextField().getText());
+
+				try {
+					Model.getInstance().doAddMonney(d);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					int t = JOptionPane.showConfirmDialog(addMoney, "You add "
+							+ addMoney.getPanel().getTextView().getTextField()
+									.getText() + " UAH"
+							+ "\n You current balance: "
+							+ Model.getInstance().doBalance() + " UAH", "Info",
+							JOptionPane.PLAIN_MESSAGE, JOptionPane.NO_OPTION);
+				} catch (HeadlessException | InterruptedException
+						| ExecutionException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+
+		}
+
+	}// END AddMoneyListener
 
 	private class ContactListListener implements ActionListener {
 
@@ -167,7 +249,32 @@ public class Controller {
 			Object source = e.getSource();
 
 			if (source == chooseYourCash.getBtnEnter()) {
-				System.out.println("get my cash");
+				Integer howMuch = Integer.parseInt(chooseYourCash.getPanel()
+						.getTextView().getTextField().getText());
+				try {
+					DateFormat dateFormat = new SimpleDateFormat(
+							"yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
+					double res = Model.getInstance().doWithdrawal(howMuch);
+					if (res == -1.0) {
+						int t = JOptionPane.showConfirmDialog(wrapper, date
+								+ "\nCant get this sum", "Withdrawal",
+								JOptionPane.PLAIN_MESSAGE,
+								JOptionPane.NO_OPTION);
+
+					} else {
+						int t = JOptionPane.showConfirmDialog(wrapper, date
+								+ "\nYour current balance:" + res + " UAH",
+								"Balance", JOptionPane.PLAIN_MESSAGE,
+								JOptionPane.NO_OPTION);
+					}
+					chooseYourCash.getPanel().getTextView().getTextField()
+							.setText("");
+				} catch (IOException | InterruptedException
+						| ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			if (source == chooseYourCash.getBtnCancel()) {
 				wrapper.resetRightPanel(withdrawal);
