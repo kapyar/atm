@@ -28,24 +28,23 @@ public enum CashController {
 			throw new RuntimeException("Cash Controller can't add cash for some reason");
 		}
 		
-		bank.setCashAmmount(bank.getCashAmmount() + ammount);
 	}
 	
 	public void loadLocalCash() throws IOException, ClassNotFoundException {
 		FileInputStream fis = new FileInputStream("cash.data");
 		ObjectInputStream oin = new ObjectInputStream(fis);
-		Integer cash = (Integer) oin.readObject();
+		// read the data about banknotes left
 		HashMap<Integer, Integer> billPack = (HashMap<Integer, Integer>) oin.readObject();
-		System.out.println(cash);
-		bank.setCashAmmount(cash);
 		bank.setBillPack(billPack);
+		
+		System.out.println(bank.getCashAmmount());
+		
 		oin.close();
 	}
 	
 	public void saveLocalCash() throws IOException {
 		FileOutputStream fos = new FileOutputStream("cash.data");
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(bank.getCashAmmount());
 		oos.writeObject(bank.getBillPack());
 		oos.flush();
 		oos.close();
@@ -74,7 +73,6 @@ public enum CashController {
 	}
 	
 	private class InnerBank {
-		private Integer cashAmmount;
 		private HashMap<Integer, Integer> bills;
 		
 		public InnerBank() {
@@ -90,20 +88,14 @@ public enum CashController {
 		}
 		
 		public Integer getCashAmmount() {
-			return cashAmmount;
+			Integer total = 0;
+			for (Map.Entry<Integer, Integer> entry : bills.entrySet()) {
+				total += entry.getValue() * entry.getKey();
+			}
+			
+			return total;
 		}
 		
-		public void setCashAmmount(Integer ammount) {
-			cashAmmount = ammount;
-		}
-		
-		public void incCash(Integer ammount) {
-			cashAmmount += ammount;
-		}
-		
-		public void decCash(Integer ammount) {
-			cashAmmount -= ammount;
-		}
 		
 	}
 	

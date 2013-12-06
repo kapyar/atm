@@ -58,8 +58,8 @@ public class Controller {
 		this.mainConteiner.setVisible(true);
 		
 
-//		System.out.println("Ammoutn of cash in this ATM is: "
-//				+ CashController.INSTANCE.getCashLeft());
+		System.out.println("Ammount of cash in this ATM is: "
+				+ CashController.INSTANCE.getCashLeft());
 		
 		System.out.println(CashController.INSTANCE.hasEnoughCash(8100));
 
