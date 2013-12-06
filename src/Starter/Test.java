@@ -1,5 +1,7 @@
 package Starter;
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
 import Controller.Controller;
@@ -20,7 +22,11 @@ public class Test {
 		balance = new Wrapper();
 		start = new StartFrame();
 		form = new MainFormClient();
-		controller = new Controller(form, start, balance);
+		try {
+			controller = new Controller(form, start, balance);
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 }

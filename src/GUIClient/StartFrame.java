@@ -127,7 +127,7 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		panel.add(myButton_0);
 		listOfComponents.add(myButton_0);
 		
-		myButton_Enter = Butto	nFactory.getNumbButton("Enter", 'E');
+		myButton_Enter = ButtonFactory.getNumbButton("Enter", 'E');
 		myButton_Enter.setBounds(327, 233, 87, 42);
 		panel.add(myButton_Enter);
 		// listOfComponents.add(myButton_Enter);

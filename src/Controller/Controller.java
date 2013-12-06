@@ -35,7 +35,7 @@ public class Controller {
 	private ContactList contactList;
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
-			Wrapper wrapper) {
+			Wrapper wrapper) throws ClassNotFoundException, IOException {
 		System.out.println("Constructing Controller");
 
 		// try {
@@ -56,6 +56,12 @@ public class Controller {
 		this.start.addOuterListener(new OuterStartActionListener());
 		this.wrapper.addNavigationListeners(new NavigationListeners());
 		this.mainConteiner.setVisible(true);
+		
+
+//		System.out.println("Ammoutn of cash in this ATM is: "
+//				+ CashController.INSTANCE.getCashLeft());
+		
+		System.out.println(CashController.INSTANCE.hasEnoughCash(8100));
 
 	}
 
@@ -69,7 +75,8 @@ public class Controller {
 					Model.SESSION_ID = Model.getInstance().doLogIn(
 							start.getTxt().getTextField().getText(),
 							start.getPin().getPass().getText());
-					System.out.println("Result autheraised: " + Model.SESSION_ID);
+					System.out.println("Result autheraised: "
+							+ Model.SESSION_ID);
 				} catch (InterruptedException | ExecutionException
 						| IOException e1) {
 					// TODO Auto-generated catch block
