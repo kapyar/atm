@@ -18,15 +18,11 @@ public class Test {
 	private static StartFrame start;
 	private static Wrapper balance;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		balance = new Wrapper();
 		start = new StartFrame();
 		form = new MainFormClient();
-		try {
-			controller = new Controller(form, start, balance);
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+		controller = new Controller(form, start, balance);
 
 	}
 }
