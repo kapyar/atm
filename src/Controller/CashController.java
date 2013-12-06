@@ -33,11 +33,12 @@ public enum CashController {
 	public void loadLocalCash() throws IOException, ClassNotFoundException {
 		FileInputStream fis = new FileInputStream("cash.data");
 		ObjectInputStream oin = new ObjectInputStream(fis);
+		
 		// read the data about banknotes left
 		HashMap<Integer, Integer> billPack = (HashMap<Integer, Integer>) oin.readObject();
 		bank.setBillPack(billPack);
 		
-		System.out.println(bank.getCashAmmount());
+		System.out.println("Loaded:  " + bank.getCashAmmount() + " $ of cash into ATM");
 		
 		oin.close();
 	}
@@ -46,6 +47,7 @@ public enum CashController {
 		FileOutputStream fos = new FileOutputStream("cash.data");
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(bank.getBillPack());
+		System.out.println("Saved:  " + bank.getCashAmmount() + " $ of cash from ATM");
 		oos.flush();
 		oos.close();
 	}
@@ -58,8 +60,16 @@ public enum CashController {
 		return (bank.getCashAmmount() - ammount) >= 0;
 	}
 	
+	public void withdraw(int sum) {
+		int tens = sum/10;
+		Integer tempCash = bank.getBillPack().get(10);
+		bank.getBillPack().put(10, tempCash - tens);
+	}
+	
 	public void uploadBills (HashMap<Integer, Integer> billPack) {
 		Integer total = 0;
+		System.out.println("****************************************************");
+		System.out.println("Adding bills:");
 		for (Map.Entry<Integer, Integer> entry : billPack.entrySet()) {
 			total += entry.getValue() * entry.getKey();
 			Integer tempCash = bank.getBillPack().get(entry.getKey());
@@ -70,6 +80,7 @@ public enum CashController {
 		
 		addCash(total);
 		System.out.println("Added " + total + " $$$");
+		System.out.println("****************************************************");
 	}
 	
 	private class InnerBank {

@@ -1,5 +1,7 @@
 package GUIClient;
 
+import Controller.CashController;
+import Controller.NotifyController;
 import MYGUI.ButtonFactory;
 import MYGUI.MyButton;
 import MYGUI.RightPanel;
@@ -83,6 +85,45 @@ public class Withdrawal extends RightPanel {
 	}
 
 	private class InnerActionListener implements ActionListener {
+		
+		private void withdraw(int howMuch) {
+			try {
+				DateFormat dateFormat = new SimpleDateFormat(
+						"yyyy/MM/dd HH:mm:ss");
+				Date date = new Date();
+				if (!CashController.INSTANCE.hasEnoughCash(howMuch)) {
+					int t = JOptionPane.showConfirmDialog(Withdrawal.this,
+							date + "Not enough bills in ATM", "Withdrawal",
+							JOptionPane.PLAIN_MESSAGE,
+							JOptionPane.NO_OPTION);
+					return;
+				}
+				
+				double res = Model.getInstance().doWithdrawal(howMuch);
+				
+				if (res == -1.0) {
+					int t = JOptionPane.showConfirmDialog(Withdrawal.this,
+							date + "Cant get this sum", "Withdrawal",
+							JOptionPane.PLAIN_MESSAGE,
+							JOptionPane.NO_OPTION);
+				} else {
+					CashController.INSTANCE.withdraw(howMuch);
+					//NotifyController.INSTANCE.sendSms("380679664588", "You've just withdrawn " + howMuch + "$. " + res + "$ left.\nAs a gold member now you get sms.\nATM from MPK");
+					
+					int t = JOptionPane
+							.showConfirmDialog(Withdrawal.this, date
+									+ "\nYour current balance:" + res
+									+ " UAH", "Balance",
+									JOptionPane.PLAIN_MESSAGE,
+									JOptionPane.NO_OPTION);
+				}
+
+			} catch (IOException | InterruptedException
+					| ExecutionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -90,134 +131,24 @@ public class Withdrawal extends RightPanel {
 
 			if (source == btn20) {
 				int howMuch = 20;
-				try {
-					DateFormat dateFormat = new SimpleDateFormat(
-							"yyyy/MM/dd HH:mm:ss");
-					Date date = new Date();
-					double res = Model.getInstance().doWithdrawal(howMuch);
-					if (res == -1.0) {
-						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
-								date + "Cant get this sum", "Withdrawal",
-								JOptionPane.PLAIN_MESSAGE,
-								JOptionPane.NO_OPTION);
-					} else {
-						int t = JOptionPane
-								.showConfirmDialog(Withdrawal.this, date
-										+ "\nYour current balance:" + res
-										+ " UAH", "Balance",
-										JOptionPane.PLAIN_MESSAGE,
-										JOptionPane.NO_OPTION);
-					}
-
-				} catch (IOException | InterruptedException
-						| ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				withdraw(howMuch);
+				
 			}// 20
 			if (source == btn50) {
 				int howMuch = 50;
-				try {
-					DateFormat dateFormat = new SimpleDateFormat(
-							"yyyy/MM/dd HH:mm:ss");
-					Date date = new Date();
-					double res = Model.getInstance().doWithdrawal(howMuch);
-					if (res == -1.0) {
-						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
-								date + "Cant get this sum", "Withdrawal",
-								JOptionPane.PLAIN_MESSAGE,
-								JOptionPane.NO_OPTION);
-					} else {
-						int t = JOptionPane
-								.showConfirmDialog(Withdrawal.this, date
-										+ "\nYour current balance:" + res
-										+ " UAH", "Balance",
-										JOptionPane.PLAIN_MESSAGE,
-										JOptionPane.NO_OPTION);
-					}
-				} catch (IOException | InterruptedException
-						| ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				withdraw(howMuch);
 			}
 			if (source == btn100) {
 				int howMuch = 100;
-				try {
-					DateFormat dateFormat = new SimpleDateFormat(
-							"yyyy/MM/dd HH:mm:ss");
-					Date date = new Date();
-					double res = Model.getInstance().doWithdrawal(howMuch);
-					if (res == -1.0) {
-						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
-								date + "Cant get this sum", "Withdrawal",
-								JOptionPane.PLAIN_MESSAGE,
-								JOptionPane.NO_OPTION);
-					} else {
-						int t = JOptionPane
-								.showConfirmDialog(Withdrawal.this, date
-										+ "\nYour current balance:" + res
-										+ " UAH", "Balance",
-										JOptionPane.PLAIN_MESSAGE,
-										JOptionPane.NO_OPTION);
-					}
-				} catch (IOException | InterruptedException
-						| ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				withdraw(howMuch);
 			}
 			if (source == btn200) {
 				int howMuch = 200;
-				try {
-					DateFormat dateFormat = new SimpleDateFormat(
-							"yyyy/MM/dd HH:mm:ss");
-					Date date = new Date();
-					double res = Model.getInstance().doWithdrawal(howMuch);
-					if (res == -1.0) {
-						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
-								date + "Cant get this sum", "Withdrawal",
-								JOptionPane.PLAIN_MESSAGE,
-								JOptionPane.NO_OPTION);
-					} else {
-						int t = JOptionPane
-								.showConfirmDialog(Withdrawal.this, date
-										+ "\nYour current balance:" + res
-										+ " UAH", "Balance",
-										JOptionPane.PLAIN_MESSAGE,
-										JOptionPane.NO_OPTION);
-					}
-				} catch (IOException | InterruptedException
-						| ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				withdraw(howMuch);
 			}
 			if (source == btn500) {
 				int howMuch = 500;
-				try {
-					DateFormat dateFormat = new SimpleDateFormat(
-							"yyyy/MM/dd HH:mm:ss");
-					Date date = new Date();
-					double res = Model.getInstance().doWithdrawal(howMuch);
-					if (res == -1.0) {
-						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
-								date + "Cant get this sum", "Withdrawal",
-								JOptionPane.PLAIN_MESSAGE,
-								JOptionPane.NO_OPTION);
-					} else {
-						int t = JOptionPane
-								.showConfirmDialog(Withdrawal.this, date
-										+ "\nYour current balance:" + res
-										+ " UAH", "Balance",
-										JOptionPane.PLAIN_MESSAGE,
-										JOptionPane.NO_OPTION);
-					}
-				} catch (IOException | InterruptedException
-						| ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				withdraw(howMuch);
 			}
 			// /the same
 
