@@ -29,7 +29,7 @@ public class Withdrawal extends RightPanel {
 	private ArrayList<MyButton> list;
 	private MyButton btn50;
 	private MyButton btn100;
-	private MyButton btn200;
+	private MyButton btn200; 
 	private MyButton btnChoose;
 	private MyButton btn500;
 	private JProgressBar progressBar;

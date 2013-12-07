@@ -65,7 +65,7 @@ public class Controller {
 		this.wrapper = wrapper;
 		this.rePin = new RePin();
 		this.rePin.addOuterListener(new RePinListener());
-		this.mainConteiner.resetPanel(new RePin());
+		this.mainConteiner.resetPanel(this.start);
 		this.start.addOuterListener(new OuterStartActionListener());
 		this.wrapper.addNavigationListeners(new NavigationListeners());
 		this.mainConteiner.setVisible(true);
