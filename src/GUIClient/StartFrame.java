@@ -204,6 +204,7 @@ public class StartFrame extends MetroPanel implements MouseListener {
 	public void clearFields() {
 		txt.getTextField().setText("");
 		pin.getPass().setText("");
+		rdbtnCardNumb.setFocusable(true);
 	}
 
 	public boolean checkInputData() {

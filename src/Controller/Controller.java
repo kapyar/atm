@@ -163,7 +163,9 @@ public class Controller {
 			
 			if (source == wrapper.getBtmExit()) {
 				//System.out.println("Finish Work");
+				start.clearFields();
 				mainConteiner.resetPanel(start);
+				
 				
 			}
 		}

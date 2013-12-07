@@ -146,7 +146,7 @@ public class Wrapper extends MetroPanel {
 		listOfBalanceButton.add(btnContactList);
 		
 		btmExit = ButtonFactory.getIconButton(
-				"resources\\imagesClient\\phone.png", "finish fork");
+				"resources\\imagesClient\\btnExit.png", "finish fork");
 		btmExit.setBounds(_x, _y+_delta*7, _W, _H);
 		pnlSide.add(btmExit);
 		listOfBalanceButton.add(btmExit);
