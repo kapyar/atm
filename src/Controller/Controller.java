@@ -160,6 +160,12 @@ public class Controller {
 				contactList.addOuterListener(new ContactListListener());
 				wrapper.resetRightPanel(contactList);
 			}
+			
+			if (source == wrapper.getBtmExit()) {
+				//System.out.println("Finish Work");
+				mainConteiner.resetPanel(start);
+				
+			}
 		}
 	}// END NavigationListeners
 
