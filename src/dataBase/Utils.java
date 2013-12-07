@@ -24,4 +24,5 @@ public class Utils {
 	public static String generateRandomString() {
 		return "just_random_session";
 	}
+	
 }
