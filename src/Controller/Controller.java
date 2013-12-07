@@ -24,6 +24,7 @@ import GUIClient.Balance;
 import GUIClient.ChooseYourCash;
 import GUIClient.ContactList;
 import GUIClient.PayBill;
+import GUIClient.RePin;
 import GUIClient.SendMoney;
 import GUIClient.WatchFriends;
 import GUIClient.Withdrawal;
@@ -42,6 +43,7 @@ public class Controller {
 	private ChooseYourCash chooseYourCash;
 	private ContactList contactList;
 	private AddMoney addMoney;
+	private RePin rePin;
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
 			Wrapper wrapper) {
@@ -61,12 +63,61 @@ public class Controller {
 		this.mainConteiner = mainConteiner;
 		this.start = start;
 		this.wrapper = wrapper;
-		this.mainConteiner.resetPanel(start);
+		this.rePin = new RePin();
+		this.rePin.addOuterListener(new RePinListener());
+		this.mainConteiner.resetPanel(new RePin());
 		this.start.addOuterListener(new OuterStartActionListener());
 		this.wrapper.addNavigationListeners(new NavigationListeners());
 		this.mainConteiner.setVisible(true);
 
 	}
+
+	private class RePinListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+
+			if (source == rePin.getPanel().getMyButton_Enter()) {
+				class MyWorker extends SwingWorker<String, Object> {
+					protected String doInBackground() {
+						rePin.getProgressBar().setVisible(true);
+						rePin.getProgressBar().setIndeterminate(true);
+						String login = Model.CURRENT_LOGIN.toString();
+						try {
+							Model.SESSION_ID = Model.getInstance().doLogIn(
+									login,
+									rePin.getPanel().getTextView()
+											.getTextField().getText());
+						} catch (InterruptedException | ExecutionException
+								| IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						return "Done.";
+					}
+
+					protected void done() {
+						rePin.getProgressBar().setVisible(false);
+
+						if (Model.SESSION_ID.equals("Failed")) {
+							JOptionPane.showConfirmDialog(start,
+									"Wrong input data", "Error",
+									JOptionPane.PLAIN_MESSAGE,
+									JOptionPane.NO_OPTION);
+							rePin.getPanel().getTextView().getTextField()
+									.setText("");
+						} else {
+							mainConteiner.resetPanel(wrapper);
+						}
+
+					}
+				}
+				new MyWorker().execute();
+			}
+		}
+	}// END RePinListener
 
 	public class OuterStartActionListener implements ActionListener {
 
