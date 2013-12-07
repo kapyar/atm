@@ -26,7 +26,7 @@ import javax.swing.JProgressBar;
 public class StartFrame extends MetroPanel implements MouseListener {
 
 	// private Font localFont = new Font("Viner Hand ITC", Font.PLAIN, 19);
-	private String FontType = "Viner Hand ITC";
+	private String FontType = ConfigGUICLient.FontType;
 	// private String FontType = "Colibry";
 	private MyButton myButton_1;
 	private MyButton myButton_2;
