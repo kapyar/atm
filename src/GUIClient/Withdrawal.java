@@ -1,7 +1,6 @@
 package GUIClient;
 
 import Controller.CashController;
-import Controller.NotifyController;
 import MYGUI.ButtonFactory;
 import MYGUI.MyButton;
 import MYGUI.RightPanel;
@@ -10,6 +9,7 @@ import Model.Model;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -21,6 +21,8 @@ import java.util.concurrent.ExecutionException;
 import java.awt.Font;
 import java.io.IOException;
 
+import javax.swing.JProgressBar;
+
 public class Withdrawal extends RightPanel {
 
 	private MyButton btn20;
@@ -30,6 +32,7 @@ public class Withdrawal extends RightPanel {
 	private MyButton btn200;
 	private MyButton btnChoose;
 	private MyButton btn500;
+	private JProgressBar progressBar;
 
 	public Withdrawal() {
 
@@ -67,6 +70,11 @@ public class Withdrawal extends RightPanel {
 		// list.add(btnChoose);
 		add(btnChoose);
 
+		progressBar = new JProgressBar();
+		progressBar.setBounds(191, 105, 312, 29);
+		progressBar.setVisible(false);
+		add(progressBar);
+
 		addInnerListener();
 
 	}
@@ -85,44 +93,54 @@ public class Withdrawal extends RightPanel {
 	}
 
 	private class InnerActionListener implements ActionListener {
-		
-		private void withdraw(int howMuch) {
-			try {
-				DateFormat dateFormat = new SimpleDateFormat(
-						"yyyy/MM/dd HH:mm:ss");
-				Date date = new Date();
-				if (!CashController.INSTANCE.hasEnoughCash(howMuch)) {
-					int t = JOptionPane.showConfirmDialog(Withdrawal.this,
-							date + "Not enough bills in ATM", "Withdrawal",
-							JOptionPane.PLAIN_MESSAGE,
-							JOptionPane.NO_OPTION);
-					return;
-				}
-				
-				double res = Model.getInstance().doWithdrawal(howMuch);
-				
-				if (res == -1.0) {
-					int t = JOptionPane.showConfirmDialog(Withdrawal.this,
-							date + "Cant get this sum", "Withdrawal",
-							JOptionPane.PLAIN_MESSAGE,
-							JOptionPane.NO_OPTION);
-				} else {
-					CashController.INSTANCE.withdraw(howMuch);
-					//NotifyController.INSTANCE.sendSms("380679664588", "You've just withdrawn " + howMuch + "$. " + res + "$ left.\nAs a gold member now you get sms.\nATM from MPK");
-					
-					int t = JOptionPane
-							.showConfirmDialog(Withdrawal.this, date
-									+ "\nYour current balance:" + res
-									+ " UAH", "Balance",
-									JOptionPane.PLAIN_MESSAGE,
-									JOptionPane.NO_OPTION);
+
+		private void withdraw(final int howMuch) {
+
+			progressBar.setVisible(true);
+			progressBar.setIndeterminate(true);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			final Date date = new Date();
+			if (!CashController.INSTANCE.hasEnoughCash(howMuch)) {
+				int t = JOptionPane.showConfirmDialog(Withdrawal.this, date
+						+ "Not enough bills in ATM", "Withdrawal",
+						JOptionPane.PLAIN_MESSAGE, JOptionPane.NO_OPTION);
+				return;
+			}
+
+			class MyWorker extends SwingWorker<String, Object> {
+				@Override
+				protected String doInBackground() throws Exception {
+					double res = Model.getInstance().doWithdrawal(howMuch);
+
+					if (res == -1.0) {
+						progressBar.setVisible(false);
+						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
+								date + "Cant get this sum", "Withdrawal",
+								JOptionPane.PLAIN_MESSAGE,
+								JOptionPane.NO_OPTION);
+					} else {
+						CashController.INSTANCE.withdraw(howMuch);
+						// NotifyController.INSTANCE.sendSms("380679664588",
+						// "You've just withdrawn " + howMuch + "$. " + res +
+						// "$ left.\nAs a gold member now you get sms.\nATM from MPK");
+
+						progressBar.setVisible(false);
+						int t = JOptionPane
+								.showConfirmDialog(Withdrawal.this, date
+										+ "\nYour current balance:" + res
+										+ " UAH", "Balance",
+										JOptionPane.PLAIN_MESSAGE,
+										JOptionPane.NO_OPTION);
+					}
+					return "Done";
+
 				}
 
-			} catch (IOException | InterruptedException
-					| ExecutionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				protected void done() {
+
+				}
 			}
+			new MyWorker().execute();
 		}
 
 		@Override
@@ -132,7 +150,7 @@ public class Withdrawal extends RightPanel {
 			if (source == btn20) {
 				int howMuch = 20;
 				withdraw(howMuch);
-				
+
 			}// 20
 			if (source == btn50) {
 				int howMuch = 50;
