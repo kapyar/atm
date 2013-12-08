@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.util.ArrayList;
 
-import org.apache.tomcat.dbcp.pool.impl.GenericKeyedObjectPool.Config;
 
 import GUIClient.ConfigGUICLient;
 
