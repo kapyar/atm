@@ -59,11 +59,52 @@ public enum CashController {
 	public boolean hasEnoughCash(Integer ammount) {
 		return (bank.getCashAmmount() - ammount) >= 0;
 	}
-	
-	public void withdraw(int sum) {
-		int tens = sum/10;
-		Integer tempCash = bank.getBillPack().get(10);
-		bank.getBillPack().put(10, tempCash - tens);
+	//magic don`t touch 
+	public boolean withdraw(int sum) {
+		boolean result = true;
+		
+		Integer bills [] = {10, 20, 50, 100, 200};		
+		HashMap<Integer, Integer> res = new HashMap<Integer, Integer>();
+		
+		
+		for (int i = 4; i >= 0; --i) {
+			int ammountOf = sum / bills[i];
+			int sumDec = 0;
+			if (ammountOf > bank.getBillPack().get(bills[i])) {
+				sumDec = bills[i] *  bank.getBillPack().get(bills[i]);
+				ammountOf = bank.getBillPack().get(bills[i]);
+			} else {
+				sumDec = bills[i] * ammountOf;
+			}
+			
+			res.put(bills[i], ammountOf);
+			sum -= sumDec;
+		}
+		if (sum != 0) {
+			result = false;
+		} else {
+			System.out.println("------------------------------------------");
+			System.out.println("ATM gives you: ");
+			for (Map.Entry<Integer, Integer> entry : res.entrySet()) {
+				System.out.println("bill: " + entry.getKey() + " - " + entry.getValue());
+			}
+			System.out.println("------------------------------------------");
+			
+			for (Map.Entry<Integer, Integer> entry : res.entrySet()) {
+				Integer temp =  bank.getBillPack().get(entry.getKey());
+				bank.getBillPack().put(entry.getKey(), temp - res.get(entry.getKey()));
+				
+				//System.out.println("bill: " + entry.getKey() + " - " + entry.getValue());
+			}
+			
+			System.out.println("After withdrawal:");
+			for (Map.Entry<Integer, Integer> entry : bank.getBillPack().entrySet()) {
+				System.out.println("bill: " + entry.getKey() + " - " + entry.getValue());
+			}
+			System.out.println("------------------------------------------");
+		}
+		
+		return result;
 	}
 	
 	public void uploadBills (HashMap<Integer, Integer> billPack) {
