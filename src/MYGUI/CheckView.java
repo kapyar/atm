@@ -31,9 +31,14 @@ public class CheckView extends RightPanel {
 
 	public CheckView() {
 		init();
-		// setHeader();
-		// addRest(rest);
-		// setFooter();
+
+	}
+
+	public CheckView(int rest) {
+		init();
+		setHeader();
+		addRest(rest);
+		setFooter();
 	}
 
 	public CheckView(HashMap<Integer, Integer> bills, int spent, int rest,
@@ -47,10 +52,32 @@ public class CheckView extends RightPanel {
 		// CashController.INSTANCE.addCash(350);
 	}
 
-	public void addOuterListener(ActionListener a) {
-		left.addActionListener(a);
-		right.addActionListener(a);
+	private void addInnerListener() {
+		left.addActionListener(new InnerListener());
+		right.addActionListener(new InnerListener());
 	}
+
+	private class InnerListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+
+			System.out.println("InnerListenerCheckView");
+			if (source == getLeft()) {
+				Test.getController().getMainConteiner()
+						.resetPanel(Test.getController().getStart());
+			}
+			if (source == getRight()) {
+				Test.getController().getWrap()
+						.resetRightPanel(Test.getController().getIntroSplash());
+				Test.getController().getMainConteiner()
+						.resetPanel(Test.getController().getRePin());
+			}
+
+		}
+
+	}// END InnerListener
 
 	private void init() {
 		setMyTitle("Your check:");
@@ -76,6 +103,7 @@ public class CheckView extends RightPanel {
 		this.add(left);
 		this.add(right);
 		this.add(check);
+		addInnerListener();
 	}
 
 	private void setHeader() {
@@ -91,7 +119,7 @@ public class CheckView extends RightPanel {
 	}
 
 	private void addRest(int rest) {
-	
+
 		data += "<div align='left'>" + "<br/>" + "Balance:" + "</div>";
 		data += "<div align='right'>" + rest + "</div>";
 

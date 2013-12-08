@@ -2,6 +2,8 @@ package GUIClient;
 
 import java.awt.event.ActionListener;
 
+import javax.swing.JProgressBar;
+
 import MYGUI.MyButton;
 import MYGUI.NumbersWithTextField;
 import MYGUI.RightPanel;
@@ -9,6 +11,7 @@ import MYGUI.RightPanel;
 public class ChooseYourCash extends RightPanel {
 
 	private NumbersWithTextField panel;
+	private JProgressBar progressBar;
 
 	public ChooseYourCash() {
 
@@ -22,6 +25,12 @@ public class ChooseYourCash extends RightPanel {
 		panel.setLocation(224, 253);
 		panel.setAlignmentY(0);
 		add(panel);
+		
+		
+		progressBar = new JProgressBar();
+		progressBar.setBounds(191, 105, 312, 29);
+		progressBar.setVisible(false);
+		add(progressBar);
 
 	}
 
@@ -40,6 +49,10 @@ public class ChooseYourCash extends RightPanel {
 
 	public NumbersWithTextField getPanel() {
 		return panel;
+	}
+
+	public JProgressBar getProgressBar() {
+		return progressBar;
 	}
 
 }
