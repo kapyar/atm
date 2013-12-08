@@ -228,12 +228,14 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == addMoney.getPanel().getMyButton_Enter()) {
+				
 				double d = Double.parseDouble(addMoney.getPanel().getTextView()
 						.getTextField().getText());
 
 				try {
 					Model.getInstance().doAddMonney(d);
 				} catch (IOException e1) {
+					System.out.println("Cant add money CONTROLLER");
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

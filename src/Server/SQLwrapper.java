@@ -64,6 +64,7 @@ public class SQLwrapper {
 			PreparedStatement ps = connection
 					.prepareStatement("SELECT `password_hash` FROM `Users` WHERE `id`=? ");
 			ps.setInt(1, getUserByAcc(accNum));
+		//	ps.setInt(1, accNum);
 
 			ResultSet rs = ps.executeQuery();
 
@@ -180,7 +181,7 @@ public class SQLwrapper {
 			PreparedStatement ps = connection
 					.prepareStatement("UPDATE `Accounts` SET `balance`=(?) WHERE `id`=(?) ");
 
-			ps.setDouble(1, newBal);
+			ps.setString(1, String.valueOf(newBal));
 			ps.setInt(2, accNum);
 
 			// ps.executeQuery();

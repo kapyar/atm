@@ -115,14 +115,19 @@ public class ServeOneJabber extends Thread {
 				String mSession = (String) in.get(Action.SESSION_ID);
 				Integer mlogin = (Integer) in.get(Action.LOGIN_FIELD);
 				Double mhowMuch = (Double) in.get(Action.ADD_MONEY);
+				System.out.println("mhowMuch: "+mhowMuch);
+
+				// System.out.println();
 
 				String sss = dataBase.getCurrentSession(mlogin);
 				if (sss.equals(mSession)) {
-					double bal = dataBase.getBalance(mSession);
-					bal += mhowMuch;
+					Double bal = dataBase.getBalance(mSession);
+					System.out.println("1 Balance: " + bal);
 
-					if (dataBase.setBalance(bal, mlogin)) {
-						out.put(Action.BALANCE, bal);
+					double sum = bal.doubleValue() + mhowMuch.doubleValue();
+
+					if (dataBase.setBalance(sum, mlogin)) {
+						out.put(Action.BALANCE, sum);
 					} else {
 						out.put(Action.ERROR_CODE, Action.ERROR_NOT_MATCHES);
 					}
