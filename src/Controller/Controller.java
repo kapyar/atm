@@ -14,6 +14,7 @@ import java.util.Timer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import javax.jws.WebParam.Mode;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
@@ -282,8 +283,6 @@ public class Controller {
 						balance.getProgressBar().setIndeterminate(true);
 
 						bln = Model.getInstance().doBalance();
-						System.out.println("Balance: inBackGround: "
-								+ (int) bln);
 						checkView = new CheckView((int) bln);
 
 						return "Done";
@@ -308,33 +307,37 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == addMoney.getPanel().getMyButton_Enter()) {
-				double d = Double.parseDouble(addMoney.getPanel().getTextView()
-						.getTextField().getText());
+				class MyWorker extends SwingWorker<String, Object> {
 
-				try {
-					Model.getInstance().doAddMonney(d);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					double bln = 0;
+					CheckView checkView;
+
+					@Override
+					protected String doInBackground() throws Exception {
+						addMoney.getProgressBar().setVisible(true);
+						addMoney.getProgressBar().setIndeterminate(true);
+
+						Integer d = Integer.parseInt(addMoney.getPanel()
+								.getTextView().getTextField().getText());
+
+						Model.getInstance().doAddMonney(d);
+
+						bln = Model.getInstance().doBalance();
+						checkView = new CheckView((int) bln);
+
+						return "Done";
+					}
+
+					protected void done() {
+						addMoney.getProgressBar().setVisible(false);
+						wrapper.resetRightPanel(checkView);
+					}
+
 				}
-
-				try {
-					int t = JOptionPane.showConfirmDialog(addMoney, "You add "
-							+ addMoney.getPanel().getTextView().getTextField()
-									.getText() + " UAH"
-							+ "\n You current balance: "
-							+ Model.getInstance().doBalance() + " UAH", "Info",
-							JOptionPane.PLAIN_MESSAGE, JOptionPane.NO_OPTION);
-				} catch (HeadlessException | InterruptedException
-						| ExecutionException | IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
+				new MyWorker().execute();
 			}
 
 		}
-
 	}// END AddMoneyListener
 
 	private class ContactListListener implements ActionListener {
@@ -403,6 +406,8 @@ public class Controller {
 									"Withdrawal", JOptionPane.PLAIN_MESSAGE,
 									JOptionPane.NO_OPTION);
 						} else {
+							// cant use side panel
+
 							Test.getController()
 									.getWrap()
 									.resetRightPanel(

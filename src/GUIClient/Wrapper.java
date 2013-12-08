@@ -194,5 +194,13 @@ public class Wrapper extends MetroPanel {
 	public MyButton getBtmExit() {
 		return btmExit;
 	}
+
+	public MetroPanel getPnlSide() {
+		return pnlSide;
+	}
+
+	public JScrollPane getScrollPane() {
+		return scrollPane;
+	}
 	
 }

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
 import MYGUI.NumbersWithTextField;
 import MYGUI.RightPanel;
@@ -20,6 +21,8 @@ public class AddMoney extends RightPanel {
 	private int _H;
 	private int _x;
 	private int _y;
+
+	private JProgressBar progressBar;
 
 	public AddMoney() {
 		_W = super.getWidth();
@@ -37,6 +40,11 @@ public class AddMoney extends RightPanel {
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblNewLabel.setBounds(16, 0, 200, 14);
 		panel.add(lblNewLabel);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(191, 105, 312, 29);
+		progressBar.setVisible(false);
+		add(progressBar);
 
 		addInnerListener();
 	}
@@ -66,5 +74,9 @@ public class AddMoney extends RightPanel {
 
 	public NumbersWithTextField getPanel() {
 		return panel;
+	}
+
+	public JProgressBar getProgressBar() {
+		return progressBar;
 	}
 }
