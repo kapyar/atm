@@ -227,7 +227,7 @@ public class Controller {
 			}
 			if (source == wrapper.getBtmExit()) {
 				//System.out.println("Finish Work");
-				mainConteiner.resetPanel(start);
+				gotoStart();
 				
 				
 			}
