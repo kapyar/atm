@@ -153,7 +153,7 @@ public class SQLwrapper {
 	}
 	
 	public boolean addCash(int ammount, int atmId) {
-		int cash = getCashLeft(atmId) + ammount;
+		int cash = ammount;
 		
 		Boolean res = true;
 		try {

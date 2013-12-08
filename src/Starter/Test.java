@@ -23,6 +23,9 @@ public class Test {
 		start = new StartFrame();
 		form = new MainFormClient();
 		controller = new Controller(form, start, balance);
-
+	}
+	
+	public static Controller getController() {
+		return controller;
 	}
 }

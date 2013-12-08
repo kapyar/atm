@@ -15,26 +15,35 @@ public enum CashController {
 	
 	private final int ATM_ID = 100;
 	private InnerBank bank;
+	private HashMap<Integer, Integer> lastWidthdraw;
+	private HashMap<Integer, Integer> lastAdd;
 	
 	private CashController() {
 		bank = new InnerBank();
 	}
 	
 	
-	private void addCash(int ammount) {
-		SQLwrapper bd = new SQLwrapper();
+	public void addCash(int sum) {
+		Integer bills [] = {10, 20, 50, 100, 200};		
+		HashMap<Integer, Integer> res = new HashMap<Integer, Integer>();
 		
-		if (!bd.addCash(ammount, ATM_ID)) {
-			throw new RuntimeException("Cash Controller can't add cash for some reason");
+		
+		for (int i = 4; i >= 0; --i) {
+			int ammountOf = sum / bills[i];
+			int sumDec = bills[i] * ammountOf;
+
+			res.put(bills[i], ammountOf);
+			sum -= sumDec;
 		}
+		
+		uploadBills(res);
 		
 	}
 	
 	public void loadLocalCash() throws IOException, ClassNotFoundException {
 		FileInputStream fis = new FileInputStream("cash.data");
 		ObjectInputStream oin = new ObjectInputStream(fis);
-		
-		// read the data about banknotes left
+
 		HashMap<Integer, Integer> billPack = (HashMap<Integer, Integer>) oin.readObject();
 		bank.setBillPack(billPack);
 		
@@ -50,6 +59,12 @@ public enum CashController {
 		System.out.println("Saved:  " + bank.getCashAmmount() + " $ of cash from ATM");
 		oos.flush();
 		oos.close();
+		
+		SQLwrapper bd = new SQLwrapper();
+		
+		if (!bd.addCash(bank.getCashAmmount(), ATM_ID)) {
+			throw new RuntimeException("Cash Controller can't add cash for some reason");
+		}
 	}
 	
 	public Integer getCashLeft() {
@@ -59,7 +74,7 @@ public enum CashController {
 	public boolean hasEnoughCash(Integer ammount) {
 		return (bank.getCashAmmount() - ammount) >= 0;
 	}
-	//magic don`t touch 
+	
 	public boolean withdraw(int sum) {
 		boolean result = true;
 		
@@ -80,14 +95,17 @@ public enum CashController {
 			res.put(bills[i], ammountOf);
 			sum -= sumDec;
 		}
+		
 		if (sum != 0) {
 			result = false;
 		} else {
 			System.out.println("------------------------------------------");
 			System.out.println("ATM gives you: ");
+			
 			for (Map.Entry<Integer, Integer> entry : res.entrySet()) {
 				System.out.println("bill: " + entry.getKey() + " - " + entry.getValue());
 			}
+			
 			System.out.println("------------------------------------------");
 			
 			for (Map.Entry<Integer, Integer> entry : res.entrySet()) {
@@ -98,16 +116,24 @@ public enum CashController {
 			}
 			
 			System.out.println("After withdrawal:");
+			
 			for (Map.Entry<Integer, Integer> entry : bank.getBillPack().entrySet()) {
 				System.out.println("bill: " + entry.getKey() + " - " + entry.getValue());
 			}
+			
 			System.out.println("------------------------------------------");
+			
+			lastWidthdraw = res;
 		}
 		
 		return result;
 	}
 	
-	public void uploadBills (HashMap<Integer, Integer> billPack) {
+	public HashMap<Integer, Integer> getLastWithdraw() {
+		return lastWidthdraw;
+	}
+	
+	private void uploadBills (HashMap<Integer, Integer> billPack) {
 		Integer total = 0;
 		System.out.println("****************************************************");
 		System.out.println("Adding bills:");
@@ -119,9 +145,16 @@ public enum CashController {
 			System.out.println("Adding " + entry.getValue() + " of " + entry.getKey() + " $ banknotes");
 		}
 		
-		addCash(total);
 		System.out.println("Added " + total + " $$$");
 		System.out.println("****************************************************");
+	}
+	
+	public HashMap<Integer, Integer> getCashDesk() {
+		return bank.getBillPack();
+	}
+	
+	public HashMap<Integer, Integer> getLastAdd() {
+		return lastAdd;
 	}
 	
 	private class InnerBank {
@@ -147,7 +180,6 @@ public enum CashController {
 			
 			return total;
 		}
-		
 		
 	}
 	

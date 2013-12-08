@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import Controller.CashController;
+import MYGUI.CheckView;
 import MYGUI.MetroPanel;
 
 public class MainFormClient extends JFrame implements WindowListener  {
@@ -35,6 +36,8 @@ public class MainFormClient extends JFrame implements WindowListener  {
 			e.printStackTrace();
 		}
 		
+		
+		
 //		HashMap<Integer, Integer> bills = new HashMap<Integer, Integer>();
 //		bills.put(100,  3);
 //		bills.put(50,  6);
@@ -47,7 +50,7 @@ public class MainFormClient extends JFrame implements WindowListener  {
 		getContentPane().removeAll();
 		getContentPane().repaint();
 		getContentPane().revalidate();
-
+		
 		getContentPane().add(m);
 		getContentPane().repaint();
 		getContentPane().revalidate();

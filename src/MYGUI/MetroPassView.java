@@ -24,8 +24,7 @@ public class MetroPassView extends JPasswordField{
 				Integer.parseInt(c + "");
 			}
 			super.processKeyEvent(ev);
-		}
-		catch (NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			// Do nothing. Character inputted is not a number, so ignore it.
 		}
 	};
