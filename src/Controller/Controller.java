@@ -183,6 +183,7 @@ public class Controller {
 							else {
 								wrapper.resetRightPanel(new IntroSplash());
 								mainConteiner.resetPanel(wrapper);
+								start.clearFields();
 							}
 
 						}
