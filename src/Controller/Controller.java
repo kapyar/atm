@@ -65,8 +65,10 @@ public class Controller {
 		this.start = start;
 		this.wrapper = wrapper;
 		this.introSplash = new IntroSplash();
-		this.checkView = new CheckView(0);
+
+		this.checkView = new CheckView();
 		this.checkView.addOuterListener(new CheckViewListener());
+
 		this.rePin = new RePin();
 		this.rePin.addOuterListener(new RePinListener());
 		this.mainConteiner.resetPanel(this.start);
@@ -202,7 +204,7 @@ public class Controller {
 		}// IF field not empty
 	}// END OuterStartActionListener
 
-	class NavigationListeners implements ActionListener {
+	private class NavigationListeners implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -430,5 +432,9 @@ public class Controller {
 
 	public Wrapper getWrap() {
 		return wrapper;
+	}
+
+	public CheckView getCheckView() {
+		return checkView;
 	}
 }

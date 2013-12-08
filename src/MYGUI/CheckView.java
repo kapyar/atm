@@ -29,7 +29,7 @@ public class CheckView extends RightPanel {
 		setFooter();
 	}
 
-	public CheckView(int rest) {
+	public CheckView() {
 		init();
 		// setHeader();
 		// addRest(rest);
@@ -90,7 +90,7 @@ public class CheckView extends RightPanel {
 		data += div;
 	}
 
-	public void addRest(int rest) {
+	private void addRest(int rest) {
 	
 		data += "<div align='left'>" + "<br/>" + "Balance:" + "</div>";
 		data += "<div align='right'>" + rest + "</div>";
@@ -98,12 +98,24 @@ public class CheckView extends RightPanel {
 	}
 
 	public void setData(int suma) {
+		inner = null;
+		data = "";
 		setHeader();
 		addRest(suma);
 		setFooter();
 	}
 
-	public void addRest(int spent, int rest, boolean negative) {
+	public void setData(HashMap<Integer, Integer> bills, int spent, int rest,
+			boolean negative) {
+		inner = null;
+		data = "";
+		setHeader();
+		addRest(spent, rest, negative);
+		addWithdrawalData(bills);
+		setFooter();
+	}
+
+	private void addRest(int spent, int rest, boolean negative) {
 		data += "<div align='left'>";
 
 		if (negative) {
@@ -118,7 +130,7 @@ public class CheckView extends RightPanel {
 		data += "<div align='right'>" + rest + "</div>";
 	}
 
-	public void addWithdrawalData(HashMap<Integer, Integer> bills) {
+	private void addWithdrawalData(HashMap<Integer, Integer> bills) {
 		data += div + "<br>";
 		data += "<div align='left'>Your bills:<br><br>";
 
