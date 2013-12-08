@@ -16,6 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import Controller.Controller.OuterStartActionListener;
+import Controller.NumberCheker;
 import MYGUI.ButtonFactory;
 import MYGUI.MetroEditablePane;
 import MYGUI.MetroEditablePin;
@@ -208,6 +209,14 @@ public class StartFrame extends MetroPanel implements MouseListener {
 	}
 
 	public boolean checkInputData() {
+		if (!NumberCheker.isNumber(txt.getTextField().getText())) {
+			System.out.println("Incorect nuber cart");
+			return false;
+		}
+		if (!NumberCheker.isNumber(pin.getPass().getText())) {
+			System.out.println("Incorect PIN code");
+			return false;
+		}
 		if (txt.getTextField().getText().equals("")
 				|| pin.getPass().getText().equals("")) {
 			return false;

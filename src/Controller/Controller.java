@@ -167,10 +167,16 @@ public class Controller {
 
 					// /END myWORKER
 
-				}// END OuterStartActionListener
+				} else {
+					JOptionPane.showConfirmDialog(start,
+							"Wrong input data", "Error",
+							JOptionPane.PLAIN_MESSAGE,
+							JOptionPane.NO_OPTION);
+					start.clearFields();
+				}
 			}
 		}// IF field not empty
-	}
+	}// END OuterStartActionListener
 
 	class NavigationListeners implements ActionListener {
 
