@@ -1,6 +1,7 @@
 package Starter;
 
 import java.io.IOException;
+import java.util.Formatter;
 
 import javax.swing.JFrame;
 
@@ -23,6 +24,10 @@ public class Test {
 		start = new StartFrame();
 		form = new MainFormClient();
 		controller = new Controller(form, start, balance);
-
 	}
+
+	public static Controller getController() {
+		return controller;
+	}
+
 }

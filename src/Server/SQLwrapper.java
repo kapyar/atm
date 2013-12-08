@@ -64,7 +64,6 @@ public class SQLwrapper {
 			PreparedStatement ps = connection
 					.prepareStatement("SELECT `password_hash` FROM `Users` WHERE `id`=? ");
 			ps.setInt(1, getUserByAcc(accNum));
-		//	ps.setInt(1, accNum);
 
 			ResultSet rs = ps.executeQuery();
 
@@ -123,46 +122,48 @@ public class SQLwrapper {
 	public double getBalance(String bSession) {
 		double result = 0;
 		try {
-			PreparedStatement ps = connection.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `session_id`=? ");
+			PreparedStatement ps = connection
+					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `session_id`=? ");
 			ps.setString(1, bSession);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				result = rs.getDouble("balance");
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
+
 	public int getCashLeft(int atmId) {
 		int result = 0;
 		try {
-			PreparedStatement ps = connection.prepareStatement("SELECT `value2` FROM `TechInfo` WHERE `name`='cashAmmount' AND `value`=(?) ");
+			PreparedStatement ps = connection
+					.prepareStatement("SELECT `value2` FROM `TechInfo` WHERE `name`='cashAmmount' AND `value`=(?) ");
 			ps.setString(1, String.valueOf(atmId));
-			
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				result = rs.getInt("value2");
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
+
 	public boolean addCash(int ammount, int atmId) {
-		int cash = getCashLeft(atmId) + ammount;
-		
+		int cash = ammount;
+
 		Boolean res = true;
 		try {
 			PreparedStatement ps = connection
 					.prepareStatement("UPDATE `TechInfo` SET `value2`=(?) WHERE `name`='cashAmmount' AND `value` = (?) ");
 
-			ps.setString(1,String.valueOf(cash));
-			ps.setString(2,String.valueOf(atmId));
+			ps.setString(1, String.valueOf(cash));
+			ps.setString(2, String.valueOf(atmId));
 
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -171,9 +172,6 @@ public class SQLwrapper {
 		}
 		return res;
 	}
-	
-	
-	
 
 	public boolean setBalance(double newBal, Integer accNum) {
 		Boolean res = true;
@@ -181,7 +179,7 @@ public class SQLwrapper {
 			PreparedStatement ps = connection
 					.prepareStatement("UPDATE `Accounts` SET `balance`=(?) WHERE `id`=(?) ");
 
-			ps.setString(1, String.valueOf(newBal));
+			ps.setDouble(1, newBal);
 			ps.setInt(2, accNum);
 
 			// ps.executeQuery();

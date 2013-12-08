@@ -22,7 +22,7 @@ import Server.MultiJabberClient;
 import Server.Server;
 
 public class Model {
-
+	
 	public static boolean isDone = false;
 
 	public static String SESSION_ID = null;
@@ -49,24 +49,23 @@ public class Model {
 		// make a command to server
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.LOG_IN);
-
 		Integer intLogin = Integer.parseInt(login);
 		CURRENT_LOGIN = intLogin;
-
 		command.put(Action.LOGIN_FIELD, intLogin);
 		command.put(Action.PASS_FIELD, pass);
-
+		
+		
 		ExecutorService ex = Executors.newCachedThreadPool();
 		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
 				command));
 		ex.shutdown();
-
+		
+		
+		
 		if (checkLogIn(res.get())) {
 			return (String) res.get().get(Action.SESSION_ID);
-		} else {
-			System.out.println("doLogin not checkLogIn");
+		} else
 			return "Failed";
-		}
 	}
 
 	public double doBalance() throws InterruptedException, ExecutionException,
@@ -110,9 +109,8 @@ public class Model {
 		}
 		return toReturn;
 	}
-
+	
 	public void doAddMonney(double d) throws IOException {
-
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.ADD_MONEY);
 		command.put(Action.SESSION_ID, SESSION_ID);
@@ -123,7 +121,7 @@ public class Model {
 		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
 				command));
 		ex.shutdown();
-
+		
 	}
 
 	private boolean checkWithdrawal(HashMap<Action, Object> hashMap) {
@@ -168,5 +166,7 @@ public class Model {
 		return true;
 
 	}
+
+	
 
 }

@@ -8,8 +8,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
+import Controller.NumberCheker;
 
 public class MetroEditablePane extends JPanel {
 
@@ -65,11 +68,24 @@ public class MetroEditablePane extends JPanel {
 	}// END InnerListener
 
 	public MetroTextView getTextField() {
+		if (!NumberCheker.isNumber(textField.getText()))
+		{
+			//textField.setText("");
+//			JOptionPane.showConfirmDialog(start,
+//					"Wrong input data", "Error",
+//					JOptionPane.PLAIN_MESSAGE,
+//					JOptionPane.NO_OPTION);
+//			//start.clearFields();
+		}
 		return textField;
 	}
 
 	public MyButton getDel() {
 		return del;
+	}
+
+	public void setTextField(MetroTextView textField) {
+		this.textField = textField;
 	}
 
 }

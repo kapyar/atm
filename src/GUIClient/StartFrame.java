@@ -16,6 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import Controller.Controller.OuterStartActionListener;
+import Controller.NumberCheker;
 import MYGUI.ButtonFactory;
 import MYGUI.MetroEditablePane;
 import MYGUI.MetroEditablePin;
@@ -62,9 +63,9 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		_y = super.getY();
 
 		System.out.println("Start Frame");
-		JLabel lblBalanceTitle = new JLabel("ATMers", JLabel.CENTER);
+		JLabel lblBalanceTitle = new JLabel("with love from MPK Team ...", JLabel.CENTER);
 		lblBalanceTitle.setFont(new Font(FontType, Font.PLAIN, 27));
-
+		lblBalanceTitle.setForeground(new Color(255, 255, 255));
 		lblBalanceTitle.setBounds((_W / 2) - ConfigGUICLient._WTL / 2,
 				ConfigGUICLient._yTL, ConfigGUICLient._WTL,
 				ConfigGUICLient._HTL);
@@ -200,6 +201,10 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		addInnerListener();
 
 	}
+	
+	public JRadioButton getCardRadioBtn() {
+		return rdbtnCardNumb;
+	}
 
 	public void clearFields() {
 		txt.getTextField().setText("");
@@ -208,6 +213,14 @@ public class StartFrame extends MetroPanel implements MouseListener {
 	}
 
 	public boolean checkInputData() {
+		if (!NumberCheker.isNumber(txt.getTextField().getText())) {
+			System.out.println("Incorect nuber cart");
+			return false;
+		}
+		if (!NumberCheker.isNumber(pin.getPass().getText())) {
+			System.out.println("Incorect PIN code");
+			return false;
+		}
 		if (txt.getTextField().getText().equals("")
 				|| pin.getPass().getText().equals("")) {
 			return false;

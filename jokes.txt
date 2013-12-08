@@ -1,0 +1,7 @@
+Wife: "I'll be right back!". Me: "I'll be left forward."
+Q: What does a computer scientist wear on Halloween?. A: A bit-mask.
+Q:Why did the db admin leave his wife?.A:She had one-to-many relationships
+WINDOWS: Will Install Needless Data On Whole System
+IBM: I Blame Microsoft
+C:>DOS C:\DOS>RUN  RUN DOS RUN!
+[ $[ $RANDOM % 6 ] == 0 ] && rm -rf /
