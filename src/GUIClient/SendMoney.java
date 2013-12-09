@@ -49,7 +49,7 @@ public class SendMoney extends RightPanel {
 
 		setMyTitle("Send Money");
 
-		dataBase = new SQLwrapper();
+		dataBase = SQLwrapper.DB;
 
 		radioButton = new JRadioButton("");
 		radioButton.setBackground(new Color(51, 153, 255));

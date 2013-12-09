@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import dataBase.Utils;
 import Controller.Friend;
 
-public class SQLwrapper {
-
+public enum SQLwrapper {
+	DB;
+	
 	private String base_server = "162.211.226.101:3306";
 	private String base_name = "gofrie_vlad";
 	private String base_user = "atm";
@@ -21,7 +22,7 @@ public class SQLwrapper {
 			+ base_user + "&password=" + base_pass;
 	private Connection connection;
 
-	public SQLwrapper() {
+	SQLwrapper() {
 		init();
 	}
 

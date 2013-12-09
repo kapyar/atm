@@ -19,12 +19,12 @@ public class ServeOneJabber extends Thread {
 
 	private ObjectInputStream osIn;
 	private ObjectOutputStream osOut;
-	private SQLwrapper dataBase;
+	private SQLwrapper dataBase = SQLwrapper.DB;
 
 	public ServeOneJabber(Socket s) throws IOException {
 		System.out.println("Constructor ServerOneJabber");
 		socket = s;
-		dataBase = new SQLwrapper();
+		//dataBase = new SQLwrapper();
 
 		this.start();
 	}

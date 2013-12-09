@@ -20,7 +20,6 @@ import java.util.concurrent.Future;
 import dataBase.Database;
 import Actions.Action;
 import Controller.Friend;
-import Server.ClientMain;
 import Server.MultiJabberClient;
 import Server.SQLwrapper;
 import Server.Server;
@@ -37,7 +36,7 @@ public class Model {
 	private SQLwrapper db;
 
 	private Model() {
-		db = new SQLwrapper();
+		db = SQLwrapper.DB;
 
 	}
 
