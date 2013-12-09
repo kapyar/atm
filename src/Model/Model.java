@@ -26,7 +26,7 @@ import Server.SQLwrapper;
 import Server.Server;
 
 public class Model {
-	
+
 	public static boolean isDone = false;
 
 	public static String SESSION_ID = null;
@@ -35,7 +35,7 @@ public class Model {
 	private static Model instance = null;
 
 	private SQLwrapper db;
-	
+
 	private Model() {
 		db = new SQLwrapper();
 
@@ -60,15 +60,12 @@ public class Model {
 		CURRENT_LOGIN = intLogin;
 		command.put(Action.LOGIN_FIELD, intLogin);
 		command.put(Action.PASS_FIELD, pass);
-		
-		
+
 		ExecutorService ex = Executors.newCachedThreadPool();
 		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
 				command));
 		ex.shutdown();
-		
-		
-		
+
 		if (checkLogIn(res.get())) {
 			return (String) res.get().get(Action.SESSION_ID);
 		} else
@@ -116,7 +113,7 @@ public class Model {
 		}
 		return toReturn;
 	}
-	
+
 	public void doAddMonney(Integer d) throws IOException {
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.ADD_MONEY);
@@ -128,7 +125,7 @@ public class Model {
 		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
 				command));
 		ex.shutdown();
-		
+
 	}
 
 	private boolean checkWithdrawal(HashMap<Action, Object> hashMap) {
@@ -173,13 +170,27 @@ public class Model {
 		return true;
 
 	}
-	//TEST
+
+	// TEST
 	public ArrayList<Friend> getlistOfFriends(Integer accNum) {
 		ArrayList<Friend> list = db.getListFriends(accNum);
 		return list;
 
 	}
 
-	
+	public void doSendMoney(int howMuch, int toWhome) throws IOException {
+		HashMap<Action, Object> command = new HashMap<Action, Object>();
+		command.put(Action.ACTION, Action.SEND_MONEY);
+		command.put(Action.SESSION_ID, SESSION_ID);
+		command.put(Action.LOGIN_FIELD, CURRENT_LOGIN);
+		command.put(Action.SEND_MONEY, howMuch);
+		command.put(Action.TO_WHOME, toWhome);
+
+		ExecutorService ex = Executors.newCachedThreadPool();
+		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
+				command));
+		ex.shutdown();
+
+	}
 
 }
