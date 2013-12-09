@@ -135,16 +135,19 @@ public class ServeOneJabber extends Thread {
 				}
 
 				break;
-				
+
 			case TO_WHOME:
 				String twSession = (String) in.get(Action.SESSION_ID);
 				Integer twlogin = (Integer) in.get(Action.LOGIN_FIELD);
-				int twHowMuch = (int)in.get(Action.SEND_MONEY);
-				int twToWhome = (int)in.get(Action.TO_WHOME);
-				
-				if(dataBase.getCurrentSession(twlogin).equals(twSession));
-				
-				
+				int twHowMuch = (int) in.get(Action.SEND_MONEY);
+				int twToWhome = (int) in.get(Action.TO_WHOME);
+
+				if (dataBase.getCurrentSession(twlogin).equals(twSession)) {
+					dataBase.sendMoney(twlogin,twToWhome,twHowMuch);
+				} else {
+					out.put(Action.ERROR_CODE, Action.ERROR_NOT_MATCHES);
+				}
+
 			}// END of switch
 
 			System.out.println("All ok");

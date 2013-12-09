@@ -41,9 +41,10 @@ public class SQLwrapper {
 		int result = -1;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
-			ps = connection.prepareStatement("SELECT `owner_id` FROM `Accounts` WHERE `id`=? ");
+			ps = connection
+					.prepareStatement("SELECT `owner_id` FROM `Accounts` WHERE `id`=? ");
 			ps.setInt(1, acc);
 
 			rs = ps.executeQuery();
@@ -51,10 +52,10 @@ public class SQLwrapper {
 			while (rs.next()) {
 				result = rs.getInt("owner_id");
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
@@ -71,7 +72,7 @@ public class SQLwrapper {
 		String result = "";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `password_hash` FROM `Users` WHERE `id`=? ");
@@ -84,7 +85,7 @@ public class SQLwrapper {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
@@ -107,7 +108,7 @@ public class SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 		}
 		return res;
@@ -116,13 +117,13 @@ public class SQLwrapper {
 	public String getCurrentSession(Integer blogin) {
 		String result = "";
 		PreparedStatement ps = null;
-		ResultSet rs= null;
-		
+		ResultSet rs = null;
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `session_id` FROM `Accounts` WHERE `id`=(?) ");
 
-			//System.out.println("bLogin: " + blogin);
+			// System.out.println("bLogin: " + blogin);
 			ps.setInt(1, blogin);
 
 			rs = ps.executeQuery();
@@ -132,32 +133,33 @@ public class SQLwrapper {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
 
 		return result;
 	}
+	
 
 	public double getBalance(String bSession) {
 		double result = 0;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `session_id`=? ");
 			ps.setString(1, bSession);
 			rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				result = rs.getDouble("balance");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
@@ -168,25 +170,25 @@ public class SQLwrapper {
 		int result = 0;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `value2` FROM `TechInfo` WHERE `name`='cashAmmount' AND `value`=(?) ");
 			ps.setString(1, String.valueOf(atmId));
 
 			rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				result = rs.getInt("value2");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
-		
+
 		return result;
 	}
 
@@ -194,9 +196,9 @@ public class SQLwrapper {
 		int cash = ammount;
 		Boolean res = true;
 		PreparedStatement ps = null;
-		
+
 		try {
-			 ps = connection
+			ps = connection
 					.prepareStatement("UPDATE `TechInfo` SET `value2`=(?) WHERE `name`='cashAmmount' AND `value` = (?) ");
 
 			ps.setString(1, String.valueOf(cash));
@@ -206,7 +208,7 @@ public class SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 		}
 		return res;
@@ -215,7 +217,7 @@ public class SQLwrapper {
 	public boolean setBalance(double newBal, Integer accNum) {
 		Boolean res = true;
 		PreparedStatement ps = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("UPDATE `Accounts` SET `balance`=(?) WHERE `id`=(?) ");
@@ -228,7 +230,7 @@ public class SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 		}
 		return res;
@@ -268,7 +270,7 @@ public class SQLwrapper {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closePSt(pst);
 			Utils.closeRs(rs);
@@ -276,5 +278,11 @@ public class SQLwrapper {
 		}
 
 		return list;
+	}
+
+	public void sendMoney(Integer twlogin, int twToWhome, int twHowMuch) {
+	
+		//setBalance(sum, accNum);
+
 	}
 }
