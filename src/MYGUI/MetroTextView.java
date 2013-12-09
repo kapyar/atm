@@ -29,7 +29,7 @@ public class MetroTextView extends JTextField {
 		try {
 			// Ignore all non-printable characters. Just check the printable
 			// ones.
-			if (c > 31 && c < 127) {
+			if (c > 31 && c < 5000) {
 				Integer.parseInt(c + "");
 			}
 			super.processKeyEvent(ev);

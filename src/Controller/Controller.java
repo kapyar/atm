@@ -49,6 +49,7 @@ public class Controller {
 	public void gotoStart() {
 		start.clearFields();
 		mainConteiner.resetPanel(start);
+		start.getCardRadioBtn().setSelected(true);
 	}
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
@@ -227,7 +228,7 @@ public class Controller {
 			}
 			if (source == wrapper.getBtmExit()) {
 				//System.out.println("Finish Work");
-				mainConteiner.resetPanel(start);
+				gotoStart();
 				
 				
 			}

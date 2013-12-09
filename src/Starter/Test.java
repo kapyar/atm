@@ -1,6 +1,7 @@
 package Starter;
 
 import java.io.IOException;
+import java.util.Formatter;
 
 import javax.swing.JFrame;
 
@@ -28,4 +29,7 @@ public class Test {
 	public static Controller getController() {
 		return controller;
 	}
+	
+
+	
 }
