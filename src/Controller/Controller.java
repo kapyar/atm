@@ -231,7 +231,6 @@ public class Controller {
 			}
 			if (source == wrapper.getBtnContactList()) {
 				contactList = new ContactList();
-				contactList.addOuterListener(new ContactListListener());
 				wrapper.resetRightPanel(contactList);
 			}
 			if (source == wrapper.getBtmExit()) {
@@ -347,24 +346,6 @@ public class Controller {
 
 		}
 	}// END AddMoneyListener
-
-	private class ContactListListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Object source = e.getSource();
-
-			if (source == contactList.getWatch()) {
-				wrapper.resetRightPanel(new WatchFriends());
-			}
-
-			if (source == contactList.getAddFriend()) {
-				wrapper.resetRightPanel(new AddNewFriend());
-			}
-
-		}
-
-	}// END ContactListListener
 
 	private class WithdrawalListener implements ActionListener {
 

@@ -290,7 +290,7 @@ public enum SQLwrapper {
 		if (fromWhome < 0)
 			return false;
 		toWhome += twHowMuch.doubleValue();
-		
+
 		setBalance(fromWhome, twlogin);
 		setBalance(toWhome, twToWhome);
 
