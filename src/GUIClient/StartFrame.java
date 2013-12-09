@@ -21,12 +21,13 @@ import MYGUI.MetroEditablePane;
 import MYGUI.MetroEditablePin;
 import MYGUI.MetroPanel;
 import MYGUI.MyButton;
+
 import javax.swing.JProgressBar;
 
 public class StartFrame extends MetroPanel implements MouseListener {
 
 	// private Font localFont = new Font("Viner Hand ITC", Font.PLAIN, 19);
-	private String FontType = "Viner Hand ITC";
+	private String FontType = ConfigGUICLient.FontType;
 	// private String FontType = "Colibry";
 	private MyButton myButton_1;
 	private MyButton myButton_2;
@@ -62,9 +63,9 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		_y = super.getY();
 
 		System.out.println("Start Frame");
-		JLabel lblBalanceTitle = new JLabel("ATMers", JLabel.CENTER);
+		JLabel lblBalanceTitle = new JLabel("ATM", JLabel.CENTER);
 		lblBalanceTitle.setFont(new Font(FontType, Font.PLAIN, 27));
-
+		lblBalanceTitle.setForeground(new Color(255, 255, 255));
 		lblBalanceTitle.setBounds((_W / 2) - ConfigGUICLient._WTL / 2,
 				ConfigGUICLient._yTL, ConfigGUICLient._WTL,
 				ConfigGUICLient._HTL);
@@ -195,6 +196,7 @@ public class StartFrame extends MetroPanel implements MouseListener {
 		progressBar = new JProgressBar();
 		progressBar.setBounds(180, 412, 440, 29);
 		progressBar.setVisible(false);
+
 		add(progressBar);
 
 		addInnerListener();

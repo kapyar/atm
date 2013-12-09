@@ -2,9 +2,11 @@ package GUIClient;
 
 import Controller.CashController;
 import MYGUI.ButtonFactory;
+import MYGUI.CheckView;
 import MYGUI.MyButton;
 import MYGUI.RightPanel;
 import Model.Model;
+import Starter.Test;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -40,17 +42,17 @@ public class Withdrawal extends RightPanel {
 
 		list = new ArrayList<MyButton>();
 		btn20 = ButtonFactory.getSelectBtn("20");
-		btn20.setLocation(0, 260);
+		btn20.setLocation(2, 260);
 		list.add(btn20);
 		add(btn20);
 
 		btn50 = ButtonFactory.getSelectBtn("50");
-		btn50.setLocation(0, 340);
+		btn50.setLocation(2, 340);
 		list.add(btn50);
 		add(btn50);
 
 		btn100 = ButtonFactory.getSelectBtn("100");
-		btn100.setLocation(0, 420);
+		btn100.setLocation(2, 420);
 
 		list.add(btn100);
 		add(btn100);
@@ -100,6 +102,7 @@ public class Withdrawal extends RightPanel {
 			progressBar.setIndeterminate(true);
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			final Date date = new Date();
+			
 			if (!CashController.INSTANCE.hasEnoughCash(howMuch)) {
 				int t = JOptionPane.showConfirmDialog(Withdrawal.this, date
 						+ "Not enough bills in ATM", "Withdrawal",
@@ -112,25 +115,29 @@ public class Withdrawal extends RightPanel {
 				protected String doInBackground() throws Exception {
 					double res = Model.getInstance().doWithdrawal(howMuch);
 
-					if (res == -1.0) {
+					if (res == -1.0 || !CashController.INSTANCE.withdraw(howMuch)) {
 						progressBar.setVisible(false);
 						int t = JOptionPane.showConfirmDialog(Withdrawal.this,
 								date + "Cant get this sum", "Withdrawal",
 								JOptionPane.PLAIN_MESSAGE,
 								JOptionPane.NO_OPTION);
 					} else {
-						CashController.INSTANCE.withdraw(howMuch);
+						
 						// NotifyController.INSTANCE.sendSms("380679664588",
 						// "You've just withdrawn " + howMuch + "$. " + res +
 						// "$ left.\nAs a gold member now you get sms.\nATM from MPK");
 
 						progressBar.setVisible(false);
+						
 						int t = JOptionPane
 								.showConfirmDialog(Withdrawal.this, date
 										+ "\nYour current balance:" + res
 										+ " UAH", "Balance",
 										JOptionPane.PLAIN_MESSAGE,
 										JOptionPane.NO_OPTION);
+						
+						Test.getController().getWrap().resetRightPanel(new CheckView(CashController.INSTANCE.getLastWithdraw(), howMuch, (int)res, true));
+						
 					}
 					return "Done";
 

@@ -1,5 +1,6 @@
 package GUIClient;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -10,13 +11,17 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 
 import MYGUI.ButtonFactory;
 import MYGUI.MetroPanel;
 import MYGUI.MetroScrollBar;
 import MYGUI.MyButton;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JButton;
 
 //which wrapped Left(scroll) and right panels
@@ -44,6 +49,11 @@ public class Wrapper extends MetroPanel {
 		System.out.println("Wrapper");
 		setPnlSide();
 		setScrollPane();
+		
+		UIManager.put("ProgressBar.background", Color.white);
+		UIManager.put("ProgressBar.foreground", new Color(63, 210, 253));
+		UIManager.put("ProgressBar.selectionBackground", Color.red);
+		UIManager.put("ProgressBar.selectionForeground", Color.green);
 	}
 
 	public void resetRightPanel(MetroPanel m) {

@@ -30,6 +30,8 @@ import GUIClient.Withdrawal;
 import GUIClient.Wrapper;
 import GUIClient.MainFormClient;
 import GUIClient.StartFrame;
+import MYGUI.CheckView;
+import MYGUI.IntroSplash;
 import MYGUI.RightPanel;
 import Model.Model;
 
@@ -75,6 +77,7 @@ public class Controller {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
 				if (start.checkInputData()) {// if all fields had written
+					
 					class MyWorker extends SwingWorker<String, Object> {
 						protected String doInBackground() {
 							start.progressBar.setVisible(true);
@@ -107,8 +110,11 @@ public class Controller {
 								start.clearFields();
 							}
 
-							else
+							else {
+								wrapper.resetRightPanel(new IntroSplash());
 								mainConteiner.resetPanel(wrapper);
+								
+							}
 
 						}
 					}
@@ -215,13 +221,28 @@ public class Controller {
 		}
 
 	}// END ContactListListener
+	
+	private class CheckListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+
+			/*if (source == withdrawal.getBtnChoose()) {
+				chooseYourCash = new ChooseYourCash();
+				chooseYourCash.addOuterListener(new ChooseYourCashListener());
+				wrapper.resetRightPanel(chooseYourCash);
+			}*/
+		}
+
+	}// END CheckListener
 
 	private class WithdrawalListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
-
+			System.out.println("Key pressed");
 			if (source == withdrawal.getBtnChoose()) {
 				chooseYourCash = new ChooseYourCash();
 				chooseYourCash.addOuterListener(new ChooseYourCashListener());
@@ -271,4 +292,9 @@ public class Controller {
 		}
 
 	}// END ChooseYourCashListener
+	
+	// remove later
+	public Wrapper getWrap() {
+		return wrapper;
+	}
 }

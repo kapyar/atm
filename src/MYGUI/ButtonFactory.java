@@ -2,9 +2,12 @@ package MYGUI;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
 
 import javax.swing.ImageIcon;
+
+import GUIClient.ConfigGUICLient;
 
 public class ButtonFactory {
 
@@ -69,7 +72,13 @@ public class ButtonFactory {
 		MyButton m = new MyButton(s);
 		m.setSize(132, 45);
 		return m;
-
+	}
+	
+	public static MyButton getCheckNavi(String s) {
+		MyButton m = new MyButton(s);
+		m.setSize(132, 45);
+		m.setFont(new Font(ConfigGUICLient.FontType, Font.PLAIN, 19));
+		return m;
 	}
 
 }

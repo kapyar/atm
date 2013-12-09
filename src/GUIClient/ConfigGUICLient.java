@@ -3,7 +3,7 @@ package GUIClient;
 public class ConfigGUICLient {
 	
 	/** FontType uses in Titles */
-	public static String FontType = "Viner Hand ITC";
+	public static String FontType = "Segoe UI";
 	
 	
 	/** _yCcoordinateTitleLabels */
