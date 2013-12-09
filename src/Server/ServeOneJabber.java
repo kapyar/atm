@@ -84,7 +84,6 @@ public class ServeOneJabber extends Thread {
 				break;
 
 			case WITHDRAWAL:
-				
 				String wSession = (String) in.get(Action.SESSION_ID);
 				Integer wlogin = (Integer) in.get(Action.LOGIN_FIELD);
 				Integer howMuch = (Integer) in.get(Action.WITHDRAWAL_SUM);

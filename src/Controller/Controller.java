@@ -24,14 +24,13 @@ import GUIClient.Balance;
 import GUIClient.ChooseYourCash;
 import GUIClient.ContactList;
 import GUIClient.PayBill;
+import GUIClient.RePin;
 import GUIClient.SendMoney;
 import GUIClient.WatchFriends;
 import GUIClient.Withdrawal;
 import GUIClient.Wrapper;
 import GUIClient.MainFormClient;
 import GUIClient.StartFrame;
-import MYGUI.CheckView;
-import MYGUI.IntroSplash;
 import MYGUI.RightPanel;
 import Model.Model;
 
@@ -44,6 +43,7 @@ public class Controller {
 	private ChooseYourCash chooseYourCash;
 	private ContactList contactList;
 	private AddMoney addMoney;
+	private RePin rePin;
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
 			Wrapper wrapper) {
@@ -63,12 +63,61 @@ public class Controller {
 		this.mainConteiner = mainConteiner;
 		this.start = start;
 		this.wrapper = wrapper;
-		this.mainConteiner.resetPanel(start);
+		this.rePin = new RePin();
+		this.rePin.addOuterListener(new RePinListener());
+		this.mainConteiner.resetPanel(this.start);
 		this.start.addOuterListener(new OuterStartActionListener());
 		this.wrapper.addNavigationListeners(new NavigationListeners());
 		this.mainConteiner.setVisible(true);
 
 	}
+
+	private class RePinListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+
+			if (source == rePin.getPanel().getMyButton_Enter()) {
+				class MyWorker extends SwingWorker<String, Object> {
+					protected String doInBackground() {
+						rePin.getProgressBar().setVisible(true);
+						rePin.getProgressBar().setIndeterminate(true);
+						String login = Model.CURRENT_LOGIN.toString();
+						try {
+							Model.SESSION_ID = Model.getInstance().doLogIn(
+									login,
+									rePin.getPanel().getTextView()
+											.getTextField().getText());
+						} catch (InterruptedException | ExecutionException
+								| IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						return "Done.";
+					}
+
+					protected void done() {
+						rePin.getProgressBar().setVisible(false);
+
+						if (Model.SESSION_ID.equals("Failed")) {
+							JOptionPane.showConfirmDialog(start,
+									"Wrong input data", "Error",
+									JOptionPane.PLAIN_MESSAGE,
+									JOptionPane.NO_OPTION);
+							rePin.getPanel().getTextView().getTextField()
+									.setText("");
+						} else {
+							mainConteiner.resetPanel(wrapper);
+						}
+
+					}
+				}
+				new MyWorker().execute();
+			}
+		}
+	}// END RePinListener
 
 	public class OuterStartActionListener implements ActionListener {
 
@@ -77,7 +126,6 @@ public class Controller {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
 				if (start.checkInputData()) {// if all fields had written
-					
 					class MyWorker extends SwingWorker<String, Object> {
 						protected String doInBackground() {
 							start.progressBar.setVisible(true);
@@ -110,11 +158,8 @@ public class Controller {
 								start.clearFields();
 							}
 
-							else {
-								wrapper.resetRightPanel(new IntroSplash());
+							else
 								mainConteiner.resetPanel(wrapper);
-								
-							}
 
 						}
 					}
@@ -122,10 +167,16 @@ public class Controller {
 
 					// /END myWORKER
 
-				}// END OuterStartActionListener
+				} else {
+					JOptionPane.showConfirmDialog(start,
+							"Wrong input data", "Error",
+							JOptionPane.PLAIN_MESSAGE,
+							JOptionPane.NO_OPTION);
+					start.clearFields();
+				}
 			}
 		}// IF field not empty
-	}
+	}// END OuterStartActionListener
 
 	class NavigationListeners implements ActionListener {
 
@@ -166,6 +217,14 @@ public class Controller {
 				contactList.addOuterListener(new ContactListListener());
 				wrapper.resetRightPanel(contactList);
 			}
+			if (source == wrapper.getBtmExit()) {
+				//System.out.println("Finish Work");
+				start.clearFields();
+				mainConteiner.resetPanel(start);
+				
+				
+			}
+			
 		}
 	}// END NavigationListeners
 
@@ -221,28 +280,13 @@ public class Controller {
 		}
 
 	}// END ContactListListener
-	
-	private class CheckListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Object source = e.getSource();
-
-			/*if (source == withdrawal.getBtnChoose()) {
-				chooseYourCash = new ChooseYourCash();
-				chooseYourCash.addOuterListener(new ChooseYourCashListener());
-				wrapper.resetRightPanel(chooseYourCash);
-			}*/
-		}
-
-	}// END CheckListener
 
 	private class WithdrawalListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
-			System.out.println("Key pressed");
+
 			if (source == withdrawal.getBtnChoose()) {
 				chooseYourCash = new ChooseYourCash();
 				chooseYourCash.addOuterListener(new ChooseYourCashListener());
@@ -292,9 +336,4 @@ public class Controller {
 		}
 
 	}// END ChooseYourCashListener
-	
-	// remove later
-	public Wrapper getWrap() {
-		return wrapper;
-	}
 }

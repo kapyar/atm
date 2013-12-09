@@ -3,7 +3,7 @@ package GUIClient;
 public class ConfigGUICLient {
 	
 	/** FontType uses in Titles */
-	public static String FontType = "Segoe UI";
+	public static String FontType = "Viner Hand ITC";
 	
 	
 	/** _yCcoordinateTitleLabels */
@@ -12,4 +12,10 @@ public class ConfigGUICLient {
 	public static int  _WTL = 300;
 	/**_HeigtTitleLabels*/
 	public static int  _HTL = 36;
+	
+	
+	/** button Nubmer Size */
+	public static int bNS =42;
+	/** Enter button weight */
+	public static int btnEW = 80;
 }
