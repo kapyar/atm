@@ -12,7 +12,7 @@ import Controller.Friend;
 
 public enum SQLwrapper {
 	DB;
-	
+
 	private String base_server = "162.211.226.101:3306";
 	private String base_name = "gofrie_vlad";
 	private String base_user = "atm";
@@ -141,7 +141,6 @@ public enum SQLwrapper {
 
 		return result;
 	}
-	
 
 	public double getBalance(String bSession) {
 		double result = 0;
@@ -231,11 +230,38 @@ public enum SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally {
+		} finally  {
 			Utils.closePSt(ps);
 		}
 		return res;
 
+	}
+	
+	public Integer getAccByUser(Integer userId) {
+		Integer result = -1;
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = connection
+					.prepareStatement("SELECT `id` FROM `Accounts` WHERE `owner_id`=(?) LIMIT 1");
+			ps.setInt(1, userId);
+
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				result = rs.getInt("id");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
+		}
+		
+		return result;
 	}
 
 	// need to finish
@@ -265,13 +291,14 @@ public enum SQLwrapper {
 				String name = rs.getString("last_name") + ' '
 						+ rs.getString("first_name");
 
-				Integer ac = rst.getInt("id");
+				Integer ac = getAccByUser(rs.getInt("id"));
+				
 
 				list.add(new Friend(name, ac));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
+		} finally  {
 			Utils.closePSt(ps);
 			Utils.closePSt(pst);
 			Utils.closeRs(rs);
@@ -281,9 +308,46 @@ public enum SQLwrapper {
 		return list;
 	}
 
-	public void sendMoney(Integer twlogin, int twToWhome, int twHowMuch) {
-	
-		//setBalance(sum, accNum);
+	public boolean sendMoney(Integer twlogin, Integer twToWhome,
+			Integer twHowMuch) {
+
+		double fromWhome = (int) getBalance(twlogin);
+		double toWhome = (int) getBalance(twToWhome);
+
+		fromWhome -= twHowMuch.doubleValue();
+		if (fromWhome < 0)
+			return false;
+		toWhome += twHowMuch.doubleValue();
+		
+		setBalance(fromWhome, twlogin);
+		setBalance(toWhome, twToWhome);
+
+		return true;
+
+	}
+
+	private double getBalance(Integer twlogin) {
+		double result = 0;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = connection
+					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `owner_id`=? ");
+			ps.setInt(1, twlogin);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result = rs.getDouble("balance");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
+		}
+		return result;
 
 	}
 }

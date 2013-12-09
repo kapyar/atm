@@ -236,7 +236,6 @@ public class Start extends JFrame {
 		JPanel contentPane = new MetroPanel();
 		
 		if (this.tables == null) {
-			Database db = new Database();
 			this.tables = db.getTables();
 		}
 		
@@ -339,7 +338,7 @@ public class Start extends JFrame {
 	public Start() {
 		super("Database Client");
 		
-		db = new Database();
+		db = Database.DB;
 		error_flag = false;
 		
 		columns_data_map = new HashMap<String, Object[][]>();

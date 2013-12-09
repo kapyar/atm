@@ -13,4 +13,12 @@ public class Friend {
 	public String toString() {
 		return name + ": " + accountNumber;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Integer getAccountNumber() {
+		return accountNumber;
+	}
 }

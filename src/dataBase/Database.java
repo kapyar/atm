@@ -15,7 +15,9 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 
-public class Database {
+public enum Database {
+	DB;
+	
 	private String base_server = "162.211.226.101:3306";
 	private String base_name = "gofrie_vlad";
 	private String base_user = "atm";
@@ -25,7 +27,7 @@ public class Database {
 	private Connection connection;
 	
 	
-	public Database () {
+	Database () {
 		init();
 	}
 
