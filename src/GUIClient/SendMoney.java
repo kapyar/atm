@@ -22,6 +22,7 @@ import javax.swing.JRadioButton;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -48,7 +49,7 @@ public class SendMoney extends RightPanel {
 
 		setMyTitle("Send Money");
 
-		dataBase = new SQLwrapper();
+		dataBase = SQLwrapper.DB;
 
 		radioButton = new JRadioButton("");
 		radioButton.setBackground(new Color(51, 153, 255));
@@ -112,7 +113,7 @@ public class SendMoney extends RightPanel {
 		System.out.println(getListOfFriends().size());
 		aa = new String[getListOfFriends().size() + 1];
 		aa[0] = "Another: 0";
-		for (int i = 0; i < aa.length-1; ++i)
+		for (int i = 0; i < aa.length - 1; ++i)
 			aa[i + 1] = listOfFriends.get(i).toString();
 	}
 
@@ -182,7 +183,14 @@ public class SendMoney extends RightPanel {
 			}
 
 			if (source == numb.getMyButton_Enter()) {
-				System.out.println("Pressed ENTER");
+				int howMuch = 0;
+				int toWhome = 0;
+				try {
+					Model.getInstance().doSendMoney(howMuch, toWhome);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			if (source == numb.getMyButton_Cancel()) {
 				how.getTextField().setText("");
@@ -203,7 +211,7 @@ public class SendMoney extends RightPanel {
 	}
 
 	private ArrayList<Friend> getListOfFriends() {
-		if(listOfFriends == null)
+		if (listOfFriends == null)
 			listOfFriends = dataBase.getListFriends(Model.CURRENT_LOGIN);
 		return listOfFriends;
 	}

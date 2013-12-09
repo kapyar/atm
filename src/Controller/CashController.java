@@ -60,7 +60,7 @@ public enum CashController {
 		oos.flush();
 		oos.close();
 		
-		SQLwrapper bd = new SQLwrapper();
+		SQLwrapper bd = SQLwrapper.DB;
 		
 		if (!bd.addCash(bank.getCashAmmount(), ATM_ID)) {
 			throw new RuntimeException("Cash Controller can't add cash for some reason");
