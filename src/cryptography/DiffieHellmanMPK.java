@@ -3,6 +3,7 @@ package cryptography;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -176,18 +177,58 @@ public class DiffieHellmanMPK {
 		
 		System.out.println(yourObject);
 		String s = "Encode me babe";
+		Integer intt  = 15;
 //		Object o = (Object)SerializationUtils.deserialize(ChiperDES.encode(s, getKeyKlient(Alise)));
 //		String strt = new String (ChiperDES.decode(SerializationUtils.serialize((Serializable) o), getKeyKlient(Alise)));
 		
+//		String sss = new String(ChiperDES.encode(intt, getKeyKlient(Alise)));
+//		String ssss = new String (ChiperDES.decode( sss.getBytes(), getKeyKlient(Alise)));
 		
-
 		byte[] o = ChiperDES.encode(s, getKeyKlient(Alise));
 		String strt = new String (ChiperDES.decode( o, getKeyKlient(Alise)));
 		System.out.println(s);
 		System.out.println(o);
 		System.out.println(strt);
-			
+		
+		ArrayList<Integer> a = new ArrayList<Integer>();
+		a.add(15);
+		a.add(45);
+		
+		User users = new User();
+		
+		
+		Object sss = ChiperDES.encode(users, getKeyKlient(Alise));
+		System.out.println("---------"+sss);
+		System.out.println("---------"+SerializationUtils.serialize((Serializable) sss));
+		System.out.println("---------"+sss.toString().getBytes());
+		
+		//String ssss = new String (ChiperDES.decode(SerializationUtils.serialize((Serializable) sss), getKeyKlient(Alise)));
+		//User us2  = (User)ChiperDES.decode( sss.getBytes(), getKeyKlient(Alise));
+		
+		
+		System.out.println("---------");
+		System.out.println();
+		System.out.println(sss);
+		//System.out.println(ssss);
 		 
+		
+		System.out.println("---------");
+		System.out.println("---------");
+	
+		System.out.println(users.toString().getBytes());
+		//System.out.println(ChiperDES.decode( sss.toString().getBytes(), getKeyKlient(Alise)));
+		
+	//	Object ob2 = (Object)ChiperDES.decode( sss.getBytes(), getKeyKlient(Alise));;
+		// = (User)ob2;
+		
+//		System.out.println(u2.name);
+//		System.out.println(ob2);
+//		System.out.println(u2.name);
+		
+	
+		
+		
+		
 		// Початок костиляString
 //		String result = closeBen.toString();
 //		for (int i = result.length(); i < 16; i++) {
@@ -199,4 +240,9 @@ public class DiffieHellmanMPK {
 
 	}
 
+
+}
+class User{
+	public String name = "Vassa";
+	
 }
