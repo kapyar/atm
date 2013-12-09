@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SMS {
-	private DataBase db=  new DataBase();
+	public final static DataBase db =  new DataBase();
 	
 	private  void sendGet() throws Exception {
 		 
@@ -40,13 +40,13 @@ public class SMS {
 					db.addSmsRow(id, phone, msg);
 				}
 			} else {
-				System.out.println("Nasty error message");
+				System.out.println("Too many connections");
 			}
 		}
 		in.close();
  
 		//System.out.println(response.toString());
- 
+		
 	}
 	
 	public void start() throws Exception {

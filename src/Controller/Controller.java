@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import javax.jws.WebParam.Mode;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
@@ -37,6 +39,7 @@ import MYGUI.CheckView;
 import MYGUI.IntroSplash;
 import MYGUI.RightPanel;
 import Model.Model;
+import Starter.Test;
 
 public class Controller {
 
@@ -49,8 +52,8 @@ public class Controller {
 	private AddMoney addMoney;
 	private RePin rePin;
 	private Balance balance;
-	private CheckView checkView;
 	private IntroSplash introSplash;
+	private ArrayList<Friend> listOfFriend;
 
 	public void gotoStart() {
 		start.clearFields();
@@ -66,9 +69,6 @@ public class Controller {
 		this.wrapper = wrapper;
 		this.introSplash = new IntroSplash();
 
-		this.checkView = new CheckView();
-		this.checkView.addOuterListener(new CheckViewListener());
-
 		this.rePin = new RePin();
 		this.rePin.addOuterListener(new RePinListener());
 		this.mainConteiner.resetPanel(this.start);
@@ -77,23 +77,6 @@ public class Controller {
 		this.mainConteiner.setVisible(true);
 
 	}
-
-	private class CheckViewListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Object source = e.getSource();
-
-			if (source == checkView.getLeft()) {
-				mainConteiner.resetPanel(start);
-			}
-			if (source == checkView.getRight()) {
-				wrapper.resetRightPanel(introSplash);
-				mainConteiner.resetPanel(rePin);
-			}
-
-		}
-	}// END CheckViewListener
 
 	private class RePinListener implements ActionListener {
 
@@ -149,6 +132,12 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
+				System.out
+						.println("-----------------TEST------------------------");
+				// System.out.println(Model.getInstance().getlistOfFriends(1));
+
+				System.out.println("-----------------------------------------");
+
 				if (start.checkInputData()) {// if all fields had written
 					class MyWorker extends SwingWorker<String, Object> {
 						protected String doInBackground() {
@@ -294,6 +283,7 @@ public class Controller {
 			if (source == balance.getBtnPrint()) {
 				class MyWorker extends SwingWorker<String, Object> {
 					double bln = 0;
+					CheckView checkView;
 
 					@Override
 					protected String doInBackground() throws Exception {
@@ -301,9 +291,7 @@ public class Controller {
 						balance.getProgressBar().setIndeterminate(true);
 
 						bln = Model.getInstance().doBalance();
-						System.out.println("Balance: inBackGround: "
-								+ (int) bln);
-						checkView.setData((int) bln);
+						checkView = new CheckView((int) bln);
 
 						return "Done";
 					}
@@ -327,33 +315,37 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == addMoney.getPanel().getMyButton_Enter()) {
-				double d = Double.parseDouble(addMoney.getPanel().getTextView()
-						.getTextField().getText());
+				class MyWorker extends SwingWorker<String, Object> {
 
-				try {
-					Model.getInstance().doAddMonney(d);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					double bln = 0;
+					CheckView checkView;
+
+					@Override
+					protected String doInBackground() throws Exception {
+						addMoney.getProgressBar().setVisible(true);
+						addMoney.getProgressBar().setIndeterminate(true);
+
+						Integer d = Integer.parseInt(addMoney.getPanel()
+								.getTextView().getTextField().getText());
+
+						Model.getInstance().doAddMonney(d);
+						CashController.INSTANCE.addCash(d);
+						bln = Model.getInstance().doBalance();
+						checkView = new CheckView((int) bln);
+
+						return "Done";
+					}
+
+					protected void done() {
+						addMoney.getProgressBar().setVisible(false);
+						wrapper.resetRightPanel(checkView);
+					}
+
 				}
-
-				try {
-					int t = JOptionPane.showConfirmDialog(addMoney, "You add "
-							+ addMoney.getPanel().getTextView().getTextField()
-									.getText() + " UAH"
-							+ "\n You current balance: "
-							+ Model.getInstance().doBalance() + " UAH", "Info",
-							JOptionPane.PLAIN_MESSAGE, JOptionPane.NO_OPTION);
-				} catch (HeadlessException | InterruptedException
-						| ExecutionException | IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
+				new MyWorker().execute();
 			}
 
 		}
-
 	}// END AddMoneyListener
 
 	private class ContactListListener implements ActionListener {
@@ -395,32 +387,56 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == chooseYourCash.getBtnEnter()) {
-				Integer howMuch = Integer.parseInt(chooseYourCash.getPanel()
-						.getTextView().getTextField().getText());
-				try {
-					DateFormat dateFormat = new SimpleDateFormat(
-							"yyyy/MM/dd HH:mm:ss");
-					Date date = new Date();
-					double res = Model.getInstance().doWithdrawal(howMuch);
-					if (res == -1.0) {
-						int t = JOptionPane.showConfirmDialog(wrapper, date
-								+ "\nCant get this sum", "Withdrawal",
-								JOptionPane.PLAIN_MESSAGE,
-								JOptionPane.NO_OPTION);
+				final Integer howMuch = Integer.parseInt(chooseYourCash
+						.getPanel().getTextView().getTextField().getText());
+				chooseYourCash.getProgressBar().setVisible(true);
+				chooseYourCash.getProgressBar().setIndeterminate(true);
+				DateFormat dateFormat = new SimpleDateFormat(
+						"yyyy/MM/dd HH:mm:ss");
+				final Date date = new Date();
 
-					} else {
-						int t = JOptionPane.showConfirmDialog(wrapper, date
-								+ "\nYour current balance:" + res + " UAH",
-								"Balance", JOptionPane.PLAIN_MESSAGE,
-								JOptionPane.NO_OPTION);
-					}
-					chooseYourCash.getPanel().getTextView().getTextField()
-							.setText("");
-				} catch (IOException | InterruptedException
-						| ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if (!CashController.INSTANCE.hasEnoughCash(howMuch)) {
+					int t = JOptionPane.showConfirmDialog(chooseYourCash, date
+							+ "Not enough bills in ATM", "Withdrawal",
+							JOptionPane.PLAIN_MESSAGE, JOptionPane.NO_OPTION);
+					return;
 				}
+				class MyWorker extends SwingWorker<String, Object> {
+
+					@Override
+					protected String doInBackground() throws Exception {
+						double res = Model.getInstance().doWithdrawal(howMuch);
+						if (res == -1.0
+								|| !CashController.INSTANCE.withdraw(howMuch)) {
+							chooseYourCash.getProgressBar().setVisible(false);
+							int t = JOptionPane.showConfirmDialog(
+									chooseYourCash, date + "Cant get this sum",
+									"Withdrawal", JOptionPane.PLAIN_MESSAGE,
+									JOptionPane.NO_OPTION);
+						} else {
+							// cant use side panel
+
+							Test.getController()
+									.getWrap()
+									.resetRightPanel(
+											new CheckView(
+													CashController.INSTANCE
+															.getLastWithdraw(),
+													howMuch, (int) res, true));
+
+						}
+						return "Done";
+
+					}
+
+					protected void done() {
+
+						chooseYourCash.getProgressBar().setVisible(false);
+					}
+
+				}// END MyWorker
+				new MyWorker().execute();
+
 			}
 			if (source == chooseYourCash.getBtnCancel()) {
 				wrapper.resetRightPanel(withdrawal);
@@ -434,7 +450,19 @@ public class Controller {
 		return wrapper;
 	}
 
-	public CheckView getCheckView() {
-		return checkView;
+	public MainFormClient getMainConteiner() {
+		return mainConteiner;
+	}
+
+	public StartFrame getStart() {
+		return start;
+	}
+
+	public IntroSplash getIntroSplash() {
+		return introSplash;
+	}
+
+	public RePin getRePin() {
+		return rePin;
 	}
 }

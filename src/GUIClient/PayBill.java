@@ -5,11 +5,15 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.SwingWorker;
 
 import MYGUI.MetroEditablePane;
 import MYGUI.MyButton;
@@ -19,10 +23,11 @@ import MYGUI.RightPanel;
 public class PayBill extends RightPanel {
 
 	private JRadioButton radioButton;
-	private MetroEditablePane numbOfBill;
 	private MetroEditablePane sum;
+	private MetroEditablePane numOfBill;
 	private Numbers numbPane;
 	private JRadioButton radioButton_1;
+	private JProgressBar progressBar;
 
 	public PayBill() {
 		setMyTitle("Pay Bill");
@@ -32,13 +37,13 @@ public class PayBill extends RightPanel {
 		radioButton.setSelected(true);
 		add(radioButton);
 
-		numbOfBill = new MetroEditablePane();
-		numbOfBill.setLocation(367, 352);
-		add(numbOfBill);
-
 		sum = new MetroEditablePane();
-		sum.setBounds(367, 295, 210, 31);
+		sum.setLocation(367, 352);
 		add(sum);
+
+		numOfBill = new MetroEditablePane();
+		numOfBill.setBounds(367, 295, 210, 31);
+		add(numOfBill);
 
 		numbPane = new Numbers();
 		numbPane.setLocation(142, 284);
@@ -64,6 +69,11 @@ public class PayBill extends RightPanel {
 		lblHowMuch.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblHowMuch.setBounds(367, 337, 69, 14);
 		add(lblHowMuch);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(191, 105, 312, 29);
+		progressBar.setVisible(false);
+		add(progressBar);
 
 		addInnerListener();
 
@@ -113,19 +123,38 @@ public class PayBill extends RightPanel {
 			}
 
 			if (source == numbPane.getMyButton_Enter()) {
-				// need to send request to server
-				int t = JOptionPane.showConfirmDialog(PayBill.this, "You send "
-						+ sum.getTextField().getText() + "UAH\n" + "to "
-						+ numbOfBill.getTextField().getText() + " account",
-						"Confirm", JOptionPane.YES_NO_OPTION);
-				if (t == 0) {
-					System.out.println("Send " + sum.getTextField().getText());
-					sum.getTextField().setText("");
-					numbOfBill.getTextField().setText("");
+				class MyWorker extends SwingWorker<String, Object> {
+
+					@Override
+					protected String doInBackground() throws Exception {
+						progressBar.setVisible(true);
+						progressBar.setIndeterminate(true);
+						Integer suma = Integer.parseInt(sum.getTextField()
+								.getText());
+						// use
+						try {
+							double res = Model.Model.getInstance()
+									.doWithdrawal(suma);
+
+							if (res != -1) {
+								System.out.println("PayBill: successfully");
+							}
+						} catch (IOException | InterruptedException
+								| ExecutionException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						return "Done";
+					}
+
+					protected void done() {
+						progressBar.setVisible(false);
+					}
 				}
+				new MyWorker().execute();
 			}
 			if (source == numbPane.getMyButton_Cancel()) {
-				numbOfBill.getTextField().setText("");
+				numOfBill.getTextField().setText("");
 				sum.getTextField().setText("");
 			}
 
@@ -133,10 +162,10 @@ public class PayBill extends RightPanel {
 
 		private void writeIt(String s) {
 			if (radioButton.isSelected()) {
-				numbOfBill.getTextField().setText(
-						numbOfBill.getTextField().getText() + s);
-			} else if (radioButton_1.isSelected()) {
 				sum.getTextField().setText(sum.getTextField().getText() + s);
+			} else if (radioButton_1.isSelected()) {
+				numOfBill.getTextField().setText(
+						numOfBill.getTextField().getText() + s);
 			}
 		}
 

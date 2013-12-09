@@ -6,6 +6,7 @@ import MYGUI.MetroEditablePane;
 import MYGUI.MyButton;
 import MYGUI.Numbers;
 import MYGUI.RightPanel;
+import Model.Model;
 import Server.SQLwrapper;
 
 import javax.swing.JLabel;
@@ -21,6 +22,7 @@ import javax.swing.JRadioButton;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -39,6 +41,8 @@ public class SendMoney extends RightPanel {
 	private JLabel lblNewLabel;
 	private JLabel lblHowMuch;
 	private SQLwrapper dataBase;
+	private ArrayList<Friend> listOfFriends;
+	private String[] aa;
 
 	public SendMoney() {
 
@@ -86,8 +90,10 @@ public class SendMoney extends RightPanel {
 		add(lblHowMuch);
 
 		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Another",
-				"A", "B" }));
+		listOfFriends = getListOfFriends();
+
+		setStringArray();
+		comboBox.setModel(new DefaultComboBoxModel(aa));
 		comboBox.setBounds(225, 239, 210, 31);
 		add(comboBox);
 
@@ -101,10 +107,13 @@ public class SendMoney extends RightPanel {
 
 	}
 
-	private Friend[] getlistOfFriends(Integer accNum) {
-		Friend[] list = dataBase.getListFriends(accNum);
-		return list;
-
+	private void setStringArray() {
+		System.out.println("StringArray");
+		System.out.println(getListOfFriends().size());
+		aa = new String[getListOfFriends().size() + 1];
+		aa[0] = "Another: 0";
+		for (int i = 0; i < aa.length-1; ++i)
+			aa[i + 1] = listOfFriends.get(i).toString();
 	}
 
 	private void addInnerListener() {
@@ -191,6 +200,16 @@ public class SendMoney extends RightPanel {
 			}
 		}
 
+	}
+
+	private ArrayList<Friend> getListOfFriends() {
+		if(listOfFriends == null)
+			listOfFriends = dataBase.getListFriends(Model.CURRENT_LOGIN);
+		return listOfFriends;
+	}
+
+	public JComboBox getComboBox() {
+		return comboBox;
 	}
 }// END InnerListener
 

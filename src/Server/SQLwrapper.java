@@ -5,15 +5,16 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import Controller.Friend;
 
 public class SQLwrapper {
 
-	private String base_server = "gofrie.mysql.ukraine.com.ua";
+	private String base_server = "162.211.226.101:3306";
 	private String base_name = "gofrie_vlad";
-	private String base_user = "gofrie_vlad";
-	private String base_pass = "e9937rdk";
+	private String base_user = "atm";
+	private String base_pass = "mndfra19";
 
 	private String dbName = "//" + base_server + "/" + base_name + "?user="
 			+ base_user + "&password=" + base_pass;
@@ -34,6 +35,7 @@ public class SQLwrapper {
 		}
 	}
 
+	// return owner_id by id in table
 	private int getUserByAcc(Integer acc) {
 		int result = -1;
 		try {
@@ -46,6 +48,8 @@ public class SQLwrapper {
 			while (rs.next()) {
 				result = rs.getInt("owner_id");
 			}
+			
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -194,23 +198,36 @@ public class SQLwrapper {
 	}
 
 	// need to finish
-	public Friend[] getListFriends(Integer accNum) {
-		String result = "";
+	public ArrayList<Friend> getListFriends(Integer accNum) {
+		ArrayList<Friend> list = new ArrayList<Friend>();
+
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("SELECT `first_name` FROM `Accounts` WHERE `id`=(?) ");
-			// ps.setInt(1, blogin);
+					.prepareStatement("SELECT `first_name`,`last_name` FROM `Users` INNER JOIN `Contacts` ON "
+							+ "Users.id = Contacts.friend_id AND Contacts.user_id = (?)");
 
+			PreparedStatement pst = connection
+					.prepareStatement("SELECT Accounts.id FROM `Accounts` INNER JOIN `Contacts` ON "
+							+ "Accounts.owner_id = Contacts.friend_id AND Contacts.user_id = (?)");
+
+			ps.setInt(1, accNum);
+			pst.setInt(1, accNum);
+
+			ResultSet rst = pst.executeQuery();
 			ResultSet rs = ps.executeQuery();
 
-			while (rs.next()) {
-				result = rs.getString("session_id");
+			while (rs.next() && rst.next()) {
+				String name = rs.getString("last_name") + ' '
+						+ rs.getString("first_name");
+
+				Integer ac = rst.getInt("id");
+
+				list.add(new Friend(name, ac));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		return list;
 	}
-
 }

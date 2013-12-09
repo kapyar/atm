@@ -16,10 +16,10 @@ import javax.swing.JOptionPane;
 
 
 public class Database {
-	private String base_server = "gofrie.mysql.ukraine.com.ua";
+	private String base_server = "162.211.226.101:3306";
 	private String base_name = "gofrie_vlad";
-	private String base_user = "gofrie_vlad";
-	private String base_pass = "e9937rdk";
+	private String base_user = "atm";
+	private String base_pass = "mndfra19";
 	
 	private String dbName = "//" + base_server + "/" + base_name + "?user=" + base_user + "&password=" + base_pass;
 	private Connection connection;
@@ -117,7 +117,7 @@ public class Database {
 		
 		try {
 			PreparedStatement ps = 
-					connection.prepareStatement("SELECT `TABLE_NAME` FROM INFORMATION_SCHEMA.TABLES WHERE `TABLE_TYPE` = 'BASE TABLE'");
+					connection.prepareStatement("SELECT `TABLE_NAME` FROM INFORMATION_SCHEMA.TABLES WHERE `TABLE_TYPE` = 'BASE TABLE' AND `TABLE_SCHEMA`='"+base_name+"' ");
        	 ResultSet rs = ps.executeQuery();
        	 
        	 while (rs.next())
@@ -276,5 +276,6 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
+
 	
 }

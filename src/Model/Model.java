@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -16,9 +17,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import dataBase.Database;
 import Actions.Action;
+import Controller.Friend;
 import Server.ClientMain;
 import Server.MultiJabberClient;
+import Server.SQLwrapper;
 import Server.Server;
 
 public class Model {
@@ -30,7 +34,10 @@ public class Model {
 
 	private static Model instance = null;
 
+	private SQLwrapper db;
+	
 	private Model() {
+		db = new SQLwrapper();
 
 	}
 
@@ -110,7 +117,7 @@ public class Model {
 		return toReturn;
 	}
 	
-	public void doAddMonney(double d) throws IOException {
+	public void doAddMonney(Integer d) throws IOException {
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.ADD_MONEY);
 		command.put(Action.SESSION_ID, SESSION_ID);
@@ -164,6 +171,12 @@ public class Model {
 		}
 
 		return true;
+
+	}
+	//TEST
+	public ArrayList<Friend> getlistOfFriends(Integer accNum) {
+		ArrayList<Friend> list = db.getListFriends(accNum);
+		return list;
 
 	}
 

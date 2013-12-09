@@ -125,12 +125,11 @@ public class Withdrawal extends RightPanel {
 					} else {
 
 						Test.getController()
-								.getCheckView()
-								.setData(
-										CashController.INSTANCE
-												.getLastWithdraw(),
-										howMuch, (int) res, true);
-						
+								.getWrap()
+								.resetRightPanel(
+										new CheckView(CashController.INSTANCE
+												.getLastWithdraw(), howMuch,
+												(int) res, true));
 
 					}
 					return "Done";
@@ -138,10 +137,7 @@ public class Withdrawal extends RightPanel {
 				}
 
 				protected void done() {
-					Test.getController()
-					.getWrap()
-					.resetRightPanel(
-							Test.getController().getCheckView());
+
 					progressBar.setVisible(false);
 				}
 			}

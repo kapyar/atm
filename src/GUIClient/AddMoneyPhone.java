@@ -9,21 +9,26 @@ import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.SwingWorker;
 
-
+import MYGUI.CheckView;
 import MYGUI.MetroEditablePane;
 import MYGUI.MyButton;
 import MYGUI.Numbers;
 import MYGUI.RightPanel;
+import Model.Model;
+import Starter.Test;
 
 public class AddMoneyPhone extends RightPanel {
 
 	private JRadioButton radioButton;
+	private MetroEditablePane suma;
 	private MetroEditablePane numbOfBill;
-	private MetroEditablePane sum;
 	private Numbers numbPane;
 	private JRadioButton radioButton_1;
+	private JProgressBar progressBar;
 
 	public AddMoneyPhone() {
 		setMyTitle("Add Phone Money");
@@ -34,13 +39,13 @@ public class AddMoneyPhone extends RightPanel {
 		radioButton.setSelected(true);
 		add(radioButton);
 
-		numbOfBill = new MetroEditablePane();
-		numbOfBill.setLocation(367, 352);
-		add(numbOfBill);
+		suma = new MetroEditablePane();
+		suma.setLocation(367, 352);
+		add(suma);
 
-		sum = new MetroEditablePane();
-		sum.setBounds(367, 295, 210, 31);
-		add(sum);
+		numbOfBill = new MetroEditablePane();
+		numbOfBill.setBounds(367, 295, 210, 31);
+		add(numbOfBill);
 
 		numbPane = new Numbers();
 		numbPane.setLocation(142, 284);
@@ -66,6 +71,11 @@ public class AddMoneyPhone extends RightPanel {
 		lblHowMuch.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblHowMuch.setBounds(367, 337, 69, 14);
 		add(lblHowMuch);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(191, 105, 312, 29);
+		progressBar.setVisible(false);
+		add(progressBar);
 
 		addInnerListener();
 
@@ -115,31 +125,50 @@ public class AddMoneyPhone extends RightPanel {
 			}
 
 			if (source == numbPane.getMyButton_Enter()) {
-				// need to send request to server
-				int t = JOptionPane.showConfirmDialog(AddMoneyPhone.this,
-						"You send " + sum.getTextField().getText() + "UAH\n"
-								+ "to " + numbOfBill.getTextField().getText()
-								+ " number", "Confirm",
-						JOptionPane.YES_NO_OPTION);
-				if (t == 0) {
-					System.out.println("Send " + sum.getTextField().getText());
-					sum.getTextField().setText("");
-					numbOfBill.getTextField().setText("");
+				class MyWorker extends SwingWorker<String, Object> {
+
+					double bln = 0;
+					CheckView checkView;
+
+					@Override
+					protected String doInBackground() throws Exception {
+						progressBar.setVisible(true);
+						progressBar.setIndeterminate(true);
+
+						Integer d = Integer.parseInt(suma.getTextField()
+								.getText());
+
+						Model.getInstance().doWithdrawal(d);
+
+						bln = Model.getInstance().doBalance();
+						checkView = new CheckView((int) bln);
+
+						return "Done";
+					}
+
+					protected void done() {
+						progressBar.setVisible(false);
+						Test.getController().getWrap()
+								.resetRightPanel(checkView);
+					}
+
 				}
+				new MyWorker().execute();
+
 			}
 			if (source == numbPane.getMyButton_Cancel()) {
+				suma.getTextField().setText("");
 				numbOfBill.getTextField().setText("");
-				sum.getTextField().setText("");
 			}
 
 		}
 
 		private void writeIt(String s) {
 			if (radioButton.isSelected()) {
+				suma.getTextField().setText(suma.getTextField().getText() + s);
+			} else if (radioButton_1.isSelected()) {
 				numbOfBill.getTextField().setText(
 						numbOfBill.getTextField().getText() + s);
-			} else if (radioButton_1.isSelected()) {
-				sum.getTextField().setText(sum.getTextField().getText() + s);
 			}
 		}
 
