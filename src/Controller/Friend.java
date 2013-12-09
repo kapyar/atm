@@ -9,4 +9,8 @@ public class Friend {
 		this.name = name;
 		this.accountNumber = accountNumber;
 	}
+
+	public String toString() {
+		return name + ": " + accountNumber;
+	}
 }
