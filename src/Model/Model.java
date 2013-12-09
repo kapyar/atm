@@ -177,7 +177,7 @@ public class Model {
 
 	}
 
-	public void doSendMoney(int howMuch, int toWhome) throws IOException {
+	public void doSendMoney(Integer howMuch, Integer toWhome) throws IOException {
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.SEND_MONEY);
 		command.put(Action.SESSION_ID, SESSION_ID);
