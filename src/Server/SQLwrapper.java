@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import dataBase.Utils;
 import Controller.Friend;
 
 public class SQLwrapper {
@@ -38,18 +39,24 @@ public class SQLwrapper {
 	// return owner_id by id in table
 	private int getUserByAcc(Integer acc) {
 		int result = -1;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = connection
-					.prepareStatement("SELECT `owner_id` FROM `Accounts` WHERE `id`=? ");
+			ps = connection.prepareStatement("SELECT `owner_id` FROM `Accounts` WHERE `id`=? ");
 			ps.setInt(1, acc);
 
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				result = rs.getInt("owner_id");
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 
 		return result;
@@ -62,18 +69,24 @@ public class SQLwrapper {
 	public Boolean passMatches(Integer accNum, String pass) {
 
 		String result = "";
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = connection
+			ps = connection
 					.prepareStatement("SELECT `password_hash` FROM `Users` WHERE `id`=? ");
 			ps.setInt(1, getUserByAcc(accNum));
 
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				result = rs.getString("password_hash");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 
 		return result.equals(pass);
@@ -81,41 +94,47 @@ public class SQLwrapper {
 
 	public Boolean setSession(Integer accNum, String session) {
 		Boolean res = true;
+		PreparedStatement ps = null;
 		try {
-			PreparedStatement ps = connection
+			ps = connection
 					.prepareStatement("UPDATE `Accounts` SET `session_id`=(?) WHERE `id`=(?) ");
 
 			ps.setString(1, session);
 			ps.setInt(2, accNum);
 
-			// ps.executeQuery();
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
+		} finally  {
+			Utils.closePSt(ps);
 		}
 		return res;
 	}
 
 	public String getCurrentSession(Integer blogin) {
 		String result = "";
+		PreparedStatement ps = null;
+		ResultSet rs= null;
+		
 		try {
-			PreparedStatement ps = connection
+			ps = connection
 					.prepareStatement("SELECT `session_id` FROM `Accounts` WHERE `id`=(?) ");
 
-			// ps.setInt(1, blogin);
-			// int i = (int) blogin;
-			System.out.println("bLogin: " + blogin);
+			//System.out.println("bLogin: " + blogin);
 			ps.setInt(1, blogin);
 
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				result = rs.getString("session_id");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 
 		return result;
@@ -123,45 +142,61 @@ public class SQLwrapper {
 
 	public double getBalance(String bSession) {
 		double result = 0;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = connection
+			ps = connection
 					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `session_id`=? ");
 			ps.setString(1, bSession);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
+			
 			while (rs.next()) {
 				result = rs.getDouble("balance");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 		return result;
 	}
 
 	public int getCashLeft(int atmId) {
 		int result = 0;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = connection
+			ps = connection
 					.prepareStatement("SELECT `value2` FROM `TechInfo` WHERE `name`='cashAmmount' AND `value`=(?) ");
 			ps.setString(1, String.valueOf(atmId));
 
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
+			
 			while (rs.next()) {
 				result = rs.getInt("value2");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
+		
 		return result;
 	}
 
 	public boolean addCash(int ammount, int atmId) {
 		int cash = ammount;
-
 		Boolean res = true;
+		PreparedStatement ps = null;
+		
 		try {
-			PreparedStatement ps = connection
+			 ps = connection
 					.prepareStatement("UPDATE `TechInfo` SET `value2`=(?) WHERE `name`='cashAmmount' AND `value` = (?) ");
 
 			ps.setString(1, String.valueOf(cash));
@@ -171,25 +206,30 @@ public class SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
+		} finally  {
+			Utils.closePSt(ps);
 		}
 		return res;
 	}
 
 	public boolean setBalance(double newBal, Integer accNum) {
 		Boolean res = true;
+		PreparedStatement ps = null;
+		
 		try {
-			PreparedStatement ps = connection
+			ps = connection
 					.prepareStatement("UPDATE `Accounts` SET `balance`=(?) WHERE `id`=(?) ");
 
 			ps.setDouble(1, newBal);
 			ps.setInt(2, accNum);
 
-			// ps.executeQuery();
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
+		} finally  {
+			Utils.closePSt(ps);
 		}
 		return res;
 
@@ -198,21 +238,25 @@ public class SQLwrapper {
 	// need to finish
 	public ArrayList<Friend> getListFriends(Integer accNum) {
 		ArrayList<Friend> list = new ArrayList<Friend>();
+		PreparedStatement ps = null;
+		PreparedStatement pst = null;
+		ResultSet rst = null;
+		ResultSet rs = null;
 
 		try {
-			PreparedStatement ps = connection
+			ps = connection
 					.prepareStatement("SELECT `first_name`,`last_name` FROM `Users` INNER JOIN `Contacts` ON "
 							+ "Users.id = Contacts.friend_id AND Contacts.user_id = (?)");
 
-			PreparedStatement pst = connection
+			pst = connection
 					.prepareStatement("SELECT Accounts.id FROM `Accounts` INNER JOIN `Contacts` ON "
 							+ "Accounts.owner_id = Contacts.friend_id AND Contacts.user_id = (?)");
 
 			ps.setInt(1, accNum);
 			pst.setInt(1, accNum);
 
-			ResultSet rst = pst.executeQuery();
-			ResultSet rs = ps.executeQuery();
+			rst = pst.executeQuery();
+			rs = ps.executeQuery();
 
 			while (rs.next() && rst.next()) {
 				String name = rs.getString("last_name") + ' '
@@ -224,6 +268,11 @@ public class SQLwrapper {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closePSt(pst);
+			Utils.closeRs(rs);
+			Utils.closeRs(rst);
 		}
 
 		return list;

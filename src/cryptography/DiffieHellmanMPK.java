@@ -1,7 +1,12 @@
 package cryptography;
 
+
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
+
+
+
 import org.apache.commons.lang3.SerializationUtils;
 public class DiffieHellmanMPK {
 	private static Random randomGenerator = new Random();
@@ -18,6 +23,17 @@ public class DiffieHellmanMPK {
 	private static BigInteger powerOfClient;
 	private static BigInteger powerOfServer;
 
+	private static BigInteger spike (BigInteger in_data)
+	{
+		// Початок костиляString
+		String result = in_data.toString();
+		for (int i = result.length(); i < 16; i++) {
+			result += "7";
+		}
+		// кінець костиля
+		return new BigInteger(result);
+	}
+	
 	private static void initianilizatoin() {
 		int iterations = 0;
 		while (iterations < 1000) {
@@ -104,7 +120,7 @@ public class DiffieHellmanMPK {
 
 		{
 			if (isInitedServer)
-				return openServer.modPow(BigInteger.valueOf(intitPower), p);
+				return spike(openServer.modPow(BigInteger.valueOf(intitPower), p));
 			else {
 				System.err
 						.println("Дані не проініцілювазовані протилежною стороною(server)");
@@ -123,7 +139,7 @@ public class DiffieHellmanMPK {
 
 		{
 			if (isInitedKlient)
-				return openClient.modPow(BigInteger.valueOf(intitPower), p);
+				return spike(openClient.modPow(BigInteger.valueOf(intitPower), p));
 			else {
 				System.err
 						.println("Дані не проініцілювазовані протилежною стороною(client)");
@@ -134,6 +150,8 @@ public class DiffieHellmanMPK {
 		return BigInteger.valueOf(0);
 	}
 
+
+	
 	public static void main(String[] args) {
 		Random randomGenerator = new Random();
 		long Alise = randomGenerator.nextInt(1000000);
@@ -148,11 +166,27 @@ public class DiffieHellmanMPK {
 		System.out.println("Wow");
 		String st = "Losos";
 		System.out.println(st);
-		byte[] data = SerializationUtils.serialize(st);
+		Object ob = st;
+		byte[] data = SerializationUtils.serialize((Serializable) ob);
 		System.out.println(data);
+		String st2 = data.toString();
+		System.out.println(st2);
 		String yourObject;
 		yourObject = (String) SerializationUtils.deserialize(data);
+		
 		System.out.println(yourObject);
+		String s = "Encode me babe";
+//		Object o = (Object)SerializationUtils.deserialize(ChiperDES.encode(s, getKeyKlient(Alise)));
+//		String strt = new String (ChiperDES.decode(SerializationUtils.serialize((Serializable) o), getKeyKlient(Alise)));
+		
+		
+
+		byte[] o = ChiperDES.encode(s, getKeyKlient(Alise));
+		String strt = new String (ChiperDES.decode( o, getKeyKlient(Alise)));
+		System.out.println(s);
+		System.out.println(o);
+		System.out.println(strt);
+			
 		 
 		// Початок костиляString
 //		String result = closeBen.toString();
