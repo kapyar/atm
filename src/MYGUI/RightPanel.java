@@ -24,6 +24,7 @@ public class RightPanel extends MetroPanel {
 		_y = super.getY();
 		
 		lblBalance = new JLabel("",JLabel.CENTER);
+		lblBalance.setSize(500, 50);
 		lblBalance.setFont(new Font(ConfigGUICLient.FontType, Font.PLAIN, 27));
 		lblBalance.setForeground(new Color(255, 255, 255));
 		lblBalance.setBounds(((_W)/2)-ConfigGUICLient._WTL/2,ConfigGUICLient._yTL, ConfigGUICLient._WTL, ConfigGUICLient._HTL);

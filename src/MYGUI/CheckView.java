@@ -1,12 +1,15 @@
 package MYGUI;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import Starter.Test;
 import Controller.CashController;
 
 
@@ -50,6 +53,16 @@ public class CheckView extends RightPanel {
 		
 		left  = ButtonFactory.getCheckNavi("EXIT");
 		right = ButtonFactory.getCheckNavi("CONTINUE");
+		
+		left.addActionListener(new ActionListener () {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Test.getController().gotoStart();
+				
+			}
+			
+		});
 		
 		left.setLocation(2, (int)check.getLocation().getY() - left.getHeight() + check.getHeight());
 		right.setLocation(this.getWidth() - right.getWidth() - rightOffset, (int)check.getLocation().getY() - left.getHeight() + check.getHeight());

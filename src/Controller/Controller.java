@@ -31,6 +31,7 @@ import GUIClient.Withdrawal;
 import GUIClient.Wrapper;
 import GUIClient.MainFormClient;
 import GUIClient.StartFrame;
+import MYGUI.IntroSplash;
 import MYGUI.RightPanel;
 import Model.Model;
 
@@ -44,6 +45,11 @@ public class Controller {
 	private ContactList contactList;
 	private AddMoney addMoney;
 	private RePin rePin;
+	
+	public void gotoStart() {
+		start.clearFields();
+		mainConteiner.resetPanel(start);
+	}
 
 	public Controller(MainFormClient mainConteiner, StartFrame start,
 			Wrapper wrapper) {
@@ -158,13 +164,15 @@ public class Controller {
 								start.clearFields();
 							}
 
-							else
+							else {
+								wrapper.resetRightPanel(new IntroSplash());
 								mainConteiner.resetPanel(wrapper);
+							}
 
 						}
 					}
 					new MyWorker().execute();
-
+					
 					// /END myWORKER
 
 				} else {
@@ -219,7 +227,6 @@ public class Controller {
 			}
 			if (source == wrapper.getBtmExit()) {
 				//System.out.println("Finish Work");
-				start.clearFields();
 				mainConteiner.resetPanel(start);
 				
 				
@@ -336,4 +343,8 @@ public class Controller {
 		}
 
 	}// END ChooseYourCashListener
+	
+	public Wrapper getWrap() {
+		return wrapper;
+	}
 }
