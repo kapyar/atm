@@ -68,7 +68,7 @@ public class AddMoney extends RightPanel {
 			if (source == panel.getMyButton_Cancel()) {
 				panel.getTextView().getTextField().setText("");
 			}
-			
+
 		}
 	}// END InnerListener
 

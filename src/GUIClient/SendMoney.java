@@ -2,12 +2,14 @@ package GUIClient;
 
 import Controller.Friend;
 import MYGUI.ButtonFactory;
+import MYGUI.CheckView;
 import MYGUI.MetroEditablePane;
 import MYGUI.MyButton;
 import MYGUI.Numbers;
 import MYGUI.RightPanel;
 import Model.Model;
 import Server.SQLwrapper;
+import Starter.Test;
 
 import javax.swing.JLabel;
 
@@ -17,7 +19,9 @@ import java.awt.Font;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.SwingWorker;
 
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -44,6 +48,7 @@ public class SendMoney extends RightPanel {
 	private SQLwrapper dataBase;
 	private ArrayList<Friend> listOfFriends;
 	private String[] aa;
+	private JProgressBar progressBar;
 
 	public SendMoney() {
 
@@ -103,6 +108,11 @@ public class SendMoney extends RightPanel {
 		lblYourFriends.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblYourFriends.setBounds(225, 224, 69, 14);
 		add(lblYourFriends);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(191, 105, 312, 29);
+		progressBar.setVisible(false);
+		add(progressBar);
 
 		addInnerListener();
 
@@ -183,17 +193,42 @@ public class SendMoney extends RightPanel {
 			}
 
 			if (source == numb.getMyButton_Enter()) {
-				Integer howMuch = Integer
-						.parseInt(how.getTextField().getText());
 
-				System.out.println("Selected index: "
-						+ comboBox.getSelectedIndex());
-				try {
-					Model.getInstance().doSendMoney(howMuch, getNumberOfUser());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				class MyWorker extends SwingWorker<String, Object> {
+
+					CheckView check;
+
+					@Override
+					protected String doInBackground() throws Exception {
+						progressBar.setVisible(true);
+						progressBar.setIndeterminate(true);
+
+						Integer howMuch = Integer.parseInt(how.getTextField()
+								.getText());
+						try {
+							Model.getInstance().doSendMoney(howMuch,
+									getNumberOfUser());
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						check = new CheckView(Integer.parseInt(how
+								.getTextField().getText()), (int) Model
+								.getInstance().doBalance(), true);
+						return "Done";
+					}
+
+					protected void done() {
+						progressBar.setVisible(false);
+						how.getTextField().setText("");
+						whome.getTextField().setText("");
+						Test.getController().getWrap().resetRightPanel(check);
+
+					}
+
 				}
+				new MyWorker().execute();
 			}
 			if (source == numb.getMyButton_Cancel()) {
 				how.getTextField().setText("");

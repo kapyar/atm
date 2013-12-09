@@ -139,8 +139,8 @@ public class ServeOneJabber extends Thread {
 			case SEND_MONEY:
 				String twSession = (String) in.get(Action.SESSION_ID);
 				Integer twlogin = (Integer) in.get(Action.LOGIN_FIELD);
-				int twHowMuch = (Integer) in.get(Action.SEND_MONEY);
-				int twToWhome = (Integer) in.get(Action.TO_WHOME);
+				Integer twHowMuch = (Integer) in.get(Action.SEND_MONEY);
+				Integer twToWhome = (Integer) in.get(Action.TO_WHOME);
 
 				if (dataBase.getCurrentSession(twlogin).equals(twSession)) {
 					if (dataBase.sendMoney(twlogin, twToWhome, twHowMuch)) {
