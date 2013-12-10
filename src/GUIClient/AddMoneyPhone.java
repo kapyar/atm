@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -21,7 +23,7 @@ import MYGUI.RightPanel;
 import Model.Model;
 import Starter.Test;
 
-public class AddMoneyPhone extends RightPanel {
+public class AddMoneyPhone extends RightPanel implements MouseListener {
 
 	private JRadioButton radioButton;
 	private MetroEditablePane suma;
@@ -40,10 +42,12 @@ public class AddMoneyPhone extends RightPanel {
 		add(radioButton);
 
 		suma = new MetroEditablePane();
+		suma.getTextField().addMouseListener(this);
 		suma.setLocation(367, 352);
 		add(suma);
 
 		numbOfBill = new MetroEditablePane();
+		numbOfBill.getTextField().addMouseListener(this);
 		numbOfBill.setBounds(367, 295, 210, 31);
 		add(numbOfBill);
 
@@ -128,6 +132,7 @@ public class AddMoneyPhone extends RightPanel {
 				class MyWorker extends SwingWorker<String, Object> {
 
 					double bln = 0;
+					double res = 0;
 					CheckView checkView;
 
 					@Override
@@ -139,7 +144,7 @@ public class AddMoneyPhone extends RightPanel {
 						Integer d = Integer.parseInt(suma.getTextField()
 								.getText());
 
-						double res = Model.getInstance().doWithdrawal(d);
+						Model.getInstance().doWithdrawal(d);
 
 						bln = Model.getInstance().doBalance();
 						checkView = new CheckView((int) bln);
@@ -149,6 +154,13 @@ public class AddMoneyPhone extends RightPanel {
 
 					protected void done() {
 						progressBar.setVisible(false);
+						if (res == -1) {
+						       JOptionPane.showConfirmDialog(AddMoneyPhone.this,
+						         "Not enough money", "Error",
+						         JOptionPane.PLAIN_MESSAGE,
+						         JOptionPane.NO_OPTION);
+						       clearField();
+						   }
 						Test.getController().getWrap()
 								.resetRightPanel(checkView);
 					}
@@ -158,7 +170,8 @@ public class AddMoneyPhone extends RightPanel {
 
 			}
 			if (source == numbPane.getMyButton_Cancel()) {
-				clearField();
+				suma.getTextField().setText("");
+				numbOfBill.getTextField().setText("");
 			}
 
 		}
@@ -172,12 +185,39 @@ public class AddMoneyPhone extends RightPanel {
 			}
 		}
 
-		private void clearField() {
-			suma.getTextField().setText("");
-			numbOfBill.getTextField().setText("");
-
-		}
-
 	}// END InnerListener
+
+	
+	private void clearField() {
+		   suma.getTextField().setText("");
+		   numbOfBill.getTextField().setText("");
+
+		  }
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object source = e.getSource();
+		if (source == suma.getTextField()) {
+			// System.out.println("txt");
+			radioButton.setSelected(true);
+		}
+		if (source == numbOfBill.getTextField()) {
+			// System.out.println("pin");
+			radioButton_1.setSelected(true);
+		}
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+
+	@Override
+	public void mouseExited(MouseEvent e) {}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
 
 }

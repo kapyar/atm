@@ -26,13 +26,15 @@ import javax.swing.SwingWorker;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class SendMoney extends RightPanel {
+public class SendMoney extends RightPanel implements MouseListener{
 
 	private MetroEditablePane how;
 	private MetroEditablePane whome;
@@ -64,10 +66,12 @@ public class SendMoney extends RightPanel {
 
 		how = new MetroEditablePane();
 		how.setLocation(225, 296);
+		how.getTextField().addMouseListener(this);
 		add(how);
 
 		whome = new MetroEditablePane();
 		whome.setBounds(469, 239, 210, 31);
+		whome.getTextField().addMouseListener(this);
 		add(whome);
 
 		numb = new Numbers();
@@ -267,5 +271,32 @@ public class SendMoney extends RightPanel {
 	public JComboBox getComboBox() {
 		return comboBox;
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object source = e.getSource();
+		if (source == how.getTextField()) {
+			// System.out.println("txt");
+			radioButton.setSelected(true);
+		}
+		if (source == whome.getTextField()) {
+			// System.out.println("pin");
+			radioButton_1.setSelected(true);
+		}
+		// System.out.println("("+e.getX()+":"+e.getY()+")");
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+
+	@Override
+	public void mouseExited(MouseEvent e) {}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
 }// END InnerListener
 
