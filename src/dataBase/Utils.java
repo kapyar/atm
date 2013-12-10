@@ -1,5 +1,9 @@
 package dataBase;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 public class Utils {
 	public static String implodeArray(String[] inputArray, String glueString) {
 		String output = "";
@@ -23,6 +27,18 @@ public class Utils {
 	
 	public static String generateRandomString() {
 		return "just_random_session";
+	}
+	
+	public static void closeSt(Statement st) {
+		try { st.close(); } catch (Exception e) { /* ignored */ }
+	}
+	
+	public static void closePSt(PreparedStatement st) {
+		try { st.close(); } catch (Exception e) { /* ignored */ }
+	}
+	
+	public static void closeRs(ResultSet rs) {
+		try { rs.close(); } catch (Exception e) { /* ignored */ }
 	}
 	
 }
