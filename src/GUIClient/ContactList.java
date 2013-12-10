@@ -11,6 +11,7 @@ import javax.swing.SwingWorker;
 import MYGUI.MyButton;
 import MYGUI.NumbersWithTextField;
 import MYGUI.RightPanel;
+import Starter.Test;
 
 public class ContactList extends RightPanel {
 	private JLabel lblNewLabel;
@@ -51,6 +52,7 @@ public class ContactList extends RightPanel {
 
 					@Override
 					protected String doInBackground() throws Exception {
+						Test.getController().getWrap().setDisablePnlSide();
 						progressBar.setVisible(true);
 						progressBar.setIndeterminate(true);
 						Integer id = Integer.parseInt(panel.getTextView()
@@ -62,6 +64,7 @@ public class ContactList extends RightPanel {
 
 					protected void done() {
 						progressBar.setVisible(false);
+						Test.getController().getWrap().setEnablePnlSide();
 					}
 
 				}

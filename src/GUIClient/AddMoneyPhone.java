@@ -132,6 +132,7 @@ public class AddMoneyPhone extends RightPanel {
 
 					@Override
 					protected String doInBackground() throws Exception {
+						Test.getController().getWrap().setDisablePnlSide();
 						progressBar.setVisible(true);
 						progressBar.setIndeterminate(true);
 

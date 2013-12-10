@@ -131,6 +131,7 @@ public class PayBill extends RightPanel {
 
 					@Override
 					protected String doInBackground() throws Exception {
+						Test.getController().getWrap().setDisablePnlSide();
 						progressBar.setVisible(true);
 						progressBar.setIndeterminate(true);
 						Integer suma = Integer.parseInt(sum.getTextField()

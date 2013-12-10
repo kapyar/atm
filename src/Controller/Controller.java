@@ -116,7 +116,9 @@ public class Controller {
 									.setText("");
 						} else {
 							rePin.clearField();
+							wrapper.setEnablePnlSide();
 							mainConteiner.resetPanel(wrapper);
+
 						}
 
 					}
@@ -249,8 +251,9 @@ public class Controller {
 					protected String doInBackground() throws Exception {
 						balance.getProgressBar().setVisible(true);
 						balance.getProgressBar().setIndeterminate(true);
-
+						wrapper.setDisablePnlSide();
 						double bln = Model.getInstance().doBalance();
+
 						balance.getLblNewLabel().setText(
 								"You've got: " + bln + " UAH");
 						balance.getProgressBar().setVisible(false);
@@ -283,7 +286,7 @@ public class Controller {
 					protected String doInBackground() throws Exception {
 						balance.getProgressBar().setVisible(true);
 						balance.getProgressBar().setIndeterminate(true);
-
+						wrapper.setDisablePnlSide();
 						bln = Model.getInstance().doBalance();
 						checkView = new CheckView((int) bln);
 
@@ -316,9 +319,10 @@ public class Controller {
 
 					@Override
 					protected String doInBackground() throws Exception {
+						wrapper.setDisablePnlSide();
 						addMoney.getProgressBar().setVisible(true);
 						addMoney.getProgressBar().setIndeterminate(true);
-
+						wrapper.setDisablePnlSide();
 						Integer d = Integer.parseInt(addMoney.getPanel()
 								.getTextView().getTextField().getText());
 
@@ -363,6 +367,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == chooseYourCash.getBtnEnter()) {
+				wrapper.setDisablePnlSide();
 				final Integer howMuch = Integer.parseInt(chooseYourCash
 						.getPanel().getTextView().getTextField().getText());
 				chooseYourCash.getProgressBar().setVisible(true);
@@ -378,6 +383,8 @@ public class Controller {
 					return;
 				}
 				class MyWorker extends SwingWorker<String, Object> {
+
+					// CheckView check;
 
 					@Override
 					protected String doInBackground() throws Exception {

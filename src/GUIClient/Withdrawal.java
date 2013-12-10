@@ -98,6 +98,8 @@ public class Withdrawal extends RightPanel {
 
 		private void withdraw(final int howMuch) {
 
+			Test.getController().getWrap().setDisablePnlSide();
+			
 			progressBar.setVisible(true);
 			progressBar.setIndeterminate(true);
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
