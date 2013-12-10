@@ -125,6 +125,9 @@ public class Controller {
 				}
 				new MyWorker().execute();
 			}
+			if (source == rePin.getPanel().getMyButton_Cancel()) {
+				mainConteiner.resetPanel(start);
+			}
 		}
 	}// END RePinListener
 
