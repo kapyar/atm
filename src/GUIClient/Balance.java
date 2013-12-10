@@ -46,10 +46,10 @@ public class Balance extends RightPanel {
 		progressBar.setVisible(false);
 		add(progressBar);
 
-		//addInnerListener();
+		// addInnerListener();
 	}
 
-	public void addOuterListener(ActionListener a){
+	public void addOuterListener(ActionListener a) {
 		btnOnDissplay.addActionListener(a);
 		btnPrint.addActionListener(a);
 	}
@@ -69,54 +69,5 @@ public class Balance extends RightPanel {
 	public JProgressBar getProgressBar() {
 		return progressBar;
 	}
-	
-//	private void addInnerListener() {
-//		btnOnDissplay.addActionListener(new ActionListenerBalance());
-//		btnPrint.addActionListener(new ActionListenerBalance());
-//	}
 
-//	private class ActionListenerBalance implements ActionListener {
-//
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			Object source = e.getSource();
-//			System.out.println("In the ActionListenerBalance");
-//
-//			double balance = 0;
-//			if (source == btnOnDissplay) {
-//				try {
-//					balance = Model.Model.getInstance().doBalance();
-//					System.out.println("balance: " + balance);
-//				} catch (InterruptedException | ExecutionException
-//						| IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				lblNewLabel
-//						.setText("Your current balance: " + balance + " UAH");
-//			}
-//
-//			if (source == btnPrint) {
-//				try {
-//					balance = Model.Model.getInstance().doBalance();
-//				} catch (InterruptedException | ExecutionException
-//						| IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				DateFormat dateFormat = new SimpleDateFormat(
-//						"yyyy/MM/dd HH:mm:ss");
-//				Date date = new Date();
-//				// System.out.println(dateFormat.format(date));
-//				int t = JOptionPane.showConfirmDialog(Balance.this, date
-//						+ "\nYour current balance:" + balance + " UAH",
-//						"Balance", JOptionPane.PLAIN_MESSAGE,
-//						JOptionPane.NO_OPTION);
-//
-//				lblNewLabel.setText("Please take your receipt");
-//			}
-//
-//		}
-//
-//	}
 }// END ActionListenerBalance

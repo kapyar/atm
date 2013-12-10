@@ -132,12 +132,6 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
-				System.out
-						.println("-----------------TEST------------------------");
-				// System.out.println(Model.getInstance().getlistOfFriends(1));
-
-				System.out.println("-----------------------------------------");
-
 				if (start.checkInputData()) {// if all fields had written
 					class MyWorker extends SwingWorker<String, Object> {
 						protected String doInBackground() {
@@ -273,6 +267,7 @@ public class Controller {
 							e.printStackTrace();
 						}
 						mainConteiner.resetPanel(rePin);
+						balance.getLblNewLabel().setText("");
 
 					}
 
