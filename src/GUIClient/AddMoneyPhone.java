@@ -139,7 +139,7 @@ public class AddMoneyPhone extends RightPanel {
 						Integer d = Integer.parseInt(suma.getTextField()
 								.getText());
 
-						Model.getInstance().doWithdrawal(d);
+						double res = Model.getInstance().doWithdrawal(d);
 
 						bln = Model.getInstance().doBalance();
 						checkView = new CheckView((int) bln);
@@ -158,8 +158,7 @@ public class AddMoneyPhone extends RightPanel {
 
 			}
 			if (source == numbPane.getMyButton_Cancel()) {
-				suma.getTextField().setText("");
-				numbOfBill.getTextField().setText("");
+				clearField();
 			}
 
 		}
@@ -171,6 +170,12 @@ public class AddMoneyPhone extends RightPanel {
 				numbOfBill.getTextField().setText(
 						numbOfBill.getTextField().getText() + s);
 			}
+		}
+
+		private void clearField() {
+			suma.getTextField().setText("");
+			numbOfBill.getTextField().setText("");
+
 		}
 
 	}// END InnerListener
