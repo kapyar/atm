@@ -310,13 +310,14 @@ public enum SQLwrapper {
 	public boolean sendMoney(Integer twlogin, Integer twToWhome,
 			Integer twHowMuch) {
 
-		double fromWhome = (int) getBalance(twlogin);
-		double toWhome = (int) getBalance(twToWhome);
+		Integer fromWhome = getBalance(twlogin);
+		Integer toWhome =  getBalance(twToWhome);
 
-		fromWhome -= twHowMuch.doubleValue();
+		fromWhome -= twHowMuch;
+		
 		if (fromWhome < 0)
 			return false;
-		toWhome += twHowMuch.doubleValue();
+		toWhome += twHowMuch;
 
 		setBalance(fromWhome, twlogin);
 		setBalance(toWhome, twToWhome);
@@ -325,19 +326,19 @@ public enum SQLwrapper {
 
 	}
 
-	private double getBalance(Integer twlogin) {
-		double result = 0;
+	private Integer getBalance(Integer twlogin) {
+		Integer result = 0;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
 			ps = connection
-					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `owner_id`=? ");
+					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `id`=? ");
 			ps.setInt(1, twlogin);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				result = rs.getDouble("balance");
+				result = rs.getInt("balance");
 			}
 
 		} catch (SQLException e) {
