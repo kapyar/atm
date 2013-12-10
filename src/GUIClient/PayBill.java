@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
@@ -22,7 +24,7 @@ import MYGUI.Numbers;
 import MYGUI.RightPanel;
 import Starter.Test;
 
-public class PayBill extends RightPanel {
+public class PayBill extends RightPanel implements MouseListener{
 
 	private JRadioButton radioButton;
 	private MetroEditablePane sum;
@@ -41,10 +43,12 @@ public class PayBill extends RightPanel {
 
 		sum = new MetroEditablePane();
 		sum.setLocation(367, 352);
+		sum.getTextField().addMouseListener(this);
 		add(sum);
 
 		numOfBill = new MetroEditablePane();
 		numOfBill.setBounds(367, 295, 210, 31);
+		numOfBill.getTextField().addMouseListener(this);
 		add(numOfBill);
 
 		numbPane = new Numbers();
@@ -179,5 +183,31 @@ public class PayBill extends RightPanel {
 		}
 
 	}// END InnerListener
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object source = e.getSource();
+		if (source == sum.getTextField()) {
+			// System.out.println("txt");
+			radioButton.setSelected(true);
+		}
+		if (source == numOfBill.getTextField()) {
+			// System.out.println("pin");
+			radioButton_1.setSelected(true);
+		}
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+
+	@Override
+	public void mouseExited(MouseEvent e) {}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
 
 }
