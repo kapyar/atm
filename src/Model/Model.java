@@ -177,7 +177,8 @@ public class Model {
 
 	}
 
-	public void doSendMoney(Integer howMuch, Integer toWhome) throws IOException {
+	public void doSendMoney(Integer howMuch, Integer toWhome)
+			throws IOException {
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.SEND_MONEY);
 		command.put(Action.SESSION_ID, SESSION_ID);
@@ -189,6 +190,11 @@ public class Model {
 		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
 				command));
 		ex.shutdown();
+
+	}
+
+	public void addFriend(Integer id) {
+		// TODO Auto-generated method stub
 
 	}
 
