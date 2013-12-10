@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
@@ -52,6 +53,7 @@ public class Controller {
 	private RePin rePin;
 	private Balance balance;
 	private IntroSplash introSplash;
+	private ArrayList<Friend> listOfFriend;
 
 	public void gotoStart() {
 		start.clearFields();
@@ -130,6 +132,12 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == start.getMyButton_Enter()) {
+				System.out
+						.println("-----------------TEST------------------------");
+				// System.out.println(Model.getInstance().getlistOfFriends(1));
+
+				System.out.println("-----------------------------------------");
+
 				if (start.checkInputData()) {// if all fields had written
 					class MyWorker extends SwingWorker<String, Object> {
 						protected String doInBackground() {
@@ -305,7 +313,6 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			Object source = e.getSource();
 			if (source == addMoney.getPanel().getMyButton_Enter()) {
 				class MyWorker extends SwingWorker<String, Object> {
@@ -320,10 +327,9 @@ public class Controller {
 
 						Integer d = Integer.parseInt(addMoney.getPanel()
 								.getTextView().getTextField().getText());
-						
+
 						Model.getInstance().doAddMonney(d);
-						//CashController.INSTANCE.addCash(d);
-						
+						CashController.INSTANCE.addCash(d);
 						bln = Model.getInstance().doBalance();
 						checkView = new CheckView((int) bln);
 
