@@ -27,6 +27,8 @@ public class ContactList extends RightPanel {
 
 		panel = new NumbersWithTextField();
 		panel.setBounds(super.getWidth() / 2 - 115, 210, 230, 326);
+		panel.getMyButton_Enter().setText("Add");
+		panel.getMyButton_Cancel().setText("Clear");
 		add(panel);
 
 		progressBar = new JProgressBar();
@@ -51,8 +53,9 @@ public class ContactList extends RightPanel {
 					protected String doInBackground() throws Exception {
 						progressBar.setVisible(true);
 						progressBar.setIndeterminate(true);
-						Integer id;
-						// Model.Model.getInstance().addFriend(id);
+						Integer id = Integer.parseInt(panel.getTextView()
+								.getTextField().getText());
+						Model.Model.getInstance().addFriend(id);
 
 						return "Done";
 					}
