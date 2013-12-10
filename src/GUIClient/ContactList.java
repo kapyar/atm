@@ -1,9 +1,12 @@
 package GUIClient;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
 
 import MYGUI.MyButton;
 import MYGUI.NumbersWithTextField;
@@ -12,6 +15,7 @@ import MYGUI.RightPanel;
 public class ContactList extends RightPanel {
 	private JLabel lblNewLabel;
 	private NumbersWithTextField panel;
+	private JProgressBar progressBar;
 
 	public ContactList() {
 		setMyTitle("Contat List");
@@ -25,6 +29,39 @@ public class ContactList extends RightPanel {
 		panel.setBounds(super.getWidth() / 2 - 115, 210, 230, 326);
 		add(panel);
 
+		progressBar = new JProgressBar();
+		progressBar.setBounds(191, 105, 312, 29);
+		progressBar.setVisible(false);
+		add(progressBar);
+
+		panel.addOuterListener(new InnerListener());
+
 	}
+
+	private class InnerListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+
+			if (source == panel.getMyButton_Enter()) {
+				class MyWorker extends SwingWorker<String, Object> {
+
+					@Override
+					protected String doInBackground() throws Exception {
+						progressBar.setVisible(true);
+						progressBar.setIndeterminate(true);
+						Integer id;
+						// Model.Model.getInstance().addFriend(id);
+
+						return "Done";
+					}
+
+				}
+			}
+
+		}
+
+	}// END InnerListener
 
 }
