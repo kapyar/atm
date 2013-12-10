@@ -60,7 +60,12 @@ public class ContactList extends RightPanel {
 						return "Done";
 					}
 
+					protected void done() {
+						progressBar.setVisible(false);
+					}
+
 				}
+				new MyWorker().execute();
 			}
 
 		}
