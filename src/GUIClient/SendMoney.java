@@ -1,5 +1,6 @@
 package GUIClient;
 
+import Controller.Controller;
 import Controller.Friend;
 import MYGUI.ButtonFactory;
 import MYGUI.CheckView;
@@ -26,15 +27,13 @@ import javax.swing.SwingWorker;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class SendMoney extends RightPanel implements MouseListener{
+public class SendMoney extends RightPanel {
 
 	private MetroEditablePane how;
 	private MetroEditablePane whome;
@@ -66,12 +65,10 @@ public class SendMoney extends RightPanel implements MouseListener{
 
 		how = new MetroEditablePane();
 		how.setLocation(225, 296);
-		how.getTextField().addMouseListener(this);
 		add(how);
 
 		whome = new MetroEditablePane();
 		whome.setBounds(469, 239, 210, 31);
-		whome.getTextField().addMouseListener(this);
 		add(whome);
 
 		numb = new Numbers();
@@ -202,26 +199,44 @@ public class SendMoney extends RightPanel implements MouseListener{
 				class MyWorker extends SwingWorker<String, Object> {
 
 					CheckView check;
+					boolean flag = true;
 
 					@Override
 					protected String doInBackground() throws Exception {
 						Test.getController().getWrap().setDisablePnlSide();
 						progressBar.setVisible(true);
 						progressBar.setIndeterminate(true);
+						
+						
 
-						Integer howMuch = Integer.parseInt(how.getTextField()
-								.getText());
-						try {
-							Model.getInstance().doSendMoney(howMuch,
-									getNumberOfUser());
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+						
+						
+						final Integer howMuch;
+						
+						String val = how.getTextField().getText();
+						if (val.equals("")) {
+							howMuch = 0;
+						} else {
+							howMuch = Integer.parseInt(val);
 						}
-
-						check = new CheckView(Integer.parseInt(how
-								.getTextField().getText()), (int) Model
-								.getInstance().doBalance(), true);
+						
+						if (howMuch == 0) {
+							Controller.alert(SendMoney.this, "You can't withdraw emptiness");
+							flag= false;
+						} else {
+						
+							try {
+								Model.getInstance().doSendMoney(howMuch,
+										getNumberOfUser());
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							//if (howMuch != 0)
+							check = new CheckView(howMuch, (int) Model
+									.getInstance().doBalance(), true);
+						}
 						return "Done";
 					}
 
@@ -229,8 +244,11 @@ public class SendMoney extends RightPanel implements MouseListener{
 						progressBar.setVisible(false);
 						how.getTextField().setText("");
 						whome.getTextField().setText("");
-						Test.getController().getWrap().resetRightPanel(check);
-
+						
+						if (flag) {
+							Test.getController().getWrap().resetRightPanel(check);
+						}
+						
 					}
 
 				}
@@ -271,32 +289,5 @@ public class SendMoney extends RightPanel implements MouseListener{
 	public JComboBox getComboBox() {
 		return comboBox;
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		Object source = e.getSource();
-		if (source == how.getTextField()) {
-			// System.out.println("txt");
-			radioButton.setSelected(true);
-		}
-		if (source == whome.getTextField()) {
-			// System.out.println("pin");
-			radioButton_1.setSelected(true);
-		}
-		// System.out.println("("+e.getX()+":"+e.getY()+")");
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-
-	@Override
-	public void mouseExited(MouseEvent e) {}
-
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {}
 }// END InnerListener
 
