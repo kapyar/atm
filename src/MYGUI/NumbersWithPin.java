@@ -3,17 +3,16 @@ package MYGUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class NumbersWithTextField extends Numbers {
-	private  MetroEditablePane textView;
-	// NumbersWithTextField sizes and coordinates
-		private int _W;
-		private int _H;
-		private int _x;
-		private int _y;
+public class NumbersWithPin extends Numbers {
 
-		
-		
-	public NumbersWithTextField() {
+	private MetroEditablePin pinView;
+	// NumbersWithTextField sizes and coordinates
+	private int _W;
+	private int _H;
+	private int _x;
+	private int _y;
+
+	public NumbersWithPin() {
 		_W = this.getWidth();
 		_H = this.getHeight();
 		_x = this.getX();
@@ -21,12 +20,13 @@ public class NumbersWithTextField extends Numbers {
 		init();
 		addInnerListener();
 	}
-//Outer ENTER AND CANCEL
-	public void addOuterListener(ActionListener a){
+
+	// Outer ENTER AND CANCEL
+	public void addOuterListener(ActionListener a) {
 		getMyButton_Cancel().addActionListener(a);
 		getMyButton_Enter().addActionListener(a);
 	}
-	
+
 	private void addInnerListener() {
 		// this is not inner
 		getListOfComponents().remove(getMyButton_Cancel());
@@ -37,36 +37,37 @@ public class NumbersWithTextField extends Numbers {
 		}
 
 	}
-	
+
 	private void init() {
 		int _xleft = 16;
 		int _ytop = 15;
 		int deltaY = 50;
 
-		
-		textView = new MetroEditablePane();
-		int textVievWidth = (textView.getWidth()+_xleft);
-		textView.setLocation(_xleft, _ytop);
-		
-		getMyButton_1().setLocation(_xleft, _ytop+deltaY);
-		getMyButton_4().setLocation(_xleft, _ytop+deltaY*2);
-		getMyButton_7().setLocation(_xleft, _ytop+deltaY*3);
-		getMyButton_Cancel().setLocation(_xleft, _ytop+deltaY*5);
-		
-		int _xcentral = (textVievWidth-getMyButton_0().getWidth()+_xleft)/2;
-		getMyButton_2().setLocation(_xcentral, _ytop+deltaY);
-		getMyButton_5().setLocation(_xcentral, _ytop+deltaY*2);
-		getMyButton_8().setLocation(_xcentral, _ytop+deltaY*3);
-		getMyButton_0().setLocation(_xcentral, _ytop+deltaY*4);
-		
-		int _xright = textVievWidth-getMyButton_0().getWidth();
-		getMyButton_3().setLocation(_xright, _ytop+deltaY);
-		getMyButton_6().setLocation(_xright, _ytop+deltaY*2);
-		getMyButton_9().setLocation(_xright, _ytop+deltaY*3);
-		
-		getMyButton_Enter().setLocation(textVievWidth-getMyButton_Enter().getWidth(), _ytop+deltaY*5);
-		
-		add(textView);
+		pinView = new MetroEditablePin();
+		int textVievWidth = (pinView.getWidth() + _xleft);
+		pinView.setLocation(_xleft, _ytop);
+
+		getMyButton_1().setLocation(_xleft, _ytop + deltaY);
+		getMyButton_4().setLocation(_xleft, _ytop + deltaY * 2);
+		getMyButton_7().setLocation(_xleft, _ytop + deltaY * 3);
+		getMyButton_Cancel().setLocation(_xleft, _ytop + deltaY * 5);
+
+		int _xcentral = (textVievWidth - getMyButton_0().getWidth() + _xleft) / 2;
+		getMyButton_2().setLocation(_xcentral, _ytop + deltaY);
+		getMyButton_5().setLocation(_xcentral, _ytop + deltaY * 2);
+		getMyButton_8().setLocation(_xcentral, _ytop + deltaY * 3);
+		getMyButton_0().setLocation(_xcentral, _ytop + deltaY * 4);
+
+		int _xright = textVievWidth - getMyButton_0().getWidth();
+		getMyButton_3().setLocation(_xright, _ytop + deltaY);
+		getMyButton_6().setLocation(_xright, _ytop + deltaY * 2);
+		getMyButton_9().setLocation(_xright, _ytop + deltaY * 3);
+
+		getMyButton_Enter().setLocation(
+				textVievWidth - getMyButton_Enter().getWidth(),
+				_ytop + deltaY * 5);
+
+		add(pinView);
 
 	}
 
@@ -110,14 +111,13 @@ public class NumbersWithTextField extends Numbers {
 		}
 
 		private void writeIt(String s) {
-			textView.getTextField().setText(
-					textView.getTextField().getText() + s);
+			pinView.getPass().setText(pinView.getPass().getText() + s);
 		}
 
 	}
 
-	public MetroEditablePane getTextView() {
-		return textView;
+	public MetroEditablePin getTextView() {
+		return pinView;
 	}
 
 }// END InnerListener

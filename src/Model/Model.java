@@ -110,7 +110,7 @@ public class Model {
 		return toReturn;
 	}
 	
-	public void doAddMonney(double d) throws IOException {
+	public void doAddMonney(Integer d) throws IOException {
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.ADD_MONEY);
 		command.put(Action.SESSION_ID, SESSION_ID);
