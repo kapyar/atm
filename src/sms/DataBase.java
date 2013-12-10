@@ -21,10 +21,10 @@ import Controller.NotifyController;
 public enum DataBase {
 	DB;
 	
-	private String base_server = "gofrie.mysql.ukraine.com.ua";
+	private String base_server = "162.211.226.101:3306";
 	private String base_name = "gofrie_vlad";
-	private String base_user = "gofrie_vlad";
-	private String base_pass = "e9937rdk";
+	private String base_user = "atm";
+	private String base_pass = "mndfra19";
 	
 	private String dbName = "//" + base_server + "/" + base_name + "?user=" + base_user + "&password=" + base_pass;
 	private Connection connection;
