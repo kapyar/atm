@@ -15,9 +15,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
 
+import dataBase.Utils;
 import Controller.NotifyController;
 
-public class DataBase {
+public enum DataBase {
+	DB;
+	
 	private String base_server = "gofrie.mysql.ukraine.com.ua";
 	private String base_name = "gofrie_vlad";
 	private String base_user = "gofrie_vlad";
@@ -27,7 +30,7 @@ public class DataBase {
 	private Connection connection;
 	
 	
-	public DataBase () {
+	DataBase () {
 		init();
 	}
 
@@ -45,17 +48,22 @@ public class DataBase {
 	
 	public int lastId() {
 		int lastid = -1;
+		Statement st = null;
+		ResultSet rs = null;
+		
 		try {
-			Statement st = connection.createStatement();
+			st = connection.createStatement();
 			
-			ResultSet rs = st.executeQuery("SELECT `id` FROM `sms` ORDER BY id DESC LIMIT 1  ");
+			rs = st.executeQuery("SELECT `id` FROM `sms` ORDER BY id DESC LIMIT 1  ");
 			if (rs.next()) {
 				lastid = Integer.parseInt(rs.getString("id"));
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			//lastid = -1;
+		}  finally  {
+			Utils.closeSt(st);
+			Utils.closeRs(rs);
 		}
 
 		return lastid;
@@ -63,14 +71,14 @@ public class DataBase {
 	
 	public int getLastSmsId() {
 		int res = 0;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
 		try {
 			int lastId = lastId();
 			if (lastId >= 0) {
-				PreparedStatement ps = connection.prepareStatement("SELECT MAX(sms_id) AS smsId FROM `sms` ");
-				//ps.setInt(1, lastId);
-				
-				ResultSet rs = ps.executeQuery();
+				ps = connection.prepareStatement("SELECT MAX(sms_id) AS smsId FROM `sms` ");
+				rs = ps.executeQuery();
 				
 				while (rs.next()) {
 					res = Integer.parseInt(rs.getString("smsId"));
@@ -81,7 +89,9 @@ public class DataBase {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			//lastid = -1;
+		}  finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 		
 		return res;
@@ -90,12 +100,15 @@ public class DataBase {
 	private double getBalance(String account) {
 		double res = -1;
 		int acc = Integer.parseInt(account);
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
 
-			PreparedStatement ps = connection.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `id`=(?) ");
+			ps = connection.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `id`=(?) ");
 			ps.setInt(1, acc);
 			
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			
 			while (rs.next()) {
 				res = rs.getDouble("balance");
@@ -104,6 +117,9 @@ public class DataBase {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}  finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 		
 		return res;
@@ -115,8 +131,9 @@ public class DataBase {
 	};
 	
 	public void addSmsRow(int smsId, String sender, String message) {
+		PreparedStatement ps= null;
 		try {
-			PreparedStatement ps =  connection.prepareStatement("INSERT INTO `sms` (sms_id, sender_number, message) VALUES (?, ?, ?) ");
+			ps =  connection.prepareStatement("INSERT INTO `sms` (sms_id, sender_number, message) VALUES (?, ?, ?) ");
 			ps.setInt(1, smsId);
 			ps.setString(2, sender);
 			ps.setString(3, message);
@@ -197,20 +214,23 @@ public class DataBase {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			//lastid = -1;
+		} finally  {
+			Utils.closePSt(ps);
 		}
 	}
 	
 	public int getOwnerId(String account) {
 		int accId = Integer.parseInt(account);
 		int res = -1;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
 		try {
 
-			PreparedStatement ps = connection.prepareStatement("SELECT `owner_id`  FROM `Accounts` WHERE id=(?) ");
+			ps = connection.prepareStatement("SELECT `owner_id`  FROM `Accounts` WHERE id=(?) ");
 			ps.setInt(1, accId);
 			
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			
 			if (rs.next()) {
 				res = Integer.parseInt(rs.getString("owner_id"));
@@ -219,6 +239,9 @@ public class DataBase {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 		
 		return res;
@@ -233,12 +256,15 @@ public class DataBase {
 			return res;
 		}
 		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
 
-			PreparedStatement ps = connection.prepareStatement("SELECT * FROM `Users` WHERE `id`=(?) LIMIT 1");
+			ps = connection.prepareStatement("SELECT * FROM `Users` WHERE `id`=(?) LIMIT 1");
 			ps.setInt(1, owner);
 			
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			
 			while (rs.next()) {
 				//res = Integer.parseInt(rs.getString("smsId"));
@@ -250,6 +276,9 @@ public class DataBase {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 		
 		
@@ -259,13 +288,15 @@ public class DataBase {
 	
 	public boolean accExists(String acc) {
 		boolean exists = false;
+		PreparedStatement ps= null;
+		ResultSet rs = null;
 		
 		try {
 
-			PreparedStatement ps = connection.prepareStatement("SELECT * FROM `Accounts` WHERE `id`=(?)");
+			ps = connection.prepareStatement("SELECT * FROM `Accounts` WHERE `id`=(?)");
 			ps.setInt(1, Integer.parseInt(acc));
 			
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			
 			if (rs.next()) {
 				exists = true;
@@ -274,6 +305,9 @@ public class DataBase {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
 		}
 		
 		return exists;
@@ -281,27 +315,32 @@ public class DataBase {
 	
 	
 	public void transfer(String from, String to, String sum) {
-		
+		PreparedStatement ps = null;
 		try {
 
-			PreparedStatement ps = connection.prepareStatement("UPDATE  `Accounts` SET balance=balance-(?) WHERE `id`=(?) ");
+			ps = connection.prepareStatement("UPDATE  `Accounts` SET balance=balance-(?) WHERE `id`=(?) ");
 			ps.setInt(1, Integer.parseInt(sum));
 			ps.setInt(2, Integer.parseInt(from));
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
 		}
 		
+		PreparedStatement ps2 = null;
+		
 		try {
-
-			PreparedStatement ps = connection.prepareStatement("UPDATE  `Accounts` SET balance=balance+(?) WHERE `id`=(?) ");
-			ps.setInt(1, Integer.parseInt(sum));
-			ps.setInt(2, Integer.parseInt(to));
-			ps.executeUpdate();
+			ps2 = connection.prepareStatement("UPDATE  `Accounts` SET balance=balance+(?) WHERE `id`=(?) ");
+			ps2.setInt(1, Integer.parseInt(sum));
+			ps2.setInt(2, Integer.parseInt(to));
+			ps2.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps2);
 		}
 		
 		

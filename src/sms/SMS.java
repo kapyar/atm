@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SMS {
-	public final static DataBase db =  new DataBase();
+	public final static DataBase db =  DataBase.DB;
 	
 	private  void sendGet() throws Exception {
 		 

@@ -235,6 +235,33 @@ public enum SQLwrapper {
 		return res;
 
 	}
+	
+	public Integer getAccByUser(Integer userId) {
+		Integer result = -1;
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = connection
+					.prepareStatement("SELECT `id` FROM `Accounts` WHERE `owner_id`=(?) LIMIT 1");
+			ps.setInt(1, userId);
+
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				result = rs.getInt("id");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
+		}
+		
+		return result;
+	}
 
 	// need to finish
 	public ArrayList<Friend> getListFriends(Integer accNum) {
@@ -246,7 +273,7 @@ public enum SQLwrapper {
 
 		try {
 			ps = connection
-					.prepareStatement("SELECT `first_name`,`last_name` FROM `Users` INNER JOIN `Contacts` ON "
+					.prepareStatement("SELECT `first_name`,`last_name`, Users.id FROM `Users` INNER JOIN `Contacts` ON "
 							+ "Users.id = Contacts.friend_id AND Contacts.user_id = (?)");
 
 			pst = connection
@@ -263,7 +290,8 @@ public enum SQLwrapper {
 				String name = rs.getString("last_name") + ' '
 						+ rs.getString("first_name");
 
-				Integer ac = rst.getInt("id");
+				Integer ac = getAccByUser(rs.getInt("id"));
+				
 
 				list.add(new Friend(name, ac));
 			}
