@@ -274,7 +274,7 @@ public enum SQLwrapper {
 
 		try {
 			ps = connection
-					.prepareStatement("SELECT `first_name`,`last_name` FROM `Users` INNER JOIN `Contacts` ON "
+					.prepareStatement("SELECT `first_name`,`last_name`, Users.id FROM `Users` INNER JOIN `Contacts` ON "
 							+ "Users.id = Contacts.friend_id AND Contacts.user_id = (?)");
 
 			pst = connection
