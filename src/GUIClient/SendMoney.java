@@ -183,10 +183,13 @@ public class SendMoney extends RightPanel {
 			}
 
 			if (source == numb.getMyButton_Enter()) {
-				int howMuch = 0;
-				int toWhome = 0;
+				Integer howMuch = Integer
+						.parseInt(how.getTextField().getText());
+
+				System.out.println("Selected index: "
+						+ comboBox.getSelectedIndex());
 				try {
-					Model.getInstance().doSendMoney(howMuch, toWhome);
+					Model.getInstance().doSendMoney(howMuch, getNumberOfUser());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -197,6 +200,14 @@ public class SendMoney extends RightPanel {
 				whome.getTextField().setText("");
 			}
 
+		}
+
+		private int getNumberOfUser() {
+			if (comboBox.getSelectedIndex() == 0) {
+				return Integer.parseInt(whome.getTextField().getText());
+			}
+			return listOfFriends.get(comboBox.getSelectedIndex() - 1)
+					.getAccountNumber();
 		}
 
 		private void writeIt(String s) {

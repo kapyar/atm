@@ -12,7 +12,7 @@ import Controller.Friend;
 
 public enum SQLwrapper {
 	DB;
-	
+
 	private String base_server = "162.211.226.101:3306";
 	private String base_name = "gofrie_vlad";
 	private String base_user = "atm";
@@ -42,9 +42,10 @@ public enum SQLwrapper {
 		int result = -1;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
-			ps = connection.prepareStatement("SELECT `owner_id` FROM `Accounts` WHERE `id`=? ");
+			ps = connection
+					.prepareStatement("SELECT `owner_id` FROM `Accounts` WHERE `id`=? ");
 			ps.setInt(1, acc);
 
 			rs = ps.executeQuery();
@@ -52,10 +53,10 @@ public enum SQLwrapper {
 			while (rs.next()) {
 				result = rs.getInt("owner_id");
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
@@ -72,7 +73,7 @@ public enum SQLwrapper {
 		String result = "";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `password_hash` FROM `Users` WHERE `id`=? ");
@@ -85,7 +86,7 @@ public enum SQLwrapper {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
@@ -108,7 +109,7 @@ public enum SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 		}
 		return res;
@@ -117,13 +118,13 @@ public enum SQLwrapper {
 	public String getCurrentSession(Integer blogin) {
 		String result = "";
 		PreparedStatement ps = null;
-		ResultSet rs= null;
-		
+		ResultSet rs = null;
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `session_id` FROM `Accounts` WHERE `id`=(?) ");
 
-			//System.out.println("bLogin: " + blogin);
+			// System.out.println("bLogin: " + blogin);
 			ps.setInt(1, blogin);
 
 			rs = ps.executeQuery();
@@ -133,7 +134,7 @@ public enum SQLwrapper {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
@@ -145,20 +146,20 @@ public enum SQLwrapper {
 		double result = 0;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `session_id`=? ");
 			ps.setString(1, bSession);
 			rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				result = rs.getDouble("balance");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
@@ -169,25 +170,25 @@ public enum SQLwrapper {
 		int result = 0;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `value2` FROM `TechInfo` WHERE `name`='cashAmmount' AND `value`=(?) ");
 			ps.setString(1, String.valueOf(atmId));
 
 			rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				result = rs.getInt("value2");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
-		
+
 		return result;
 	}
 
@@ -195,9 +196,9 @@ public enum SQLwrapper {
 		int cash = ammount;
 		Boolean res = true;
 		PreparedStatement ps = null;
-		
+
 		try {
-			 ps = connection
+			ps = connection
 					.prepareStatement("UPDATE `TechInfo` SET `value2`=(?) WHERE `name`='cashAmmount' AND `value` = (?) ");
 
 			ps.setString(1, String.valueOf(cash));
@@ -207,7 +208,7 @@ public enum SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 		}
 		return res;
@@ -216,7 +217,7 @@ public enum SQLwrapper {
 	public boolean setBalance(double newBal, Integer accNum) {
 		Boolean res = true;
 		PreparedStatement ps = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("UPDATE `Accounts` SET `balance`=(?) WHERE `id`=(?) ");
@@ -229,38 +230,11 @@ public enum SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 		}
 		return res;
 
-	}
-	
-	public Integer getAccByUser(Integer userId) {
-		Integer result = -1;
-		
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		
-		try {
-			ps = connection
-					.prepareStatement("SELECT `id` FROM `Accounts` WHERE `owner_id`=(?) LIMIT 1");
-			ps.setInt(1, userId);
-
-			rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				result = rs.getInt("id");
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally  {
-			Utils.closePSt(ps);
-			Utils.closeRs(rs);
-		}
-		
-		return result;
 	}
 
 	// need to finish
@@ -273,7 +247,7 @@ public enum SQLwrapper {
 
 		try {
 			ps = connection
-					.prepareStatement("SELECT `first_name`,`last_name`, Users.id FROM `Users` INNER JOIN `Contacts` ON "
+					.prepareStatement("SELECT `first_name`,`last_name` FROM `Users` INNER JOIN `Contacts` ON "
 							+ "Users.id = Contacts.friend_id AND Contacts.user_id = (?)");
 
 			pst = connection
@@ -290,14 +264,13 @@ public enum SQLwrapper {
 				String name = rs.getString("last_name") + ' '
 						+ rs.getString("first_name");
 
-				Integer ac = getAccByUser(rs.getInt("id"));
-				
+				Integer ac = rst.getInt("id");
 
 				list.add(new Friend(name, ac));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closePSt(pst);
 			Utils.closeRs(rs);
@@ -305,5 +278,48 @@ public enum SQLwrapper {
 		}
 
 		return list;
+	}
+
+	public boolean sendMoney(Integer twlogin, Integer twToWhome,
+			Integer twHowMuch) {
+
+		double fromWhome = (int) getBalance(twlogin);
+		double toWhome = (int) getBalance(twToWhome);
+
+		fromWhome -= twHowMuch.doubleValue();
+		if (fromWhome < 0)
+			return false;
+		toWhome += twHowMuch.doubleValue();
+		
+		setBalance(fromWhome, twlogin);
+		setBalance(toWhome, twToWhome);
+
+		return true;
+
+	}
+
+	private double getBalance(Integer twlogin) {
+		double result = 0;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = connection
+					.prepareStatement("SELECT `balance` FROM `Accounts` WHERE `owner_id`=? ");
+			ps.setInt(1, twlogin);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result = rs.getDouble("balance");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
+		}
+		return result;
+
 	}
 }
