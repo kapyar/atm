@@ -206,25 +206,22 @@ public class SendMoney extends RightPanel {
 						Test.getController().getWrap().setDisablePnlSide();
 						progressBar.setVisible(true);
 						progressBar.setIndeterminate(true);
-						
-						
 
-						
-						
 						final Integer howMuch;
-						
+
 						String val = how.getTextField().getText();
 						if (val.equals("")) {
 							howMuch = 0;
 						} else {
 							howMuch = Integer.parseInt(val);
 						}
-						
+
 						if (howMuch == 0) {
-							Controller.alert(SendMoney.this, "You can't withdraw emptiness");
-							flag= false;
+							Controller.alert(SendMoney.this,
+									"You can't withdraw emptiness");
+							flag = false;
 						} else {
-						
+
 							try {
 								Model.getInstance().doSendMoney(howMuch,
 										getNumberOfUser());
@@ -232,8 +229,8 @@ public class SendMoney extends RightPanel {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							
-							//if (howMuch != 0)
+
+							// if (howMuch != 0)
 							check = new CheckView(howMuch, (int) Model
 									.getInstance().doBalance(), true);
 						}
@@ -244,11 +241,13 @@ public class SendMoney extends RightPanel {
 						progressBar.setVisible(false);
 						how.getTextField().setText("");
 						whome.getTextField().setText("");
-						
+
 						if (flag) {
-							Test.getController().getWrap().resetRightPanel(check);
+							Test.getController().getWrap()
+									.resetRightPanel(check);
 						}
-						
+						Test.getController().getWrap().setEnablePnlSide();
+
 					}
 
 				}

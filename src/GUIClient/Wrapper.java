@@ -61,7 +61,7 @@ public class Wrapper extends MetroPanel {
 
 	public void resetRightPanel(MetroPanel m) {
 
-		if (pnlBalance != null && m != null) {
+		if (pnlBalance != null) {
 			remove(pnlBalance);
 			repaint();
 			revalidate();

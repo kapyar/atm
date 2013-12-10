@@ -102,36 +102,36 @@ public class Withdrawal extends RightPanel {
 		private void withdraw(final int howMuch) {
 
 			Test.getController().getWrap().setDisablePnlSide();
-			
+
 			progressBar.setVisible(true);
 			progressBar.setIndeterminate(true);
-
-
-
-			
 
 			class MyWorker extends SwingWorker<String, Object> {
 				@Override
 				protected String doInBackground() throws Exception {
 					double res = Model.getInstance().doWithdrawal(howMuch);
 					if (!CashController.INSTANCE.hasEnoughCash(howMuch)) {
-						Controller.alert(Withdrawal.this, "Not enough bills in the ATM");
-					} else
-					if (howMuch % 10 != 0) {
-						Controller.alert(Withdrawal.this, "Sum must be multiple by 10");
-					} else
-					if (howMuch == 0) {
-						Controller.alert(Withdrawal.this, "You can't withdraw emptiness");
-					} else
-					if (res == -1.0
+						Controller.alert(Withdrawal.this,
+								"Not enough bills in the ATM");
+					} else if (howMuch % 10 != 0) {
+						Controller.alert(Withdrawal.this,
+								"Sum must be multiple by 10");
+					} else if (howMuch == 0) {
+						Controller.alert(Withdrawal.this,
+								"You can't withdraw emptiness");
+					} else if (res == -1.0
 							|| !CashController.INSTANCE.withdraw(howMuch)) {
 						progressBar.setVisible(false);
-						Controller.alert(Withdrawal.this, "You don't have enougn money on your account");
-						
+						Controller.alert(Withdrawal.this,
+								"You don't have enougn money on your account");
+
 					} else {
 						CashController.INSTANCE.withdraw(howMuch);
-						
-						NotifyController.INSTANCE.sendSms(SQLwrapper.DB.getUserPhone(), "You've just withdrawn " + howMuch + "$. " + res + "$ left.\nWith love, MPK");
+
+						NotifyController.INSTANCE.sendSms(
+								SQLwrapper.DB.getUserPhone(),
+								"You've just withdrawn " + howMuch + "$. "
+										+ res + "$ left.\nWith love, MPK");
 
 						Test.getController()
 								.getWrap()
@@ -148,6 +148,7 @@ public class Withdrawal extends RightPanel {
 				protected void done() {
 
 					progressBar.setVisible(false);
+					Test.getController().getWrap().setEnablePnlSide();
 				}
 			}
 			new MyWorker().execute();

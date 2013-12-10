@@ -342,6 +342,7 @@ public class Controller {
 
 					protected void done() {
 						addMoney.getProgressBar().setVisible(false);
+						wrapper.setEnablePnlSide();
 						wrapper.resetRightPanel(checkView);
 					}
 
