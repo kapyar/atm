@@ -193,8 +193,17 @@ public class Model {
 
 	}
 
-	public void addFriend(Integer id) {
-		// TODO Auto-generated method stub
+	public void addFriend(Integer id) throws IOException {
+		HashMap<Action, Object> command = new HashMap<Action, Object>();
+		command.put(Action.ACTION, Action.ADD_FRIEND);
+		command.put(Action.SESSION_ID, SESSION_ID);
+		command.put(Action.LOGIN_FIELD, CURRENT_LOGIN);
+		command.put(Action.ADD_FRIEND, id);
+
+		ExecutorService ex = Executors.newCachedThreadPool();
+		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
+				command));
+		ex.shutdown();
 
 	}
 
