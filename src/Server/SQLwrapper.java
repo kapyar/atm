@@ -230,11 +230,38 @@ public enum SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally {
+		} finally  {
 			Utils.closePSt(ps);
 		}
 		return res;
 
+	}
+	
+	public Integer getAccByUser(Integer userId) {
+		Integer result = -1;
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = connection
+					.prepareStatement("SELECT `id` FROM `Accounts` WHERE `owner_id`=(?) LIMIT 1");
+			ps.setInt(1, userId);
+
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				result = rs.getInt("id");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally  {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
+		}
+		
+		return result;
 	}
 
 	// need to finish
@@ -264,13 +291,14 @@ public enum SQLwrapper {
 				String name = rs.getString("last_name") + ' '
 						+ rs.getString("first_name");
 
-				Integer ac = rst.getInt("id");
+				Integer ac = getAccByUser(rs.getInt("id"));
+				
 
 				list.add(new Friend(name, ac));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
+		} finally  {
 			Utils.closePSt(ps);
 			Utils.closePSt(pst);
 			Utils.closeRs(rs);
