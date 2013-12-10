@@ -46,6 +46,8 @@ public class SQLwrapper {
 			while (rs.next()) {
 				result = rs.getInt("owner_id");
 			}
+			
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

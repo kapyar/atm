@@ -305,6 +305,7 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 			Object source = e.getSource();
 			if (source == addMoney.getPanel().getMyButton_Enter()) {
 				class MyWorker extends SwingWorker<String, Object> {
@@ -319,9 +320,10 @@ public class Controller {
 
 						Integer d = Integer.parseInt(addMoney.getPanel()
 								.getTextView().getTextField().getText());
-
+						
 						Model.getInstance().doAddMonney(d);
-
+						//CashController.INSTANCE.addCash(d);
+						
 						bln = Model.getInstance().doBalance();
 						checkView = new CheckView((int) bln);
 
