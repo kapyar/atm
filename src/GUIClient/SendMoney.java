@@ -1,5 +1,6 @@
 package GUIClient;
 
+import Controller.Controller;
 import Controller.Friend;
 import MYGUI.ButtonFactory;
 import MYGUI.CheckView;
@@ -198,26 +199,44 @@ public class SendMoney extends RightPanel {
 				class MyWorker extends SwingWorker<String, Object> {
 
 					CheckView check;
+					boolean flag = true;
 
 					@Override
 					protected String doInBackground() throws Exception {
 						Test.getController().getWrap().setDisablePnlSide();
 						progressBar.setVisible(true);
 						progressBar.setIndeterminate(true);
+						
+						
 
-						Integer howMuch = Integer.parseInt(how.getTextField()
-								.getText());
-						try {
-							Model.getInstance().doSendMoney(howMuch,
-									getNumberOfUser());
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+						
+						
+						final Integer howMuch;
+						
+						String val = how.getTextField().getText();
+						if (val.equals("")) {
+							howMuch = 0;
+						} else {
+							howMuch = Integer.parseInt(val);
 						}
-
-						check = new CheckView(Integer.parseInt(how
-								.getTextField().getText()), (int) Model
-								.getInstance().doBalance(), true);
+						
+						if (howMuch == 0) {
+							Controller.alert(SendMoney.this, "You can't withdraw emptiness");
+							flag= false;
+						} else {
+						
+							try {
+								Model.getInstance().doSendMoney(howMuch,
+										getNumberOfUser());
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							//if (howMuch != 0)
+							check = new CheckView(howMuch, (int) Model
+									.getInstance().doBalance(), true);
+						}
 						return "Done";
 					}
 
@@ -225,8 +244,11 @@ public class SendMoney extends RightPanel {
 						progressBar.setVisible(false);
 						how.getTextField().setText("");
 						whome.getTextField().setText("");
-						Test.getController().getWrap().resetRightPanel(check);
-
+						
+						if (flag) {
+							Test.getController().getWrap().resetRightPanel(check);
+						}
+						
 					}
 
 				}

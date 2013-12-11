@@ -1,5 +1,6 @@
 package Controller;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -39,6 +40,7 @@ import MYGUI.CheckView;
 import MYGUI.IntroSplash;
 import MYGUI.RightPanel;
 import Model.Model;
+import Server.SQLwrapper;
 import Starter.Test;
 
 public class Controller {
@@ -368,46 +370,59 @@ public class Controller {
 			Object source = e.getSource();
 			if (source == chooseYourCash.getBtnEnter()) {
 				wrapper.setDisablePnlSide();
-				final Integer howMuch = Integer.parseInt(chooseYourCash
-						.getPanel().getTextView().getTextField().getText());
+				final Integer howMuch;
+				
+				String val = chooseYourCash.getPanel().getTextView().getTextField().getText();
+				if (val.equals("")) {
+					howMuch = 0;
+				} else {
+					howMuch = Integer.parseInt(val);
+				}
 				chooseYourCash.getProgressBar().setVisible(true);
 				chooseYourCash.getProgressBar().setIndeterminate(true);
-				DateFormat dateFormat = new SimpleDateFormat(
-						"yyyy/MM/dd HH:mm:ss");
-				final Date date = new Date();
 
-				if (!CashController.INSTANCE.hasEnoughCash(howMuch)) {
-					int t = JOptionPane.showConfirmDialog(chooseYourCash, date
-							+ "Not enough bills in ATM", "Withdrawal",
-							JOptionPane.PLAIN_MESSAGE, JOptionPane.NO_OPTION);
-					return;
-				}
+				
+
+				
 				class MyWorker extends SwingWorker<String, Object> {
 
 					// CheckView check;
 
 					@Override
 					protected String doInBackground() throws Exception {
-						double res = Model.getInstance().doWithdrawal(howMuch);
-						if (res == -1.0
-								|| !CashController.INSTANCE.withdraw(howMuch)) {
-							chooseYourCash.getProgressBar().setVisible(false);
-							int t = JOptionPane.showConfirmDialog(
-									chooseYourCash, date + "Cant get this sum",
-									"Withdrawal", JOptionPane.PLAIN_MESSAGE,
-									JOptionPane.NO_OPTION);
-						} else {
-							// cant use side panel
-
-							Test.getController()
-									.getWrap()
-									.resetRightPanel(
-											new CheckView(
-													CashController.INSTANCE
-															.getLastWithdraw(),
-													howMuch, (int) res, true));
-
-						}
+						
+						if (howMuch == 0) {
+							Controller.alert(chooseYourCash, "You can't withdraw emptiness");
+						} else 
+						if (!CashController.INSTANCE.hasEnoughCash(howMuch)) {
+							Controller.alert(chooseYourCash, "Not enough bills in the ATM");
+						} else 
+							if (howMuch % 10 != 0) {
+								Controller.alert(chooseYourCash, "Sum must be multiple by 10");
+							} else {
+								double res = Model.getInstance().doWithdrawal(howMuch);
+								if (res == -1.0
+										|| !CashController.INSTANCE.withdraw(howMuch)) {
+									chooseYourCash.getProgressBar().setVisible(false);
+									Controller.alert(chooseYourCash, "You don't have enougn money on your account");
+									
+								} else {
+									// cant use side panel
+									
+									CashController.INSTANCE.withdraw(howMuch);
+									
+									NotifyController.INSTANCE.sendSms(SQLwrapper.DB.getUserPhone(), "You've just withdrawn " + howMuch + "$. " + res + "$ left.\nWith love, MPK");
+		
+									Test.getController()
+											.getWrap()
+											.resetRightPanel(
+													new CheckView(
+															CashController.INSTANCE
+																	.getLastWithdraw(),
+															howMuch, (int) res, true));
+		
+								}
+							}
 						return "Done";
 
 					}
@@ -418,7 +433,9 @@ public class Controller {
 					}
 
 				}// END MyWorker
+
 				new MyWorker().execute();
+
 
 			}
 			if (source == chooseYourCash.getBtnCancel()) {
@@ -448,4 +465,10 @@ public class Controller {
 	public RePin getRePin() {
 		return rePin;
 	}
+	
+	public static void alert (Component c, String error) {
+		JOptionPane.showConfirmDialog(c, error, "Alert",
+				JOptionPane.PLAIN_MESSAGE, JOptionPane.NO_OPTION);
+	}
+	
 }

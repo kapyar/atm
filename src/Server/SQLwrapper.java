@@ -68,6 +68,35 @@ public enum SQLwrapper {
 		return getUserByAcc(accNum) >= 0;
 	}
 
+	public String getUserPhone() {
+		String result = "";
+		
+		int userId = getUserByAcc(Model.Model.CURRENT_LOGIN);
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = connection
+					.prepareStatement("SELECT `phone` FROM `Users` WHERE `id`=(?) ");
+			ps.setInt(1, userId);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result = rs.getString("phone");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Utils.closePSt(ps);
+			Utils.closeRs(rs);
+		}
+		
+		return result;
+	}
+	
 	public Boolean passMatches(Integer accNum, String pass) {
 
 		String result = "";
@@ -279,12 +308,8 @@ public enum SQLwrapper {
 
 			int userId = getUserByAcc(accNum);
 			
-			System.out.println("User ACCOUNT is " + accNum);
-			
+
 			ps.setInt(1, userId);
-	
-			System.out.println("My fuckign id is" + userId);
-		
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -292,14 +317,11 @@ public enum SQLwrapper {
 						+ rs.getString("first_name");
 
 				Integer friendAcc = rs.getInt("id");
-				Integer ac = getAccByUser(friendAcc);
+				Integer acFriend = getAccByUser(friendAcc);
 				
-				System.out.println("-------------------");
-				System.out.println("account of friend is " + ac);
-				System.out.println("id of friend is " + friendAcc);
-				System.out.println("-------------------");
 
-				list.add(new Friend(name, ac));
+
+				list.add(new Friend(name, acFriend));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
