@@ -177,13 +177,28 @@ public class Model {
 
 	}
 
-	public void doSendMoney(Integer howMuch, Integer toWhome) throws IOException {
+	public void doSendMoney(Integer howMuch, Integer toWhome)
+			throws IOException {
 		HashMap<Action, Object> command = new HashMap<Action, Object>();
 		command.put(Action.ACTION, Action.SEND_MONEY);
 		command.put(Action.SESSION_ID, SESSION_ID);
 		command.put(Action.LOGIN_FIELD, CURRENT_LOGIN);
 		command.put(Action.SEND_MONEY, howMuch);
 		command.put(Action.TO_WHOME, toWhome);
+
+		ExecutorService ex = Executors.newCachedThreadPool();
+		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
+				command));
+		ex.shutdown();
+
+	}
+
+	public void addFriend(Integer id) throws IOException {
+		HashMap<Action, Object> command = new HashMap<Action, Object>();
+		command.put(Action.ACTION, Action.ADD_FRIEND);
+		command.put(Action.SESSION_ID, SESSION_ID);
+		command.put(Action.LOGIN_FIELD, CURRENT_LOGIN);
+		command.put(Action.ADD_FRIEND, id);
 
 		ExecutorService ex = Executors.newCachedThreadPool();
 		Future<HashMap<Action, Object>> res = ex.submit(new MultiJabberClient(
