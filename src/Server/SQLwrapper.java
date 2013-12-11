@@ -268,7 +268,7 @@ public enum SQLwrapper {
 	public ArrayList<Friend> getListFriends(Integer accNum) {
 		ArrayList<Friend> list = new ArrayList<Friend>();
 		PreparedStatement ps = null;
-		PreparedStatement pst = null;
+
 		ResultSet rst = null;
 		ResultSet rs = null;
 
@@ -277,17 +277,14 @@ public enum SQLwrapper {
 					.prepareStatement("SELECT `first_name`,`last_name`, Users.id FROM `Users` INNER JOIN `Contacts` ON "
 							+ "Users.id = Contacts.friend_id AND Contacts.user_id = (?)");
 
-			pst = connection
-					.prepareStatement("SELECT Accounts.id FROM `Accounts` INNER JOIN `Contacts` ON "
-							+ "Accounts.owner_id = Contacts.friend_id AND Contacts.user_id = (?)");
+		
+			ps.setInt(1, getUserByAcc(accNum));
+	
 
-			ps.setInt(1, accNum);
-			pst.setInt(1, accNum);
-
-			rst = pst.executeQuery();
+		
 			rs = ps.executeQuery();
 
-			while (rs.next() && rst.next()) {
+			while (rs.next()) {
 				String name = rs.getString("last_name") + ' '
 						+ rs.getString("first_name");
 
@@ -300,9 +297,7 @@ public enum SQLwrapper {
 			e.printStackTrace();
 		} finally  {
 			Utils.closePSt(ps);
-			Utils.closePSt(pst);
 			Utils.closeRs(rs);
-			Utils.closeRs(rst);
 		}
 
 		return list;
