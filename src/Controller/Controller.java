@@ -139,6 +139,7 @@ public class Controller {
 				if (start.checkInputData()) {// if all fields had written
 					class MyWorker extends SwingWorker<String, Object> {
 						protected String doInBackground() {
+							wrapper.setEnablePnlSide();
 							start.progressBar.setVisible(true);
 							start.progressBar.setIndeterminate(true);
 							try {
