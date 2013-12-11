@@ -230,37 +230,37 @@ public enum SQLwrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			res = false;
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 		}
 		return res;
 
 	}
-	
+
 	public Integer getAccByUser(Integer userId) {
 		Integer result = -1;
-		
+
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 			ps = connection
 					.prepareStatement("SELECT `id` FROM `Accounts` WHERE `owner_id`=(?) LIMIT 1");
 			ps.setInt(1, userId);
 
 			rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				result = rs.getInt("id");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
-		
+
 		return result;
 	}
 
@@ -289,13 +289,12 @@ public enum SQLwrapper {
 						+ rs.getString("first_name");
 
 				Integer ac = getAccByUser(rs.getInt("id"));
-				
 
 				list.add(new Friend(name, ac));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally  {
+		} finally {
 			Utils.closePSt(ps);
 			Utils.closeRs(rs);
 		}
@@ -346,4 +345,28 @@ public enum SQLwrapper {
 		return result;
 
 	}
+
+	public boolean addNewFriend(Integer log, Integer frId) {
+		Boolean res = true;
+		PreparedStatement ps = null;
+
+		try {
+			ps = connection
+					.prepareStatement("INSERT INTO Contacts (user_id,friend_id)VALUES (?,?)");
+
+			ps.setInt(1, log);
+			ps.setInt(2, frId);
+
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			res = false;
+		} finally {
+			Utils.closePSt(ps);
+		}
+		return res;
+
+	}
+
 }

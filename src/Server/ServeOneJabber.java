@@ -151,6 +151,18 @@ public class ServeOneJabber extends Thread {
 				} else {
 					out.put(Action.ERROR_CODE, Action.ERROR_NOT_MATCHES);
 				}
+				break;
+
+			case ADD_FRIEND:
+				String afSession = (String) in.get(Action.SESSION_ID);
+				Integer log = (Integer) in.get(Action.LOGIN_FIELD);
+				Integer frId = (Integer) in.get(Action.ADD_FRIEND);
+
+				if (dataBase.getCurrentSession(log).equals(afSession)) {
+					dataBase.addNewFriend(log, frId);
+				} else {
+					out.put(Action.ERROR_CODE, Action.ERROR_NOT_MATCHES);
+				}
 
 			}// END of switch
 
