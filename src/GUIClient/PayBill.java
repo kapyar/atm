@@ -15,10 +15,12 @@ import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.SwingWorker;
 
+import MYGUI.CheckView;
 import MYGUI.MetroEditablePane;
 import MYGUI.MyButton;
 import MYGUI.Numbers;
 import MYGUI.RightPanel;
+import Starter.Test;
 
 public class PayBill extends RightPanel {
 
@@ -125,16 +127,18 @@ public class PayBill extends RightPanel {
 			if (source == numbPane.getMyButton_Enter()) {
 				class MyWorker extends SwingWorker<String, Object> {
 
+					CheckView check;
+
 					@Override
 					protected String doInBackground() throws Exception {
 						progressBar.setVisible(true);
 						progressBar.setIndeterminate(true);
 						Integer suma = Integer.parseInt(sum.getTextField()
 								.getText());
+						double res = 0;
 						// use
 						try {
-							double res = Model.Model.getInstance()
-									.doWithdrawal(suma);
+							res = Model.Model.getInstance().doWithdrawal(suma);
 
 							if (res != -1) {
 								System.out.println("PayBill: successfully");
@@ -144,11 +148,15 @@ public class PayBill extends RightPanel {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						// int r = Integer.parseInt(s)
+						check = new CheckView((int) suma, (int) Model.Model
+								.getInstance().doBalance(), true);
 						return "Done";
 					}
 
 					protected void done() {
 						progressBar.setVisible(false);
+						Test.getController().getWrap().resetRightPanel(check);
 					}
 				}
 				new MyWorker().execute();
