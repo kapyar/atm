@@ -96,6 +96,7 @@ public class SendMoney extends RightPanel {
 		add(lblHowMuch);
 
 		comboBox = new JComboBox();
+		System.out.println("get list friends");
 		listOfFriends = getListOfFriends();
 
 		setStringArray();

@@ -277,10 +277,13 @@ public enum SQLwrapper {
 					.prepareStatement("SELECT `first_name`,`last_name`, Users.id FROM `Users` INNER JOIN `Contacts` ON "
 							+ "Users.id = Contacts.friend_id AND Contacts.user_id = (?)");
 
-		
-			ps.setInt(1, getUserByAcc(accNum));
+			int userId = getUserByAcc(accNum);
+			
+			System.out.println("User ACCOUNT is " + accNum);
+			
+			ps.setInt(1, userId);
 	
-
+			System.out.println("My fuckign id is" + userId);
 		
 			rs = ps.executeQuery();
 
@@ -288,7 +291,13 @@ public enum SQLwrapper {
 				String name = rs.getString("last_name") + ' '
 						+ rs.getString("first_name");
 
-				Integer ac = getAccByUser(rs.getInt("id"));
+				Integer friendAcc = rs.getInt("id");
+				Integer ac = getAccByUser(friendAcc);
+				
+				System.out.println("-------------------");
+				System.out.println("account of friend is " + ac);
+				System.out.println("id of friend is " + friendAcc);
+				System.out.println("-------------------");
 
 				list.add(new Friend(name, ac));
 			}
@@ -301,7 +310,8 @@ public enum SQLwrapper {
 
 		return list;
 	}
-
+	
+	//vars are account ids
 	public boolean sendMoney(Integer twlogin, Integer twToWhome,
 			Integer twHowMuch) {
 
