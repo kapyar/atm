@@ -10,7 +10,7 @@ public class SMS {
 	
 	private  void sendGet() throws Exception {
 		 
-		String url = "http://smsc.ua/sys/get.php?get_answers=1&login=MPK&psw=dd0b3d9c09c13390c55747399e9c02f5";
+		String url = "http://smsc.ua/sys/get.php?get_answers=1&login=MPK&psw=";
  
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
