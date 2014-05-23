@@ -18,10 +18,12 @@ import javax.swing.JTextField;
 import Controller.Controller.OuterStartActionListener;
 import Controller.NumberCheker;
 import MYGUI.ButtonFactory;
+import MYGUI.ConfigGUICLient;
 import MYGUI.MetroEditablePane;
 import MYGUI.MetroEditablePin;
 import MYGUI.MetroPanel;
 import MYGUI.MyButton;
+
 import javax.swing.JProgressBar;
 
 public class StartFrame extends MetroPanel implements MouseListener {

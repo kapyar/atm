@@ -5,8 +5,6 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 
-import GUIClient.ConfigGUICLient;
-
 public class RightPanel extends MetroPanel {
 	private JLabel lblBalance;
 	// RightPanel sizes and coordinates

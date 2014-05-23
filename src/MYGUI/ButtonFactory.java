@@ -7,8 +7,6 @@ import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 
-import GUIClient.ConfigGUICLient;
-
 public class ButtonFactory {
 
 	public static final String BACK = "back";

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 
+import MYGUI.ConfigGUICLient;
 import MYGUI.MetroEditablePin;
 import MYGUI.MetroPanel;
 import MYGUI.MetroPassView;
