@@ -1,5 +1,12 @@
-atm
+ATM
 ===
+java slim - client(desktop) - server application
+-
 
-java client(desktop) - server application
-also notify via SMS when you do some operation
+to run this app u need:
+
+1. Build server(package Server)
+2. In MultiJabber set connection prperty
+3. Create DB, or find exported in root directory
+4. Create user manually  
+5. Start work with app
